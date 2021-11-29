@@ -13,10 +13,10 @@ It works with Android, IOS and windows and linux
 I am using it at media streaming, please check mediaserver respository.
 
 
-If compiling as a part of webrtc then do
+mkdir build 
 
+cd build 
 
-gn gen out/x64/Debug --args="is_debug=true use_rtti=true target_cpu=\"x64\""
+on windows
 
-ninja -C out/x64/Debug signaler
-
+cmake.exe ..  -G  "Visual Studio 16 2019"

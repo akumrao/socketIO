@@ -26,7 +26,7 @@ namespace base {
     namespace net {
 
         HttpConnection::HttpConnection(Listener* listener, http_parser_type type)
-        : TcpConnection(listener),
+        : TcpConnectionBase(),
            listener(listener),HttpBase(type),wsAdapter(nullptr) {
 
 
@@ -39,14 +39,25 @@ namespace base {
         }
 
         HttpConnection::~HttpConnection() {
-            LTrace("~HttpConnection()")
+         
+            
+            if(wsAdapter)
+            {    
+                SDebug <<  "wsAdapter delete connection " << wsAdapter; 
+                delete wsAdapter;
+                wsAdapter = nullptr;
+                 
+            }
+            
+            SDebug << "~HttpConnection()";
+          
         }
 
         void HttpConnection::on_read(const char* data, size_t len) {
 
            LTrace("on_read()")
                     
-           STrace << "on_read:TCP server send data: " << data << "len: " << len << std::endl << std::flush;
+          // SDebug << "on_read:TCP server send data: " << std::string((char*)data, len) << "len: " << len << std::endl << std::flush;
                     
             if(wsAdapter)
             {
@@ -54,7 +65,13 @@ namespace base {
                 return;
             }
             
-             _parser.parse((const char*) data, len);
+           try {
+              _parser.parse((const char*)data, len);
+            }
+           catch(...) {
+           
+               SInfo << "Excetion at parser ";
+           }
              
           //  if(!wsAdapter)
            // this->listener->on_read(this, data, len);
@@ -62,10 +79,11 @@ namespace base {
         
           void HttpConnection::on_close() {
 
-            LTrace("on_close()")
+            SDebug << "HttpConnection::on_close()";
                     
             if (_responder) {
                 _responder->onClose();
+                delete _responder;
             }
              
             this->listener->on_close(this);
@@ -90,22 +108,28 @@ namespace base {
             // bypassing the WebSocketConnection
 
              STrace << head;
-             Write(head.c_str(), head.length());
+             Write(head.c_str(), head.length(),nullptr);
              return head.length();
         }
         
         void HttpConnection::Close()
         {
-            TcpConnection::Close();
+            TcpConnectionBase::Close();
         }
           
-        void HttpConnection::send(const char* data, size_t len) {
+        
+        void HttpConnection::tcpsend(const char* data, size_t len, onSendCallback cb)
+        {
+              Write(data, len, cb);
+        }
+        
+        void HttpConnection::send(const char* data, size_t len, bool binary) {
 
              LTrace("HttpConnection::send()")
             
              if (shouldSendHeader())
             {
-                long res = sendHeader();
+                sendHeader();
 
                 // The initial packet may be empty to push the headers through
                 if (len == 0)
@@ -121,7 +145,7 @@ namespace base {
 
             // Utils::Byte::Set2Bytes(frameLen, 0, len);
             // TcpConnectionBase::Write(frameLen, 2, data, len);
-            Write(data, len);
+            Write(data, len,nullptr);
         }
 
        
@@ -140,7 +164,11 @@ namespace base {
                         // scope we just swap the SocketAdapter instance pointers and do
                         // a deferred delete on the old adapter. No more callbacks will be
                         // received from the old adapter after replaceAdapter is called.
+                          if(wsAdapter)
+                               delete wsAdapter;
                           wsAdapter = new WebSocketConnection( listener, this, ServerSide);
+                          SDebug <<  "wsAdapter new connection " << wsAdapter;  
+                          
                         //   replaceAdapter(wsAdapter);
 
                            // Send the handshake request to the WS adapter for handling.
@@ -159,12 +187,14 @@ namespace base {
 
                            wsAdapter->onSocketRecv( buffer);
             }
+            else
+            {
+                // Notify the server the connection is ready for data flow
+                //   _server.onConnectionReady(*this);
 
-            // Notify the server the connection is ready for data flow
-            //   _server.onConnectionReady(*this);
-
-            // Instantiate the responder now that request headers have been parsed
-            this->listener->on_header(this);
+                // Instantiate the responder now that request headers have been parsed
+                this->listener->on_header(this);
+            }
 
             // Upgraded connections don't receive the onHeaders callback
             if (_responder && !_upgrade)
@@ -177,17 +207,20 @@ namespace base {
         void HttpConnection::on_payload(const char* data, size_t len){
 
            this->listener->on_read(this, data,len );
+           
+            if (_responder)
+                _responder->onPayload( std::string( data,len ));
         }
 
         void HttpConnection::onComplete() {
 
             if (_responder)
                 _responder->onRequest(_request, _response);
-            else
-            {    Close();
-                 this->listener->on_close(this);
-                
-            }
+//            else
+//            {    Close();
+//                 this->listener->on_close(this);
+//                
+//            }
                 
         }
 

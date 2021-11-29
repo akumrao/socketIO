@@ -36,8 +36,6 @@
 #include "handle-inl.h"
 #include "fs-fd-hash-inl.h"
 
-#include <wincrypt.h>
-
 
 #define UV_FS_FREE_PATHS         0x0002
 #define UV_FS_FREE_PTR           0x0008
@@ -295,7 +293,7 @@ static int fs__wide_to_utf8(WCHAR* w_source_ptr,
     return 0;
   }
 
-  target = uv__malloc(target_len + 1);
+  target = (char*) uv__malloc(target_len + 1);
   if (target == NULL) {
     SetLastError(ERROR_OUTOFMEMORY);
     return -1;
@@ -1197,9 +1195,10 @@ void fs__mkdir(uv_fs_t* req) {
   }
 }
 
+typedef int (*uv__fs_mktemp_func)(uv_fs_t* req);
 
 /* OpenBSD original: lib/libc/stdio/mktemp.c */
-void fs__mkdtemp(uv_fs_t* req) {
+void fs__mktemp(uv_fs_t* req, uv__fs_mktemp_func func) {
   static const WCHAR *tempchars =
     L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   static const size_t num_chars = 62;
@@ -1207,9 +1206,7 @@ void fs__mkdtemp(uv_fs_t* req) {
   WCHAR *cp, *ep;
   unsigned int tries, i;
   size_t len;
-  HCRYPTPROV h_crypt_prov;
   uint64_t v;
-  BOOL released;
 
   len = wcslen(req->file.pathw);
   ep = req->file.pathw + len;
@@ -1218,16 +1215,10 @@ void fs__mkdtemp(uv_fs_t* req) {
     return;
   }
 
-  if (!CryptAcquireContext(&h_crypt_prov, NULL, NULL, PROV_RSA_FULL,
-                           CRYPT_VERIFYCONTEXT)) {
-    SET_REQ_WIN32_ERROR(req, GetLastError());
-    return;
-  }
-
   tries = TMP_MAX;
   do {
-    if (!CryptGenRandom(h_crypt_prov, sizeof(v), (BYTE*) &v)) {
-      SET_REQ_WIN32_ERROR(req, GetLastError());
+    if (uv__random_rtlgenrandom((void *)&v, sizeof(v)) < 0) {
+      SET_REQ_UV_ERROR(req, UV_EIO, ERROR_IO_DEVICE);
       break;
     }
 
@@ -1237,22 +1228,89 @@ void fs__mkdtemp(uv_fs_t* req) {
       v /= num_chars;
     }
 
-    if (_wmkdir(req->file.pathw) == 0) {
-      len = strlen(req->path);
-      wcstombs((char*) req->path + len - num_x, ep - num_x, num_x);
-      SET_REQ_RESULT(req, 0);
-      break;
-    } else if (errno != EEXIST) {
-      SET_REQ_RESULT(req, -1);
+    if (func(req)) {
+      if (req->result >= 0) {
+        len = strlen(req->path);
+        wcstombs((char*) req->path + len - num_x, ep - num_x, num_x);
+      }
       break;
     }
   } while (--tries);
 
-  released = CryptReleaseContext(h_crypt_prov, 0);
-  assert(released);
   if (tries == 0) {
     SET_REQ_RESULT(req, -1);
   }
+}
+
+
+static int fs__mkdtemp_func(uv_fs_t* req) {
+  if (_wmkdir(req->file.pathw) == 0) {
+    SET_REQ_RESULT(req, 0);
+    return 1;
+  } else if (errno != EEXIST) {
+    SET_REQ_RESULT(req, -1);
+    return 1;
+  }
+
+  return 0;
+}
+
+
+void fs__mkdtemp(uv_fs_t* req) {
+  fs__mktemp(req, fs__mkdtemp_func);
+}
+
+
+static int fs__mkstemp_func(uv_fs_t* req) {
+  HANDLE file;
+  int fd;
+
+  file = CreateFileW(req->file.pathw,
+                     GENERIC_READ | GENERIC_WRITE,
+                     FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                     NULL,
+                     CREATE_NEW,
+                     FILE_ATTRIBUTE_NORMAL,
+                     NULL);
+
+  if (file == INVALID_HANDLE_VALUE) {
+    DWORD error;
+    error = GetLastError();
+
+    /* If the file exists, the main fs__mktemp() function
+       will retry. If it's another error, we want to stop. */
+    if (error != ERROR_FILE_EXISTS) {
+      SET_REQ_WIN32_ERROR(req, error);
+      return 1;
+    }
+
+    return 0;
+  }
+
+  fd = _open_osfhandle((intptr_t) file, 0);
+  if (fd < 0) {
+    /* The only known failure mode for _open_osfhandle() is EMFILE, in which
+     * case GetLastError() will return zero. However we'll try to handle other
+     * errors as well, should they ever occur.
+     */
+    if (errno == EMFILE)
+      SET_REQ_UV_ERROR(req, UV_EMFILE, ERROR_TOO_MANY_OPEN_FILES);
+    else if (GetLastError() != ERROR_SUCCESS)
+      SET_REQ_WIN32_ERROR(req, GetLastError());
+    else
+      SET_REQ_WIN32_ERROR(req, UV_UNKNOWN);
+    CloseHandle(file);
+    return 1;
+  }
+
+  SET_REQ_RESULT(req, fd);
+
+  return 1;
+}
+
+
+void fs__mkstemp(uv_fs_t* req) {
+  fs__mktemp(req, fs__mkstemp_func);
 }
 
 
@@ -1360,8 +1418,8 @@ void fs__scandir(uv_fs_t* req) {
       if (dirents_used >= dirents_size) {
         size_t new_dirents_size =
             dirents_size == 0 ? dirents_initial_size : dirents_size << 1;
-        uv__dirent_t** new_dirents =
-            uv__realloc(dirents, new_dirents_size * sizeof *dirents);
+        uv__dirent_t** new_dirents = (uv__dirent_t**)uv__realloc(
+            dirents, new_dirents_size * sizeof *dirents);
 
         if (new_dirents == NULL)
           goto out_of_memory_error;
@@ -1374,7 +1432,7 @@ void fs__scandir(uv_fs_t* req) {
        * includes room for the first character of the filename, but `utf8_len`
        * doesn't count the NULL terminator at this point.
        */
-      dirent = uv__malloc(sizeof *dirent + utf8_len);
+      dirent = (uv__dirent_t*)uv__malloc(sizeof *dirent + utf8_len);
       if (dirent == NULL)
         goto out_of_memory_error;
 
@@ -1485,7 +1543,7 @@ void fs__opendir(uv_fs_t* req) {
     goto error;
   }
 
-  dir = uv__malloc(sizeof(*dir));
+  dir = (uv_dir_t*) uv__malloc(sizeof(*dir));
   if (dir == NULL) {
     SET_REQ_UV_ERROR(req, UV_ENOMEM, ERROR_OUTOFMEMORY);
     goto error;
@@ -1500,7 +1558,7 @@ void fs__opendir(uv_fs_t* req) {
   else
     fmt = L"%s\\*";
 
-  find_path = uv__malloc(sizeof(WCHAR) * (len + 4));
+  find_path = (WCHAR*) uv__malloc(sizeof(WCHAR) * (len + 4));
   if (find_path == NULL) {
     SET_REQ_UV_ERROR(req, UV_ENOMEM, ERROR_OUTOFMEMORY);
     goto error;
@@ -1537,7 +1595,7 @@ void fs__readdir(uv_fs_t* req) {
   int r;
 
   req->flags |= UV_FS_FREE_PTR;
-  dir = req->ptr;
+  dir =(uv_dir_t*) req->ptr;
   dirents = dir->dirents;
   memset(dirents, 0, dir->nentries * sizeof(*dir->dirents));
   find_data = &dir->find_data;
@@ -1594,7 +1652,7 @@ error:
 void fs__closedir(uv_fs_t* req) {
   uv_dir_t* dir;
 
-  dir = req->ptr;
+  dir = (uv_dir_t*) req->ptr;
   FindClose(dir->dir_handle);
   uv__free(req->ptr);
   SET_REQ_RESULT(req, 0);
@@ -2478,7 +2536,7 @@ static ssize_t fs__realpath_handle(HANDLE handle, char** realpath_ptr) {
     return -1;
   }
 
-  w_realpath_buf = uv__malloc((w_realpath_len + 1) * sizeof(WCHAR));
+  w_realpath_buf = (WCHAR*) uv__malloc((w_realpath_len + 1) * sizeof(WCHAR));
   if (w_realpath_buf == NULL) {
     SetLastError(ERROR_OUTOFMEMORY);
     return -1;
@@ -2573,7 +2631,7 @@ static void fs__statfs(uv_fs_t* req) {
     return;
   }
 
-  stat_fs = uv__malloc(sizeof(*stat_fs));
+  stat_fs = ( uv_statfs_t*) uv__malloc(sizeof(*stat_fs));
   if (stat_fs == NULL) {
     SET_REQ_UV_ERROR(req, UV_ENOMEM, ERROR_OUTOFMEMORY);
     return;
@@ -2587,6 +2645,7 @@ static void fs__statfs(uv_fs_t* req) {
   stat_fs->f_files = 0;
   stat_fs->f_ffree = 0;
   req->ptr = stat_fs;
+  req->flags |= UV_FS_FREE_PTR;
   SET_REQ_RESULT(req, 0);
 }
 
@@ -2620,6 +2679,7 @@ static void uv__fs_work(struct uv__work* w) {
     XX(RMDIR, rmdir)
     XX(MKDIR, mkdir)
     XX(MKDTEMP, mkdtemp)
+//    XX(MKSTEMP, mkstemp)
     XX(RENAME, rename)
     XX(SCANDIR, scandir)
     XX(READDIR, readdir)
@@ -2726,7 +2786,7 @@ int uv_fs_read(uv_loop_t* loop,
   req->fs.info.nbufs = nbufs;
   req->fs.info.bufs = req->fs.info.bufsml;
   if (nbufs > ARRAY_SIZE(req->fs.info.bufsml))
-    req->fs.info.bufs = uv__malloc(nbufs * sizeof(*bufs));
+    req->fs.info.bufs = (uv_buf_t*)uv__malloc(nbufs * sizeof(*bufs));
 
   if (req->fs.info.bufs == NULL)
     return UV_ENOMEM;
@@ -2755,7 +2815,7 @@ int uv_fs_write(uv_loop_t* loop,
   req->fs.info.nbufs = nbufs;
   req->fs.info.bufs = req->fs.info.bufsml;
   if (nbufs > ARRAY_SIZE(req->fs.info.bufsml))
-    req->fs.info.bufs = uv__malloc(nbufs * sizeof(*bufs));
+    req->fs.info.bufs = (uv_buf_t*) uv__malloc(nbufs * sizeof(*bufs));
 
   if (req->fs.info.bufs == NULL)
     return UV_ENOMEM;
@@ -2796,11 +2856,28 @@ int uv_fs_mkdir(uv_loop_t* loop, uv_fs_t* req, const char* path, int mode,
 }
 
 
-int uv_fs_mkdtemp(uv_loop_t* loop, uv_fs_t* req, const char* tpl,
-    uv_fs_cb cb) {
+int uv_fs_mkdtemp(uv_loop_t* loop,
+                  uv_fs_t* req,
+                  const char* tpl,
+                  uv_fs_cb cb) {
   int err;
 
   INIT(UV_FS_MKDTEMP);
+  err = fs__capture_path(req, tpl, NULL, TRUE);
+  if (err)
+    return uv_translate_sys_error(err);
+
+  POST;
+}
+
+
+int uv_fs_mkstemp(uv_loop_t* loop,
+                  uv_fs_t* req,
+                  const char* tpl,
+                  uv_fs_cb cb) {
+  int err;
+
+//  INIT(UV_FS_MKSTEMP);  //arvind
   err = fs__capture_path(req, tpl, NULL, TRUE);
   if (err)
     return uv_translate_sys_error(err);

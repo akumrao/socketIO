@@ -20,7 +20,10 @@ namespace sa {
     Signaler *thread = nullptr ;
 
 
-    void connect(const std::string& ip, const uint16_t port)
+    void connect(const char* ip, const int port, const char* roomid, const char** turn_urls,
+                 const int no_of_urls,
+                 const char* username,
+                 const char* credential )
     {
        // sigObj.connect(host, port );
         
@@ -33,7 +36,7 @@ namespace sa {
 
             SInfo << "connect " << connect  <<  " port " << port ;
 
-            thread = new Signaler(ip, port);
+            thread = new Signaler(ip, port, roomid);
             
             thread->start();
 
@@ -44,33 +47,27 @@ namespace sa {
         }
     }
 
-    
-    void UploadedPercentage(const std::string& file, const int& prog)
+
+    void sendSDP(const char* type, const char* sdp   )
     {
-        SInfo << "Percentage uploaded " << prog;
+        SInfo <<  type ;
+        thread->sendSDP (type , sdp,"");
     }
 
 
-    void cbFailure(const std::string& file, const std::string &reason, const int &code )
-    {
-        SInfo << "Uploade failure. "  <<  reason;
+    // void createoffer( const std::string& type, const std::string& sdp)
+    // {
+    //     SInfo <<  type ;
 
-    }
+    //     thread->sendSDP (type , sdp,"");
 
-    void cbSuccess(const std::string& file, const std::string &reason)
-    {
-        SInfo << "Uploade Suceess. "  << reason;
-    }
+    // }
 
-
-    
- 
 
     void  stop( )
     {
         
-        
-        if(thread)
+      if(thread)
 	{
           thread->shutdown();
           thread->join();
@@ -82,7 +79,20 @@ namespace sa {
     }
 
 
+   bool RegisterOnLocalSdpReadytoSend(LOCALSDPREADYTOSEND_CALLBACK callback) 
+   {
+  
+      thread->RegisterOnLocalSdpReadytoSend( callback);
 
+      return true;
+   }
+
+   bool RegisterOnMessage(MESSAGE_CALLBACK callback)
+   {
+     thread->RegisterOnMessage( callback);
+
+      return true;
+   }
    
 
 }// end hm

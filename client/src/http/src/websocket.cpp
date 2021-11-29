@@ -39,6 +39,9 @@ namespace base {
          framer(mode)
         {
             _connection->shouldSendHeader(false);
+            
+            dummy_timer.cb_timeout = std::bind(&WebSocketConnection::dummy_timer_cb, this);
+            dummy_timer.Start(7,7);
         }
 
         bool WebSocketConnection::shutdown(uint16_t statusCode, const std::string& statusMessage) {
@@ -53,15 +56,32 @@ namespace base {
             
             return true;
         }
+        
+        bool WebSocketConnection::pong() {
+            char buffer[2];
+            BitWriter writer(buffer, 2);
+            //writer.putU16(statusCode);
+            //writer.put(statusMessage);
 
-        void WebSocketConnection::send(const char* data, size_t len, int flags) {
+            assert(socket);
+             send(buffer, writer.position(),
+                    unsigned(FrameFlags::Fin) | unsigned(Opcode::Pong));
+            
+            return true;
+        }
+
+        void WebSocketConnection::send(const char* data, size_t len, bool binary) {
            // LTrace("Send: ", len, ": ", std::string(data, len))
             assert(framer.handshakeComplete());
 
             // Set default text flag if none specified
-            if (!flags)
+            
+            int flags;
+            if (!binary)
                 flags = SendFlags::Text;
-
+            else
+                 flags = SendFlags::Binary;
+                
             // Frame and send the data
             Buffer buffer;
             buffer.reserve(len + WebSocketFramer::MAX_HEADER_LENGTH);
@@ -69,7 +89,7 @@ namespace base {
             framer.writeFrame(data, len, flags, writer);
 
             assert(socket);
-            _connection->tcpsend((const char*) writer.begin(), writer.position());
+            _connection->tcpsend((const char*) writer.begin(), writer.position(), nullptr);
             
             
         }
@@ -82,7 +102,7 @@ namespace base {
             LTrace("Client request: ", oss.str())
 
             assert(socket);
-            _connection->tcpsend((const char*) oss.str().c_str(), oss.str().length());
+            _connection->tcpsend((const char*) oss.str().c_str(), oss.str().length(),  nullptr);
         }
 
     
@@ -96,10 +116,73 @@ namespace base {
             listener->on_connect( this);
             // Call net::SocketEmitter::onSocketConnect to notify handlers that data may flow
             //net::SocketEmitter::onSocketConnect(*socket.get());
+            
+
+            
+        }
+        
+        void WebSocketConnection::push( const char* data, size_t len, bool binary, bool is_first )
+        { 
+            dummy_mutex.lock();
+            
+            Store store;
+            store.binary = binary;
+            store.buff =  std::string(data, len );
+            store.isFirstFrame = is_first;
+            
+            if (is_first && !first_frame)
+              first_frame = true; 
+
+            if (first_frame)
+            dummy_queue.push(store);
+            
+            dummy_mutex.unlock();
         }
 
-        
-       
+        void WebSocketConnection::dummy_timer_cb() {
+          
+            
+//            static int x = 0;
+//            char tmp[5];
+//            sprintf( tmp,  "%d", x++ );
+//            
+//            send(tmp,5 , false);
+            
+          //  SInfo << "WebSocketConnection " <<    uv_thread_self();
+            
+            
+             //net::HttpConnection* cn = (net::HttpConnection*)connection;
+                
+            int qsize =  ((net::HttpConnection*)_connection)->write_queue_size();
+           
+            while(dummy_queue.size())
+            {  
+                Store tmp;
+                dummy_mutex.lock();
+            
+                tmp = dummy_queue.front();
+                dummy_queue.pop();
+                dummy_mutex.unlock();
+                 
+               if( (!dropping && qsize < 27621) ||  (dropping &&  qsize < 27621 && tmp.isFirstFrame ) )
+               {
+                    if(tmp.buff.length())
+                    send(&tmp.buff[0],tmp.buff.length() , tmp.binary);
+                    
+                    dropping = false;
+               }
+               else
+               {
+                   dropping = true;
+                   SInfo << "dropping frame, storage queueze " <<  dummy_queue.size() << " pending Queue Size "  <<   qsize;
+                   
+               }
+            }
+            
+            
+           
+           
+        }
         
         void WebSocketConnection::handleServerRequest(const std::string & buffer) {
             LTrace("Server request: ", buffer)
@@ -145,10 +228,11 @@ namespace base {
             sendClientRequest();
         }
 
-        void WebSocketConnection::onSocketRecv(const std::string& buffer) {
+        void WebSocketConnection::onSocketRecv( std::string buffer) {
             //LTrace("On recv: ", buffer.size())
 
-            if (framer.handshakeComplete()) {
+            if (framer.handshakeComplete()) 
+            {
 
                 // Note: The spec wants us to buffer partial frames, but our
                 // software does not require this feature, and furthermore
@@ -158,62 +242,136 @@ namespace base {
                 //
                 // Incoming frames may be joined, so we parse them
                 // in a loop until the read buffer is empty.
+                 WebSocketFrameType wsFrameTyp;
+                 
+                if(buffer.size() < 3) 
+                {
+                     storeBuf = storeBuf + buffer;
+                     wsFrameTyp= WebSocketFrameType::INCOMPLETE_FRAME;
+                     
+                     SInfo << "Incomplete frame buffer, continue for more buffer to make a  ws frame.. "  << this;
+                     
+                     return;
+                }
+
+
+                if( !storeBuf.empty())
+                {
+                    buffer = storeBuf + buffer;
+                    storeBuf.clear();
+                }
+                
+               
+                
+                unsigned char msg_opcode = buffer[0] & 0x0F;
+                unsigned char msg_fin = (buffer[0] >> 7) & 0x01;
+                //unsigned char msg_masked = (buffer[1] >> 7) & 0x01;
+                
+                switch(msg_opcode)
+                        
+                {
+                    case 0x0:
+                    {
+                        wsFrameTyp= (msg_fin)?CONTINUATION_FRAME:INCOMPLETE_CONTINUATION_FRAME;   
+                    }
+                    break;
+                    case 0x1:
+                    {
+                        wsFrameTyp= (msg_fin)?TEXT_FRAME:INCOMPLETE_TEXT_FRAME;
+                    }
+                    break;
+                    case 0x2:
+                    {
+                        wsFrameTyp= (msg_fin)?BINARY_FRAME:INCOMPLETE_BINARY_FRAME;
+                    }
+                    break; 
+                    
+                    case 0x8:
+                    {
+                        wsFrameTyp= CLOSE_FRAME; 
+                        
+                         SInfo << "Close "  << this;
+                         
+                         if(listener)
+                        listener->on_close(listener);
+
+                         if(_connection)
+                        _connection->Close();
+                         
+                         return;
+                    }
+                    break;
+
+                    case 0x9:
+                    {
+                        wsFrameTyp= PING_FRAME; 
+                        SInfo << "Ping "  << this;
+                        pong();
+                        return;
+                    }
+                    break;
+                    case 0xA:
+                    {
+                      
+                        wsFrameTyp= PONG_FRAME;
+                        SInfo << "Pong "  << this;
+                    }
+                    break;
+                    default:
+                    {
+                        wsFrameTyp= ERROR_FRAME;  
+                        SError << "Error frame "  << this;
+                    }
+                    
+                };
+                
+      
+
                 BitReader reader(buffer);
+
                 size_t total = reader.available();
                 size_t offset = reader.position();
-                while (offset < total) {
+                while (offset < total) 
+                {
                     char* payload = nullptr;
                     uint64_t payloadLength = 0;
-                    try {
-                        // Restore buffer state for next read
-                        // reader.position(offset);
-                        // reader.limit(total);
-
-                        // STrace << "Read frame at: "
-                        //      << "\n\tinputPosition: " << offset
-                        //      << "\n\tinputLength: " << total
-                        //      << "\n\tbufferPosition: " << reader.position()
-                        //      << "\n\tbufferAvailable: " << reader.available()
-                        //      << "\n\tbufferLimit: " << reader.limit()
-                        //      << "\n\tbuffer: " << std::string(reader.current(),
-                        //      reader.limit())
-                        //      << endl;
-
-                        // Parse a frame to throw
-                        // int payloadLength = framer.readFrame(reader);
-                        payloadLength = framer.readFrame(reader, payload);
-                        assert(payload);
-
+                  
+                    // Parse a frame to throw
+                    // int payloadLength = framer.readFrame(reader);
+                    payloadLength = framer.readFrame(reader, payload);
+                   /// assert(payload);
+                     if (payloadLength)
+                     {
+                       
+ 
                         // Update the next frame offset
                         offset = reader.position(); // + payloadLength;
                         if (offset < total)
                             LTrace("Splitting joined packet at ", offset, " of ", total)
 
-                            // Drop empty packets
-                            if (!payloadLength) {
-                                LDebug("Dropping empty frame")
-                                continue;
-                            }
-                    } catch (std::exception& exc) {
-                        LError("Parser error: ", exc.what())
-                        //socket->setError(exc.what());
-                        return;
-                    }
 
-                    // Emit the result packet
-                    assert(payload);
-                    assert(payloadLength);
-                    if(listener)
-                    listener->on_read( this,(const char*) payload, payloadLength );
-                    
-                   // net::SocketEmitter::onSocketRecv(*socket.get(),
-                    //  mutableBuffer(payload, (size_t)payloadLength),
-                    // peerAddress);
-                    if(_connection->fnPayload)
-                    _connection->fnPayload(_connection,payload , payloadLength);
-                }
+                        // Emit the result packet
+                        assert(payload);
+                        assert(payloadLength);
+                        if(listener)
+                        listener->on_read( this,(const char*) payload, payloadLength );
+                        
+                       // net::SocketEmitter::onSocketRecv(*socket.get(),
+                        //  mutableBuffer(payload, (size_t)payloadLength),
+                        // peerAddress);
+                        if(_connection->fnPayload)
+                        _connection->fnPayload(_connection,payload , payloadLength);
+                     }
+                     else
+                     {
+                            storeBuf = buffer.substr(offset);
+                             return ;
+                     }
+                }//end while
                 assert(offset == total);
-            } else {
+            } 
+            else 
+            {
                 try {
                     if (framer.mode() == ClientSide)
                         handleClientResponse(buffer);
@@ -415,7 +573,8 @@ namespace base {
             } else {
                 lenByte |= 127;
                 frame.putU8(lenByte);
-                frame.putU64(static_cast<uint16_t> (len));
+                //frame.putU64(static_cast<uint16_t> (len));// websocket lager number > 65536 writeFrame bug
+                frame.putU64(static_cast<uint64_t>(len));
             }
 
             if (_maskPayload) {
@@ -445,12 +604,19 @@ namespace base {
 
             return frame.position();
         }
+        
 
         uint64_t WebSocketFramer::readFrame(BitReader& frame, char*& payload) {
             assert(handshakeComplete());
             uint64_t limit = frame.limit();
             size_t offset = frame.position();
             // assert(offset == 0);
+
+
+//            if( frame.available() < 3)
+//            {
+//                return 0;
+//            }
 
             // Read the frame header
             char header[MAX_HEADER_LENGTH];
@@ -461,6 +627,14 @@ namespace base {
             if (lengthByte & FRAME_FLAG_MASK)
                 maskOffset += 4;
             lengthByte &= 0x7f;
+
+
+            if( lengthByte >frame.available())
+            {
+                //LTrace( util::format("WebSocket error: Insufficient buffer for payload ")); //, ErrorPayloadTooBig
+                return 0;
+            }
+
             if (lengthByte + 2 + maskOffset < MAX_HEADER_LENGTH) {
                 frame.get(header + 2, lengthByte + maskOffset);
             } else {
@@ -482,23 +656,32 @@ namespace base {
                 uint64_t l;
                 headerReader.getU64(l);
                 if (l > limit)
-                    throw std::runtime_error(
-                        util::format("WebSocket error: Insufficient buffer for payload size %" PRIu64, l)); //, ErrorPayloadTooBig
+                {
+                    
+                   // LTrace( util::format("WebSocket error: Insufficient buffer for payload size %" PRIu64, l)); //, ErrorPayloadTooBig
+                    return 0;
+                }
                 payloadLength = l;
                 payloadOffset += 8;
             } else if ((lengthByte & 0x7f) == 126) {
                 uint16_t l;
                 headerReader.getU16(l);
                 if (l > limit)
-                    throw std::runtime_error(util::format(
-                        "WebSocket error: Insufficient buffer for payload size %" PRIu64, l)); //, ErrorPayloadTooBig
-                payloadLength = l;
+                {
+                    
+                   // LTrace( util::format("WebSocket error: Insufficient buffer for payload size %" PRIu64, l)); //, ErrorPayloadTooBig
+                    return 0;
+                }
+		payloadLength = l;
                 payloadOffset += 2;
             } else {
                 uint8_t l = lengthByte & 0x7f;
                 if (l > limit)
-                    throw std::runtime_error(util::format(
-                        "WebSocket error: Insufficient buffer for payload size %" PRIu64, l)); //, ErrorPayloadTooBig
+                 {
+                    
+                    LTrace( util::format("WebSocket error: Insufficient buffer for payload size %" PRIu64, l)); //, ErrorPayloadTooBig
+                    return 0;
+                }
                 payloadLength = l;
             }
             if (lengthByte & FRAME_FLAG_MASK) {
@@ -507,8 +690,11 @@ namespace base {
             }
 
             if (payloadLength > limit)
-                throw std::runtime_error(
-                    "WebSocket error: Incomplete frame received"); //ErrorIncompleteFrame
+             {
+
+                    LError( "WebSocket error: Incomplete frame received"); //, ErrorPayloadTooBig
+                    return 0;
+             }
 
             // Get a reference to the start of the payload
             payload = reinterpret_cast<char*> (
@@ -522,8 +708,16 @@ namespace base {
                 }
             }
 
+
+            if (offset + payloadOffset + payloadLength > limit)
+            {
+
+                LError( "WebSocket error: Incomplete frame received"); //, ErrorPayloadTooBig
+                return 0;
+            }
+
             // Update frame length to include payload plus header
-            frame.seek(size_t(offset + payloadOffset + payloadLength));
+            frame.seek(size_t(offset + payloadOffset + payloadLength));// arvind need to fix
             // frame.limit(offset + payloadOffset + payloadLength);
             // int frameLength = (offset + payloadOffset);
             // assert(frame.position() == (offset + payloadOffset));

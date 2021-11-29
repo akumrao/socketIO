@@ -15,7 +15,7 @@
 #include "http/response.h"
 #include <http_parser.h>
 #include <functional> 
-
+#include "net/TcpConnection.h"
 #ifndef HTTP_Parser_H
 #define HTTP_Parser_H
 
@@ -114,8 +114,8 @@ namespace base {
             virtual ~HttpBase();
 
         public:
-            virtual void tcpsend(const char* data, size_t len) {}
-            virtual void send(const char* data, size_t len) = 0;
+            virtual void tcpsend(const char* data, size_t len, onSendCallback cb) =0;
+            virtual void send(const char* data, size_t len, bool binary=false) = 0;
             virtual void Close() = 0;
 
 

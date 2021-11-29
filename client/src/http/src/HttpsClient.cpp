@@ -26,7 +26,7 @@ namespace base {
     namespace net {
 
         HttpsClient::HttpsClient(URL url) :
-         SslConnection(nullptr)
+         SslConnection()
         , ClientConnecton(HTTP_RESPONSE)
         , listener(nullptr)
         , _url(url)
@@ -39,7 +39,7 @@ namespace base {
 
      
         HttpsClient::HttpsClient(const std::string& protocol, const std::string &ip, int port, const std::string& query):
-            SslConnection(nullptr)
+            SslConnection()
           , ClientConnecton(HTTP_RESPONSE)
           , listener(nullptr)
           , _connect(false)
@@ -91,11 +91,16 @@ namespace base {
             if (_url.scheme() == "wss") {
                 //  conn->replaceAdapter(new ws::ConnectionAdapter(conn.get(), ws::ClientSide));
                 wsAdapter = new WebSocketConnection(listener, this, ClientSide);
+                SInfo <<  "wsAdapter new connection " << wsAdapter;  
             }
         }
          
         HttpsClient::~HttpsClient() {
-            LTrace("~HttpsClient()")
+            SInfo <<  "wsAdapter delete connection " << wsAdapter;  
+            delete wsAdapter;
+            wsAdapter = nullptr;
+            
+            SInfo << "~HttpsClient ";
         }
 
         void HttpsClient::send() {
@@ -114,17 +119,17 @@ namespace base {
             SslConnection::Close();
         }
 
-         void HttpsClient::tcpsend(const char* data, size_t len) {
+         void HttpsClient::tcpsend(const char* data, size_t len , onSendCallback cb) {
     
-             SslConnection::send(data, len);
+             SslConnection::tcpsend(data, len, cb); //arvind
          }
          
-        void HttpsClient::send(const char* data, size_t len) {
+        void HttpsClient::send(const char* data, size_t len, bool binary) {
             connect();
             
             if(wsAdapter)
             {
-                wsAdapter->send(data,len );
+                wsAdapter->send(data,len, binary );
                 return;
             }
 
@@ -279,11 +284,13 @@ namespace base {
 
             // Release any file handles
             if (_readStream) {
-                std::ofstream* fstream = (std::ofstream*) (_readStream.get());
-                if (fstream) {
-                    // LTrace("Closing file stream")
-                    fstream->close();
-                }
+                _readStream.reset();
+                
+//                std::ofstream* fstream = (std::ofstream*) (_readStream.get()); // it is not file stream, please check the file stream before closing it
+//                if (fstream) {
+//                    // LTrace("Closing file stream")
+//                    fstream->close();
+//                }
             }
             _complete = true; // in case close() is called inside callback
 

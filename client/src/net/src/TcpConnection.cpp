@@ -17,6 +17,7 @@
 #include <cstdlib> // std::malloc(), std::free()
 #include <cstring> // std::memcpy()
 
+// TcpConnection class is for RFC 4571 for RTP transport. Please do not use it other than SFU/MCU.
 
 namespace base {
     namespace net {
@@ -33,33 +34,41 @@ namespace base {
         inline static void onRead(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
             auto* connection = static_cast<TcpConnectionBase*> (handle->data);
 
-            if (connection == nullptr)
-                return;
-
-            connection->OnUvRead(nread, buf);
+           // SDebug << "onRead "  << connection;
+            if (connection)
+            	connection->OnUvRead(nread, buf);
         }
 
         inline static void onWrite(uv_write_t* req, int status) {
             auto* writeData = static_cast<TcpConnectionBase::UvWriteData*> (req->data);
             auto* handle = req->handle;
             auto* connection = static_cast<TcpConnectionBase*> (handle->data);
+            auto cb         = writeData->cb;
 
             // Delete the UvWriteData struct (which includes the uv_req_t and the store char[]).
             if (connection)
-                connection->OnUvWrite(status);
-            std::free(writeData);
+                connection->OnUvWrite(status,cb);
+            delete writeData;
 
         }
 
         inline static void onClose(uv_handle_t* handle) {
-
-            LInfo("onClose");
+            
+            
             TcpConnectionBase *obj = (TcpConnectionBase *) handle->data;
-
+            
+            SDebug << "onClose ";
+            
+           
             if (obj)
                 obj->on_close();
-            delete handle;
-            handle = nullptr;
+            
+             if(obj->listenerClose)
+             obj->listenerClose->OnTcpConnectionClosed(obj);
+                    
+            
+//            delete handle;
+//              handle = nullptr;
         }
 
         inline static void onShutdown(uv_shutdown_t* req, int /*status*/) {
@@ -79,13 +88,23 @@ namespace base {
 
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 
-        TcpConnectionBase::TcpConnectionBase(bool tls) : tls(tls) {
+        TcpConnectionBase::TcpConnectionBase(Listener *listener, bool tls) : tls(tls), listener(listener){
 
             this->uvHandle = new uv_tcp_t;
             this->uvHandle->data = (void*) this;
-
+           
+            SDebug << "TcpConnectionBase new handle " <<  this->uvHandle;
+             
             // NOTE: Don't allocate the buffer here. Instead wait for the first uv_alloc_cb().
         }
+        
+       int TcpConnectionBase::write_queue_size()
+       {
+           if( uvHandle != nullptr) 
+           return this->uvHandle->write_queue_size;
+           
+           return 0;
+       }
 
         TcpConnectionBase::~TcpConnectionBase() {
 
@@ -94,11 +113,22 @@ namespace base {
                 Close();
 
             delete[] this->buffer;
+            
+            SDebug << "~TcpConnectionBase delete handle " <<  this->uvHandle;
+            delete   this->uvHandle;
+            this->uvHandle = nullptr;        
+            
         }
+        
+        
+         void TcpConnectionBase::on_close() 
+         {
+             
+         }
 
         void TcpConnectionBase::Close() {
 
-            LTrace("Close ", this->uvHandle)
+            STrace << "Close handle " ;
             if (this->closed)
                 return;
 
@@ -106,7 +136,7 @@ namespace base {
 
             this->closed = true;
 
-            this->uvHandle->data = this;
+           // this->uvHandle->data = this;
 
             // Tell the UV handle that the TcpConnectionBase has been closed.
             /*this->uvHandle->data = nullptr;
@@ -153,12 +183,12 @@ namespace base {
             LDebug("</TcpConnectionBase>");
         }
 
-        void TcpConnectionBase::Setup(
+        void TcpConnectionBase::Setup( ListenerClose* listenerClose, uv_loop_t* _loop,
                 struct sockaddr_storage* localAddr, const std::string& localIp, uint16_t localPort) {
-
+            this->listenerClose = listenerClose;
 
             // Set the UV handle.
-            int err = uv_tcp_init(Application::uvGetLoop(), this->uvHandle);
+            int err = uv_tcp_init(_loop, this->uvHandle);
 
             if (err != 0) {
                 delete this->uvHandle;
@@ -283,13 +313,21 @@ namespace base {
                 LError("error setting peer IP and port");
         }
 
-        int TcpConnectionBase::Write(const char* data, size_t len) {
+        int TcpConnectionBase::Write(const char* data, size_t len, onSendCallback cb) {
 
             if (this->closed)
+            {
+                if (cb)
+                    (cb)(false);
                 return -1;
+            }
 
             if (len == 0)
+            {
+                if (cb)
+                    (cb)(false);
                 return 0;
+            }
 
             // LTrace("TcpConnectionBase::Write " , len);
 
@@ -304,6 +342,8 @@ namespace base {
 
             // All the data was written. Done.
             if (written == static_cast<int> (len)) {
+                if (cb)
+                    (cb)(true);
                 return written;
             }// Cannot write any data at first time. Use uv_write().
             else if (written == UV_EAGAIN || written == UV_ENOSYS) {
@@ -311,10 +351,12 @@ namespace base {
                 written = 0;
             }// Error. Should not happen.
             else if (written < 0) {
-                LDebug("uv_try_write() failed, closing the connection: %s", uv_strerror(written));
+                //LDebug("uv_try_write() failed, closing the connection: %s", uv_strerror(written));
+                LDebug("uv_try_write() failed, trying uv_write(): %s", uv_strerror(written));
 
-                Close();
-                return -1;
+                //Close(); // arvind TBD .. I am not sure if I should close connection here
+                //return -1;
+                written = 0;
             }
 
             // LDebug(
@@ -323,35 +365,57 @@ namespace base {
 
             size_t pendingLen = len - written;
             // Allocate a special UvWriteData struct pointer.
-            auto* writeData = static_cast<UvWriteData*> (std::malloc(sizeof (UvWriteData) + pendingLen));
+            auto* writeData = new UvWriteData(pendingLen);
 
+            writeData->req.data = static_cast<void*>(writeData);
             std::memcpy(writeData->store, data + written, pendingLen);
-            writeData->req.data = (void*) writeData;
+            writeData->cb = cb;
 
-            buffer = uv_buf_init(reinterpret_cast<char*> (writeData->store), pendingLen);
+            buffer = uv_buf_init(reinterpret_cast<char*>(writeData->store), pendingLen);
 
             int err = uv_write(
-                    &writeData->req,
-                    reinterpret_cast<uv_stream_t*> (this->uvHandle),
-                    &buffer,
-                    1,
-                    static_cast<uv_write_cb> (onWrite));
+              &writeData->req,
+              reinterpret_cast<uv_stream_t*>(this->uvHandle),
+              &buffer,
+              1,
+              static_cast<uv_write_cb>(onWrite));
 
-            if (err != 0) {
+            if (err != 0)
+            {
                 LError("uv_write() failed: %s", uv_strerror(err));
-            } else
-                sentBytes += pendingLen;
 
-            return -2;
+                if (cb)
+                    (cb)(false);
+
+                // Delete the UvWriteData struct (it will delete the store and cb too).
+                delete writeData;
+                return -1;
+            }
+            else
+            {
+                // Update sent bytes.
+                this->sentBytes += pendingLen;
+            }
+
+
+            return pendingLen;
         }
 
-        int TcpConnectionBase::Write(const char* data1, size_t len1, const char* data2, size_t len2) {
+        int TcpConnectionBase::Write(const char* data1, size_t len1, const char* data2, size_t len2, onSendCallback cb) {
 
             if (this->closed)
+            {
+                if (cb)
+                    (cb)(false);
                 return -1;
+            }
 
             if (len1 == 0 && len2 == 0)
+            {
+                if (cb)
+                    (cb)(false);
                 return 0;
+            }
 
             size_t totalLen = len1 + len2;
             uv_buf_t buffers[2];
@@ -370,6 +434,8 @@ namespace base {
 
             // All the data was written. Done.
             if (written == static_cast<int> (totalLen)) {
+                 if (cb)
+                    (cb)(true);
                 return written;
             }// Cannot write any data at first time. Use uv_write().
             else if (written == UV_EAGAIN || written == UV_ENOSYS) {
@@ -377,48 +443,65 @@ namespace base {
                 written = 0;
             }// Error. Should not happen.
             else if (written < 0) {
-                LDebug("uv_try_write() failed, closing the connection: %s", uv_strerror(written));
+                 //LDebug("uv_try_write() failed, closing the connection: %s", uv_strerror(written));
+                LDebug("uv_try_write() failed, trying uv_write(): %s", uv_strerror(written));
 
-                Close();
-
-                return -1;
+                //Close(); // arvind TBD .. I am not sure if I should close connection here
+                //return -1;
+                written = 0;
             }
 
             size_t pendingLen = totalLen - written;
+            auto* writeData   = new UvWriteData(pendingLen);
 
-            // Allocate a special UvWriteData struct pointer.
-            auto* writeData = static_cast<UvWriteData*> (std::malloc(sizeof (UvWriteData) + pendingLen));
+            writeData->req.data = static_cast<void*>(writeData);
 
             // If the first buffer was not entirely written then splice it.
-            if (static_cast<size_t> (written) < len1) {
+            if (static_cast<size_t>(written) < len1)
+            {
                 std::memcpy(
-                        writeData->store, data1 + static_cast<size_t> (written), len1 - static_cast<size_t> (written));
-                std::memcpy(writeData->store + (len1 - static_cast<size_t> (written)), data2, len2);
-            }// Otherwise just take the pending data in the second buffer.
-            else {
+                  writeData->store, data1 + static_cast<size_t>(written), len1 - static_cast<size_t>(written));
+                std::memcpy(writeData->store + (len1 - static_cast<size_t>(written)), data2, len2);
+            }
+            // Otherwise just take the pending data in the second buffer.
+            else
+            {
                 std::memcpy(
-                        writeData->store,
-                        data2 + (static_cast<size_t> (written) - len1),
-                        len2 - (static_cast<size_t> (written) - len1));
+                  writeData->store,
+                  data2 + (static_cast<size_t>(written) - len1),
+                  len2 - (static_cast<size_t>(written) - len1));
             }
 
-            writeData->req.data = (void*) writeData;
+            writeData->cb = cb;
 
-            uv_buf_t buffer = uv_buf_init(reinterpret_cast<char*> (writeData->store), pendingLen);
+            uv_buf_t buffer = uv_buf_init(reinterpret_cast<char*>(writeData->store), pendingLen);
 
             err = uv_write(
-                    &writeData->req,
-                    reinterpret_cast<uv_stream_t*> (this->uvHandle),
-                    &buffer,
-                    1,
-                    static_cast<uv_write_cb> (onWrite));
+              &writeData->req,
+              reinterpret_cast<uv_stream_t*>(this->uvHandle),
+              &buffer,
+              1,
+              static_cast<uv_write_cb>(onWrite));
 
-            if (err != 0) {
+            if (err != 0)
+            {
                 LError("uv_write() failed: %s", uv_strerror(err));
-            } else
-                sentBytes += pendingLen;
 
-            return -2;
+                if (cb)
+                    (cb)(false);
+
+                // Delete the UvWriteData struct (it will delete the store and cb too).
+                delete writeData;
+                return -1;
+            }
+            else
+            {
+                // Update sent bytes.
+                this->sentBytes += pendingLen;
+            }
+
+             return pendingLen;
+
         }
 
         void TcpConnectionBase::ErrorReceiving() {
@@ -496,6 +579,9 @@ namespace base {
                     on_tls_read((const char*) buf->base, nread);
                 else
                     on_read((const char*) buf->base, nread);
+                
+                if(listener)
+                listener->on_read(this, (const char*) buf->base, nread); //arvind
 
             }// Client disconneted.
             else if (nread == UV_EOF || nread == UV_ECONNRESET) {
@@ -518,25 +604,37 @@ namespace base {
             }
         }
 
-        inline void TcpConnectionBase::OnUvWrite(int status) {
+        inline void TcpConnectionBase::OnUvWrite(int status,onSendCallback cb) {
 
             if (status == 0) {
+                if (cb)
+                 (cb)(true);
             } else {
                 if (status != UV_EPIPE && status != UV_ENOTCONN)
                     this->hasError = true;
+                    
+                if (cb)
+                  (cb)(false);
 
                 LDebug("write error, closing the connection: %s", uv_strerror(status));
                 Close();
             }
         }
+        
+        
+        void TcpConnectionBase::send(const char* data, size_t len) {
+
+           Write(data, len, nullptr);
+        }
 
         /*************************************************************************************************************/
-
+        // TcpConnection class is for RFC 4571 for RTP transport. Please do not use it other than SFU/MCU.
+        
         static constexpr size_t ReadBufferSize{ 65536 };
-	static uint8_t ReadBuffer[ReadBufferSize];
+	    static uint8_t ReadBuffer[ReadBufferSize];
 
         TcpConnection::TcpConnection(Listener* listener, bool tls)
-        : TcpConnectionBase(tls), listener(listener) {
+        : TcpConnectionBase(listener, tls){
 
         }
 
@@ -665,7 +763,7 @@ namespace base {
             uint8_t frameLen[2];
 
             base::util::Byte::Set2Bytes(frameLen, 0, len);
-            TcpConnectionBase::Write((const char*)frameLen, 2, data, len);
+            TcpConnectionBase::Write((const char*)frameLen, 2, data, len,nullptr);
            //TcpConnectionBase::Write(data, len);
         }
 

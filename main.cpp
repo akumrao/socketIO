@@ -1,25 +1,25 @@
 
 #include "SocketIO.h"
-#include <unistd.h>
+#include "base/platform.h"
 #include <iostream>
 
- const std::string ip = "192.168.0.16";
+ const char ip[] = "192.168.0.16";
    
- const int port = 1794;
+ const int port = 8080;
 
 int main(int argc, char** argv) {
 
 //    sa::stop();
    
-    sa::connect(ip, port);
+    sa::connect(ip, port,"room1", nullptr, 2, nullptr,nullptr);
 
-    usleep(900000000);
+    base::sleep(1000);
     std::cout << "Signal Client Terminating" << std::endl << std::flush;
     
 
     // hm::stop();
-    // std::cout << "stop done" << std::endl;
-
+   
+      base::sleep(1);
     // usleep(900000);
 
     // std::cout << "second upload start" << std::endl;
@@ -31,6 +31,8 @@ int main(int argc, char** argv) {
     // std::cout << "second upload done" << std::endl;
 
      sa::stop();
+     
+     std::cout << "Signal Client Terminated" << std::endl << std::flush;
 
 
     return 0;

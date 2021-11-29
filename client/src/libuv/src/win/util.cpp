@@ -616,14 +616,14 @@ int uv_cpu_info(uv_cpu_info_t** cpu_infos_ptr, int* cpu_count_ptr) {
   GetSystemInfo(&system_info);
   cpu_count = system_info.dwNumberOfProcessors;
 
-  cpu_infos = uv__calloc(cpu_count, sizeof *cpu_infos);
+  cpu_infos = (uv_cpu_info_t*)uv__calloc(cpu_count, sizeof *cpu_infos);
   if (cpu_infos == NULL) {
     err = ERROR_OUTOFMEMORY;
     goto error;
   }
 
   sppi_size = cpu_count * sizeof(*sppi);
-  sppi = uv__malloc(sppi_size);
+  sppi = (  SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION*)uv__malloc(sppi_size);
   if (sppi == NULL) {
     err = ERROR_OUTOFMEMORY;
     goto error;
@@ -845,7 +845,7 @@ int uv_interface_addresses(uv_interface_address_t** addresses_ptr,
       case ERROR_BUFFER_OVERFLOW:
         /* This happens when win_address_buf is NULL or too small to hold all
          * adapters. */
-        win_address_buf = uv__malloc(win_address_buf_size);
+        win_address_buf =(IP_ADAPTER_ADDRESSES*) uv__malloc(win_address_buf_size);
         if (win_address_buf == NULL)
           return UV_ENOMEM;
 
@@ -853,7 +853,7 @@ int uv_interface_addresses(uv_interface_address_t** addresses_ptr,
 
       case ERROR_NO_DATA: {
         /* No adapters were found. */
-        uv_address_buf = uv__malloc(1);
+        uv_address_buf = ( uv_interface_address_t*)uv__malloc(1);
         if (uv_address_buf == NULL)
           return UV_ENOMEM;
 
@@ -930,7 +930,7 @@ int uv_interface_addresses(uv_interface_address_t** addresses_ptr,
   }
 
   /* Allocate space to store interface data plus adapter names. */
-  uv_address_buf = uv__malloc(uv_address_buf_size);
+  uv_address_buf = ( uv_interface_address_t*) uv__malloc(uv_address_buf_size);
   if (uv_address_buf == NULL) {
     uv__free(win_address_buf);
     return UV_ENOMEM;
@@ -1252,7 +1252,7 @@ int uv__convert_utf16_to_utf8(const WCHAR* utf16, int utf16len, char** utf8) {
   /* Allocate the destination buffer adding an extra byte for the terminating
    * NULL. If utf16len is not -1 WideCharToMultiByte will not add it, so
    * we do it ourselves always, just in case. */
-  *utf8 = uv__malloc(bufsize + 1);
+  *utf8 = (char*)uv__malloc(bufsize + 1);
 
   if (*utf8 == NULL)
     return UV_ENOMEM;
@@ -1300,7 +1300,7 @@ int uv__convert_utf8_to_utf16(const char* utf8, int utf8len, WCHAR** utf16) {
   /* Allocate the destination buffer adding an extra byte for the terminating
    * NULL. If utf8len is not -1 MultiByteToWideChar will not add it, so
    * we do it ourselves always, just in case. */
-  *utf16 = uv__malloc(sizeof(WCHAR) * (bufsize + 1));
+  *utf16 = (WCHAR*)uv__malloc(sizeof(WCHAR) * (bufsize + 1));
 
   if (*utf16 == NULL)
     return UV_ENOMEM;
@@ -1401,7 +1401,7 @@ int uv_os_environ(uv_env_item_t** envitems, int* count) {
 
   for (penv = env, i = 0; *penv != L'\0'; penv += wcslen(penv) + 1, i++);
 
-  *envitems = uv__calloc(i, sizeof(**envitems));
+  *envitems = (uv_env_item_t*) uv__calloc(i, sizeof(**envitems));
   if (envitems == NULL) {
     FreeEnvironmentStringsW(env);
     return UV_ENOMEM;
@@ -1417,7 +1417,9 @@ int uv_os_environ(uv_env_item_t** envitems, int* count) {
     if (uv__convert_utf16_to_utf8(penv, -1, &buf) != 0)
       goto fail;
 
-    ptr = strchr(buf, '=');
+    /* Using buf + 1 here because we know that `buf` has length at least 1,
+     * and some special environment variables on Windows start with a = sign. */
+    ptr = strchr(buf + 1, '=');
     if (ptr == NULL) {
       uv__free(buf);
       goto do_continue;
@@ -1857,4 +1859,21 @@ int uv_gettimeofday(uv_timeval64_t* tv) {
   tv->tv_sec = (int64_t) ((ularge.QuadPart - epoch) / 10000000L);
   tv->tv_usec = (int32_t) (((ularge.QuadPart - epoch) % 10000000L) / 10);
   return 0;
+}
+
+int uv__random_rtlgenrandom(void* buf, size_t buflen) {
+  if (pRtlGenRandom == NULL)
+    return UV_ENOSYS;
+
+  if (buflen == 0)
+    return 0;
+
+  if (pRtlGenRandom(buf, buflen) == FALSE)
+    return UV_EIO;
+
+  return 0;
+}
+
+void uv_sleep(unsigned int msec) {
+  Sleep(msec);
 }

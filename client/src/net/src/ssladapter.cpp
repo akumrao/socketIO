@@ -20,6 +20,8 @@
 #include <stdexcept>
 #include <vector>
 
+#define FROMFILE 1
+
 using namespace std;
 
 
@@ -51,13 +53,8 @@ namespace base {
             const SSL_METHOD *method;
             SSL_CTX *ctx;
 
-            //char CertFile[] = "/var/tmp/key/certificate.crt";
-            //char KeyFile[] = "/var/tmp/key/private_key.pem";
 
-            //sslCrt: '/etc/ssl/certs/ssl-cert-snakeoil.pem',
-            //sslKey: '/etc/ssl/private/ssl-cert-snakeoil.key',
-            char CertFile[] = "/etc/ssl/certs/ssl-cert-snakeoil.pem";
-            char KeyFile[] = "/etc/ssl/private/ssl-cert-snakeoil.key";
+            char KeyFile[] = "./key/key.pem";
 
             SSL_library_init();
 
@@ -83,7 +80,10 @@ namespace base {
         
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            /* from file
+            #if FROMFILE
+
+            char CertFile[] = "./key/cert.pem";
+           
             if (SSL_CTX_load_verify_locations(ctx, CertFile, nullptr) != 1)
                     ERR_print_errors_fp(stderr);
 
@@ -95,7 +95,7 @@ namespace base {
                 ERR_print_errors_fp(stderr);
                 abort();
             }
-            */
+            #else
 
             X509 *cert = NULL;
             BIO *bio = NULL;
@@ -128,14 +128,17 @@ namespace base {
             if(cert)
                 X509_free(cert);
 
+          #endif
+
             
 //                
 
            if (server) {
                 //New lines //for server side only 
 
-                
-               // SSL_CTX_set_default_passwd_cb_userdata(ctx, (void *) "12345678");
+                #if FROMFILE
+                SSL_CTX_set_default_passwd_cb_userdata(ctx, (void *) "12345678");
+		#endif
                 
                 if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0) {
                     ERR_print_errors_fp(stderr);
@@ -360,20 +363,22 @@ namespace base {
 
       /* Arvind TBD. Below code does not work with lower version of OpenSSL.
         In future I will replace TLS with DTLS
-
+      */
         void SSLAdapter::flushReadBIO() {
             size_t npending = BIO_ctrl_pending(_readBIO);
             if (npending > 0) {
                 int nread;
-                char buffer[npending];
+                char *buffer = new char[npending];
                 while ((nread = SSL_read(_ssl, buffer, npending)) > 0) {
                    // LTrace("On Read ", buffer)
                     //  _socket->listener->on_read(_socket, buffer, nread); // arvind
                     _socket->on_read(buffer, nread); // arvind
                 }
+                delete []buffer;
             }
         }
-        */ 
+
+        /*
         void SSLAdapter::flushReadBIO() {
             size_t npending = BIO_ctrl_pending(_readBIO);
             if (npending > 0) {
@@ -389,16 +394,18 @@ namespace base {
                 }
                 _socket->on_read(buffer, ntotal); // arvind
             }
-        }
+        }*/
 
         void SSLAdapter::flushWriteBIO() {
             size_t npending = BIO_ctrl_pending(_writeBIO);
             if (npending > 0) {
-                char buffer[npending];
+                char *buffer = new char[npending];
                 int nread = BIO_read(_writeBIO, buffer, npending);
                 if (nread > 0) {
-                    _socket->Write(buffer, nread); // arvind
+                    _socket->Write(buffer, nread,cb); // arvind
+                    cb = nullptr;
                 }
+                delete []buffer;
             }
         }
 
@@ -411,7 +418,7 @@ namespace base {
                     LTrace("SSL_ERROR_ZERO_RETURN")
                     return;
                 case SSL_ERROR_WANT_READ:
-                    LTrace("SSL_ERROR_WANT_READ")
+                    //LTrace("SSL_ERROR_WANT_READ")
                     flushWriteBIO();
                     break;
                 case SSL_ERROR_WANT_WRITE:

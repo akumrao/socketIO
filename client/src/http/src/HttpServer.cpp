@@ -31,12 +31,12 @@ namespace base {
 
         /*************************************************************************************************************/
         /******************************************************************************************************************/
-        static constexpr size_t MaxTcpConnectionsPerServer{ 100000};
+        static constexpr size_t MaxTcpConnectionsPerServer{ 1000};
 
         /* Instance methods. */
 
-        HttpServerBase::HttpServerBase(Listener *listener, std::string ip, int port, bool ssl)
-        : TcpServerBase( BindTcp(ip, port), 256),listener(listener),ssl(ssl)
+        HttpServerBase::HttpServerBase(Listener *listener, std::string ip, int port, bool multithreaded,  bool ssl)
+        : TcpServerBase( BindTcp(ip, port), 256, multithreaded),listener(listener),ssl(ssl)
         {
 
         }
@@ -52,9 +52,11 @@ namespace base {
 
             LTrace(" On acccept-> UserOnTcpConnectionAlloc"  )
             // Allocate a new RTC::HttpConnection for the HttpServerBase to handle it.
+#if HTTPSSL
             if(ssl)
             *connection = new HttpsConnection(listener, HTTP_REQUEST);
             else
+#endif
             *connection = new HttpConnection(listener, HTTP_REQUEST);
                
             
@@ -74,15 +76,16 @@ namespace base {
 
         void HttpServerBase::UserOnTcpConnectionClosed(TcpConnectionBase* connection) {
 
-            //this->listener->on_close(connection);
+            //override this function
+
         }
 
         /*******************************************************************************************************************/
 
 
 
-        HttpServer::HttpServer( std::string ip, int port, ServerConnectionFactory *factory) 
-        : HttpServerBase( this,  ip, port )
+        HttpServer::HttpServer( std::string ip, int port, ServerConnectionFactory *factory, bool multithreaded ) 
+        : HttpServerBase( this,  ip, port, multithreaded )
         ,ip(ip), port(port), _factory(factory)
         {
  
@@ -112,8 +115,11 @@ namespace base {
         }
 
         void HttpServer::on_close(Listener* connection) {
+	     //override this function
 
-            STrace << "HttpServer::on_close, LocalIP" << connection->GetLocalIp() << " PeerIP" << connection->GetPeerIp() << std::endl << std::flush;
+            TcpConnectionBase *con = (TcpConnectionBase*)connection;
+            STrace << "HttpServer::on_close, LocalIP" << con->GetLocalIp() << " PeerIP" << con->GetPeerIp() << std::endl << std::flush;
+          
         }
 
        
@@ -132,86 +138,7 @@ namespace base {
 
              // assert(multipartparser_execute(&parser, &callbacks, BODY, len) == len);
         }
-/*
-        typedef struct part {
-    std::map<std::string,std::string> headers;
-    std::string body;
-} part;
 
-//static multipartparser_callbacks g_callbacks;
-
-static bool             g_body_begin_called;
-static std::string      g_header_name;
-static std::string      g_header_value;
-static std::list<part>  g_parts;
-static bool             g_body_end_called;
-
-static void init_globals()
-{
-    g_body_begin_called = false;
-    g_header_name.clear();
-    g_header_value.clear();
-    g_parts.clear();
-    g_body_end_called = false;
-}
-
-static int on_body_begin(multipartparser* )
-{
-    g_body_begin_called = true;
-    return 0;
-}
-
-static int on_part_begin(multipartparser* )
-{
-    g_parts.push_back(part());
-    return 0;
-}
-
-static void on_header_done()
-{
-    g_parts.back().headers[g_header_name] = g_header_value;
-    g_header_name.clear();
-    g_header_value.clear();
-}
-
-static int on_header_field(multipartparser* , const char* data, size_t size)
-{
-    if (g_header_value.size() > 0)
-        on_header_done();
-    g_header_name.append(data, size);
-    return 0;
-}
-
-static int on_header_value(multipartparser* , const char* data, size_t size)
-{
-    g_header_value.append(data, size);
-    return 0;
-}
-
-static int on_headers_complete(multipartparser* )
-{
-    if (g_header_value.size() > 0)
-        on_header_done();
-    return 0;
-}
-
-static int on_data(multipartparser* , const char* data, size_t size)
-{
-    g_parts.back().body.append(data, size);
-    return 0;
-}
-
-static int on_part_end(multipartparser* )
-{
-    return 0;
-}
-
-static int on_body_end(multipartparser* )
-{
-    g_body_end_called = true;
-    return 0;
-}
-  */      
         
         void HttpServer::on_header(Listener* connection) {
               HttpConnection *con = (HttpConnection*)connection;
@@ -263,9 +190,9 @@ static int on_body_end(multipartparser* )
 
 /***********************************************************************************************/
         
-
-        HttpsServer::HttpsServer( std::string ip, int port, ServerConnectionFactory *factory) 
-        : HttpServerBase( this,  ip, port , true)
+#if HTTPSSL
+        HttpsServer::HttpsServer( std::string ip, int port, ServerConnectionFactory *factory,bool multithreaded  ) 
+        : HttpServerBase( this,  ip, port ,multithreaded, true)
         ,ip(ip), port(port), _factory(factory)
         {
  
@@ -322,6 +249,7 @@ static int on_body_end(multipartparser* )
          
                LTrace("HttpsServer::on_header" )
         }
+#endif
 
     } // namespace net
 } // base

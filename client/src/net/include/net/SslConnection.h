@@ -25,14 +25,14 @@ namespace net {
 
 
 /// SSL socket implementation.
-class  SslConnection : public TcpConnection
+class  SslConnection : public TcpConnectionBase
 {
 public:
    // typedef std::shared_ptr<SslConnection> Ptr;
     //typedef std::vector<Ptr> Vec;
 
-    SslConnection(Listener* listener); //, SocketMode mode = ClientSide
-    SslConnection(Listener* listener, bool serverMode);
+    SslConnection(); //, SocketMode mode = ClientSide
+    SslConnection( bool serverMode);
 //    SslConnection(Listener* listener, SSLContext::Ptr sslContext, SSLSession::Ptr session);
 
     virtual ~SslConnection();
@@ -60,6 +60,7 @@ public:
 
     void send(const char* data, size_t len) override;
  
+    void tcpsend(const char* data, size_t len, onSendCallback _cb);
 
     /// Use the given SSL context for this socket.
 //    void useContext(SSLContext::Ptr context);
@@ -111,7 +112,7 @@ protected:
     //net::SSLSession::Ptr _sslSession;
     net::SSLAdapter _sslAdapter;
 
-    Listener* listener{ nullptr};
+   // Listener* listener{ nullptr};
     
     friend class net::SSLAdapter;
     
