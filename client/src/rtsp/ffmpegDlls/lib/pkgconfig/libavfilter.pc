@@ -1,0 +1,14 @@
+prefix=/local64
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavfilter
+Description: FFmpeg audio/video filtering library
+Version: 6.82.100
+Requires: 
+Requires.private: libswscale >= 4.6.100, libavformat >= 57.71.100, libavcodec >= 57.89.100, libswresample >= 2.7.100, libavutil >= 55.58.100
+Conflicts:
+Libs: -L${libdir}  -lavfilter 
+Libs.private: -lws2_32 -lavicap32 -lgdi32 -lpsapi -lole32 -lstrmiids -luuid -loleaut32 -lshlwapi -luser32 -ldl -ldl -liconv -lsecur32 -LE:/fb_goal/local64/lib -lmingw32 -lSDL2main -lSDL2 -mwindows -Wl,--dynamicbase -Wl,--nxcompat -Wl,--high-entropy-va -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lsetupapi -lversion -luuid -mconsole -LE:/fb_goal/local64/lib -lvpx -lm -lm -lpthread -LE:/fb_goal/local64/lib -lvpx -lm -lm -lpthread -LE:/fb_goal/local64/lib -lvpx -lm -lm -lpthread -LE:/fb_goal/local64/lib -lvpx -lm -lm -lpthread -lvorbisenc -lvorbis -logg -LE:/fb_goal/local64/lib -lopus -lm -lmp3lame -LE:/fb_goal/local64/lib -lfdk-aac -lgmp -lm -llzma -lbz2 -lz -lpsapi -ladvapi32 -lshell32
+Cflags: -I${includedir}
