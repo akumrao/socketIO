@@ -266,15 +266,12 @@ list(APPEND SOURCES
 ./client/src/rtsp/ffmpeg/atomic.cpp
 ./client/src/rtsp/ffmpeg/audio_frame_queue.cpp
 ./client/src/rtsp/ffmpeg/audiointerleave.cpp
-./client/src/rtsp/ffmpeg/avbuffer.cpp
 ./client/src/rtsp/ffmpeg/avc.cpp
 ./client/src/rtsp/ffmpeg/avfft.cpp
 ./client/src/rtsp/ffmpeg/avio.cpp
 ./client/src/rtsp/ffmpeg/aviobuf.cpp
 ./client/src/rtsp/ffmpeg/avpacket.cpp
-./client/src/rtsp/ffmpeg/avparser.cpp
 ./client/src/rtsp/ffmpeg/avstring.cpp
-./client/src/rtsp/ffmpeg/avtime.cpp
 ./client/src/rtsp/ffmpeg/bitstream.cpp
 ./client/src/rtsp/ffmpeg/bitstream_filters.cpp
 ./client/src/rtsp/ffmpeg/bprint.cpp
@@ -323,7 +320,6 @@ list(APPEND SOURCES
 ./client/src/rtsp/ffmpeg/mpegvideodsp.cpp
 ./client/src/rtsp/ffmpeg/mpegvideoencdsp.cpp
 ./client/src/rtsp/ffmpeg/mux.cpp
-./client/src/rtsp/ffmpeg/muxframe.cpp
 ./client/src/rtsp/ffmpeg/network.cpp
 ./client/src/rtsp/ffmpeg/opt.cpp
 ./client/src/rtsp/ffmpeg/options.cpp
@@ -358,9 +354,18 @@ list(APPEND SOURCES
 
 )
 
-add_executable(main  mainhttp.cpp  ${SOURCES})
+add_executable(main  ./client/src/rtsp/main/fMp4tests.cpp   
+./client/src/rtsp/src/ffparese.cpp
+./client/src/rtsp/src/fmp4.cpp
+./client/src/rtsp/src/framefilter.cpp
+./client/src/rtsp/src/muxer.cpp
+./client/src/rtsp/src/muxframe.cpp
+./client/src/rtsp/src/Settings.cpp
+./client/src/rtsp/src/tools.cpp 
+${SOURCES} )
+
 target_compile_definitions(main PRIVATE ${media_defines})
-target_include_directories(main PUBLIC ./client/src/base/include ./client/src/http_parser ./client/src/json/include ./client/src/net/include ./client/src/http/include ./client/src/libuv/include ./client/src/libuv/src  ./client/src/signal/include ./client/src/rtsp/ffmpeg )
+target_include_directories(main PUBLIC ./client/src/base/include ./client/src/http_parser ./client/src/json/include ./client/src/net/include ./client/src/http/include ./client/src/libuv/include ./client/src/libuv/src  ./client/src/signal/include ./client/src/rtsp/ffmpeg ./client/src/rtsp/include)
 target_link_libraries(main  PUBLIC uv_a )
 
 

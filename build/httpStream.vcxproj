@@ -1,0 +1,420 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C321DF71-5EB0-3091-B29D-E0825FAF0ECE}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>httpStream</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\dev\work\crash_fix_game\socketIO\build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">httpStream.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">httpStream</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\dev\work\crash_fix_game\socketIO\build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">httpStream.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">httpStream</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\dev\work\crash_fix_game\socketIO\build\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">httpStream.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">httpStream</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\dev\work\crash_fix_game\socketIO\build\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">httpStream.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">httpStream</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;SCY_WIN;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;SCY_WIN;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SCY_WIN;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SCY_WIN;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SCY_WIN;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SCY_WIN;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SCY_WIN;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SCY_WIN;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\dev\work\crash_fix_game\socketIO\CMakeLists.txt">
+      <StdOutEncoding>UTF-8</StdOutEncoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule E:/dev/work/crash_fix_game/socketIO/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SE:/dev/work/crash_fix_game/socketIO -BE:/dev/work/crash_fix_game/socketIO/build --check-stamp-file E:/dev/work/crash_fix_game/socketIO/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeDependentOption.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTest.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTestTargets.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTestUseLaunchers.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\DartConfiguration.tcl.in;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\GNUInstallDirs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\WriteBasicConfigVersionFile.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeCXXCompiler.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeRCCompiler.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule E:/dev/work/crash_fix_game/socketIO/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SE:/dev/work/crash_fix_game/socketIO -BE:/dev/work/crash_fix_game/socketIO/build --check-stamp-file E:/dev/work/crash_fix_game/socketIO/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeDependentOption.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTest.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTestTargets.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTestUseLaunchers.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\DartConfiguration.tcl.in;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\GNUInstallDirs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\WriteBasicConfigVersionFile.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeCXXCompiler.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeRCCompiler.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule E:/dev/work/crash_fix_game/socketIO/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SE:/dev/work/crash_fix_game/socketIO -BE:/dev/work/crash_fix_game/socketIO/build --check-stamp-file E:/dev/work/crash_fix_game/socketIO/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeDependentOption.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTest.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTestTargets.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTestUseLaunchers.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\DartConfiguration.tcl.in;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\GNUInstallDirs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\WriteBasicConfigVersionFile.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeCXXCompiler.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeRCCompiler.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule E:/dev/work/crash_fix_game/socketIO/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SE:/dev/work/crash_fix_game/socketIO -BE:/dev/work/crash_fix_game/socketIO/build --check-stamp-file E:/dev/work/crash_fix_game/socketIO/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeDependentOption.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeInitializeConfigs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeLanguageInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTest.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTestTargets.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\CTestUseLaunchers.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\DartConfiguration.tcl.in;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\GNUInstallDirs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\Windows.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.20\Modules\WriteBasicConfigVersionFile.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeCXXCompiler.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeRCCompiler.cmake;E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\3.20.21032501-MSVC_2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\dev\work\crash_fix_game\socketIO\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\Timer.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\application.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\base64.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\buffer.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\collection.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\datetime.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\filesystem.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\idler.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\logger.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\packetstream.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\platform.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\process.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\random.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\sha1.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\signalsHandler.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\test.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\thread.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\time.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\util.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http_parser\http_parser.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\json\src\configuration.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\json\src\json.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\IP.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\TcpServer.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\PortManager.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\TcpConnection.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\UdpSocket.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\HTTPResponder.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\message.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\url.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\HttpClient.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\client.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\packetizers.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\websocket.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\HttpConn.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\cookie.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\parser.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\HttpServer.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\form.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\request.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\httputil.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\response.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\aac_ac3_parser.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\ac3_parser.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\ac3tab.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\aes.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\aes_ctr.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\allcodecs.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\allformats.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\atomic.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\audio_frame_queue.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\audiointerleave.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avc.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avfft.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avio.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\aviobuf.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avpacket.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avstring.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\bitstream.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\bitstream_filters.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\bprint.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\bsf.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\channel_layout.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\codec_desc.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\color_utils.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\cpu.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\crc.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\cuvid.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\dct.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\dict.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\error.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\eval.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\faandct.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\fdctdsp.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\fifo.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\file_open.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\format.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\frame_thread_encoder.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\h264_mp4toannexb_bsf.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\hwcontext.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\id3v1.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\id3v2.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\imgutils.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\intmath.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\isom.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\libfdk-aacdec.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\libfdk-aacenc.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\live.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\livethread.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\log.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mathematics.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mem.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\metadata.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mov_chan.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\movenc.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\movenccenc.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\movenchint.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpeg12data.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpeg4_unpack_bframes_bsf.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpeg4audio.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegaudiodata.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegpicture.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegutils.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegvideodsp.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegvideoencdsp.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mux.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\network.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\opt.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\options.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\options_avformat.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\os_support.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\parseutils.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\pixdesc.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\profiles.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\protocols.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\pthread.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\pthread_frame.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\pthread_slice.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\random_seed.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\ratecontrol.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\rational.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\raw.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\rawutils.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\rdft.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\reverse.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\riff.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\riffenc.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\rl.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\samplefmt.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\sha.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\stereo3d.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\timecode.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\utils.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\utils_avformat.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\utils_avutil.cpp" />
+    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\vpcc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="E:\dev\work\crash_fix_game\socketIO\build\ZERO_CHECK.vcxproj">
+      <Project>{E0C24F6B-2B7F-30FF-94B7-C301D34CAC78}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="E:\dev\work\crash_fix_game\socketIO\build\uv_a.vcxproj">
+      <Project>{E7763F5B-BD70-37E6-834B-3D79336AC639}</Project>
+      <Name>uv_a</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
