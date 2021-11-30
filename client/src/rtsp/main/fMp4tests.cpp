@@ -23,7 +23,7 @@
 extern "C"
 {
 //#include <libavutil/timestamp.h>
-#include <avformat.h>
+#include "libavformat/avformat.h"
 }
 
 using namespace base;

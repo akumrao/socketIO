@@ -26,15 +26,17 @@
 
 extern "C" {
  
-// #include <libavutil/avassert.h>    
- #include <avcodec.h>
-// #include <libavutil/opt.h>
-// #include <libswscale/swscale.h>
-// #ifdef HAVE_FFMPEG_SWRESAMPLE
-// #include <libswresample/swresample.h>
-// #else
-// #include <libavresample/avresample.h>
-// #endif
+//#include <libavutil/timestamp.h>
+// #include <avformat.h>
+// #include <avcodec.h>
+// #include <channel_layout.h>    
+// #include <mathematics.h>
+
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include "libavutil/channel_layout.h"
+#include "libavutil/mathematics.h"
+
 }
 
  
