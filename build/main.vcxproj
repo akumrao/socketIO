@@ -126,6 +126,10 @@
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
+    <PostBuildEvent>
+      <Command>copy $(SolutionDir)..\client\src\rtsp\ffmpegDlls\bin-video\*.dll $(TargetDir) /Y
+xcopy $(SolutionDir)..\client\src\rtsp\main\ $(TargetDir) /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
