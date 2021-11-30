@@ -1,11 +1,8 @@
 
 #include "framefilter.h"
+#include "tools.h"
 #include "base/logger.h"
 #include "fmp4.h"
-
-#include "tools.h"
-
-
 
 namespace base {
 namespace fmp4 {
@@ -76,7 +73,7 @@ void DummyFrameFilter::go(Frame *frame) {
         #endif
         
         if(conn)
-         conn->broadcast((const char*)muxframe->payload.data(), meta->size, true );
+         conn->broadcast((const char*)muxframe->payload.data(), meta->size, true , muxframe->is_first );
         
         STrace << " Mp4 Wrote: "<<   meta->size << " Toltal Mp4 Size: " << tolalMp4Size ;
 
@@ -97,14 +94,13 @@ TextFrameFilter::~TextFrameFilter()
     
 }
 
-void TextFrameFilter::go(std::string cmd) {
-
-        // std::cout << "DummyFrameFilter : "<< this->name << " " << verbose << " : got frame : " << *(frame) << std::endl;
-        SDebug << "TextFrameFilter : " << this->name << " : got frame : " << cmd ;
-
+void TextFrameFilter::go(Frame *frame) {
         
-        if(conn)
-         conn->broadcast((const char*)cmd.c_str(), cmd.size(), false );
+      TextFrame *txt    =  (TextFrame*) frame;
+       SDebug << "Send Text Message : " << this->name << " : got frame : " << txt->txt ;
+        
+      if(conn)
+         conn->broadcast((const char*)txt->txt.c_str(), txt->txt.size(), false );
    
 }
 

@@ -1,13 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* This file is part of mediaserver. A RTSP live server.
+ * Copyright (C) 2018 Arvind Umrao <akumrao@yahoo.com> & Herman Umrao<hermanumrao@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
  */
+
 
 #include "fmp4.h"
 
-//#include "ff/ff.h"
-//#include "ff/mediacapture.h"
+
 #include "base/define.h"
 #include "base/test.h"
 #include <thread>
@@ -15,8 +19,12 @@
 //#include "livethread.h"
  #include "Settings.h"
 
+extern "C"
+{
 //#include <libavutil/timestamp.h>
-#include <avformat.h>
+#include <libavformat/avformat.h>
+//#include <libavcodec/avcodec.h>
+}
 
 #define SERVER_HOST  "127.0.0.1"               
 #define SERVER_PORT 8000
@@ -50,7 +58,7 @@ namespace base {
 
     namespace fmp4 {
 
-        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpsServer(  ip, port,  factory, true) {
+        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpServer(  ip, port,  factory, true) {
 
             self = this;
 
@@ -135,7 +143,7 @@ namespace base {
 
         }
     
-        void ReadMp4::broadcast(const char * data, int size, bool binary   )
+        void ReadMp4::broadcast(const char * data, int size, bool binary, bool is_first  )
         {
            // conn->send( data, size, binary    );
             static int noCon =0;
@@ -149,9 +157,13 @@ namespace base {
 
             for (auto* connection :  this->GetConnections())
             {
+                net::HttpConnection* cn = (net::HttpConnection*)connection;
+                
+
+                
                  net::WebSocketConnection *con = ((net::HttpConnection*)connection)->getWebSocketCon();
                  if(con)
-                 con->push(data ,size, binary, false );
+                 con->push(data ,size, binary, is_first );
             }
 
         

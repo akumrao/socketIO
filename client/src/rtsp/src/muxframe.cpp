@@ -13,6 +13,9 @@
 
 #include <sstream>
 
+namespace base {
+namespace fmp4 {
+    
 
 Frame::Frame() : n_slot(0),  mstimestamp(0), stream_index(-1) {
 }
@@ -494,9 +497,14 @@ void MarkerFrame::reset() {
     tm_end=false;
 }
     
+
+
+TextFrame::TextFrame() : Frame() {
     
+}
     
-    
+}
+}
     
     
     

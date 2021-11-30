@@ -46,7 +46,7 @@ class ReadMp4;
 class LiveConnectionContext;
 class FFParse;
 
- class ReadMp4: public Thread, public net::HttpsServer 
+ class ReadMp4: public Thread, public net::HttpServer 
  {
      
      
@@ -77,17 +77,16 @@ class FFParse;
      
  private:
      
-     DummyFrameFilter *fragmp4_filter;
-     FrameFilter *fragmp4_muxer;
-     FrameFilter *info;
-     FrameFilter *txt;
-     LiveConnectionContext *ctx;
-             
+     DummyFrameFilter *fragmp4_filter{nullptr};
+     FrameFilter *fragmp4_muxer{nullptr};;
+     FrameFilter *info{nullptr};;
+     FrameFilter *txt{nullptr};;
+
      std::string fileName;
      
  public:
      
-     void broadcast(const char * data, int size, bool binary  );
+     void broadcast(const char * data, int size, bool binary,  bool is_first  );
      void on_read(net::Listener* connection, const char* msg, size_t len) ;
      
 //    virtual void onConnect(    int socketID                        );

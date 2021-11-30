@@ -7,10 +7,17 @@
 
 //#include <libavutil/timestamp.h>
  
- #include "avformat.h"
- #include "avcodec.h"
- #include "channel_layout.h"
+// #include "avformat.h"
+// #include "avcodec.h"
+// #include "channel_layout.h"
   
+extern "C"
+{
+//#include <libavutil/timestamp.h>
+#include <libavformat/avformat.h>
+#include <libavcodec/avcodec.h>
+}
+
  /*
 
   H.264 comes in a variety of stream formats. One variation is called "Annex B".
@@ -92,6 +99,7 @@ avio_ctx_buffer(NULL), missing(0), ccf(0), av_dict(NULL), format_name("matroska"
     // av_dict_set(&av_dict, "frag_size", "500", 500); // nopes
     av_dict_set(&av_dict, "frag_size", "512", 0);
      */
+     SInfo <<   "MuxFrameFilter()";   
 }
 
 MuxFrameFilter::~MuxFrameFilter() {
@@ -100,7 +108,8 @@ MuxFrameFilter::~MuxFrameFilter() {
     av_free(avio_ctx_buffer);
     av_packet_unref(avpkt);
     delete avpkt;
-        
+    
+    SInfo <<   "~MuxFrameFilter()";   
 }
 
 void MuxFrameFilter::initMux() {
@@ -156,14 +165,14 @@ void MuxFrameFilter::initMux() {
                 AVStream *av_stream;
 
                 av_codec_context = avcodec_alloc_context3(avcodec_find_decoder(codec_id));
-                av_codec_context->width = 720; // dummy values .. otherwise mkv muxer refuses to co-operate
-                av_codec_context->height = 576;
+                av_codec_context->width = width; // dummy values .. otherwise mkv muxer refuses to co-operate
+                av_codec_context->height = height;
                 av_codec_context->bit_rate = 1024 * 1024;
 
 
                 AVRational tb;
                 tb.num = 1;
-                tb.den = STREAM_FRAME_RATE;
+                tb.den =fps;
                                 
                 av_codec_context->time_base = tb;//  (AVRational){ 1, STREAM_FRAME_RATE };
 
@@ -387,11 +396,13 @@ void MuxFrameFilter::closeMux() {
 }
 
 void MuxFrameFilter::deActivate() {
+    
+    SInfo << "deActivate";
+    
     if (initialized) {
         av_write_trailer(av_format_context);
         closeMux();
         av_dict_free(&av_dict);
-
 
 
         streams.clear();
@@ -498,7 +509,11 @@ void MuxFrameFilter::go(Frame* frame) {
 #ifdef MUXSTATE
                     std::cout << "MuxFrameFilter: go: state: appending extradata" << std::endl;
 #endif
-                  
+                    
+                    fps = basicframe->fps;
+                    width= basicframe->width;
+                    height = basicframe->height;
+                    
                     extradata_videoframe.payload.insert(
                             extradata_videoframe.payload.end(),
                             basicframe->payload.begin(),
@@ -708,14 +723,31 @@ void FragMP4MuxFrameFilter::sendMeta() {
     if (got_ftyp && got_moov) {
         
         SDebug<< " sendMeta "<<  "send ftyp & moov";
-        std::cout << "FragMP4MuxFrameFilter: sending metadata!" << std::endl;
+        //std::cout << "FragMP4MuxFrameFilter: sending metadata!" << std::endl;
         next->run(&ftyp_frame);
         next->run(&moov_frame);
     } else {
         std::cout << "FragMP4MuxFrameFilter: No metadata!" << std::endl;
     }
 }
+//http://underpop.online.fr/f/ffmpeg/help/mov_002c-mp4_002c-ismv.htm.gz
 
+/*
+ 
+In streaming mode mp4 trailer is not required for playout.
+
+// very important 
+
+        if (os->segment_type == SEGMENT_TYPE_MP4) {
+            if (c->streaming)
+                av_dict_set(&opts, "movflags", "frag_every_frame+dash+delay_moov+skip_sidx", 0);
+                av_dict_set(&opts, "movflags", "frag_every_frame+dash+delay_moov+skip_sidx+skip_trailer", 0);
+            else
+                av_dict_set(&opts, "movflags", "frag_custom+dash+delay_moov", 0);
+        } else {
+
+ 
+ */
 void FragMP4MuxFrameFilter::defineMux() {
     this->avio_ctx = avio_alloc_context(this->avio_ctx_buffer, this->avio_ctx_buffer_size, 1,
             this, this->read_packet, this->write_packet, this->seek); // no read, nor seek
@@ -870,6 +902,8 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             if (strncmp(boxname, "moof", 4) == 0) {
                 metap->is_first = moofHasFirstSampleFlag(internal_frame.payload.data());
                 //#ifdef MUXPARSE
+                
+               internal_frame.is_first =  metap->is_first;
                 STrace << "FragMP4MuxFrameFilter: moof first sample flag: " << int(metap->is_first) ;
                 // #endif
             }

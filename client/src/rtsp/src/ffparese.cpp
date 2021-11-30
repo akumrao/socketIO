@@ -21,12 +21,14 @@
 #include "tools.h"
 #include "fmp4.h"
 
-
+extern "C"
+{
 //#include <libavutil/timestamp.h>
 #include <avformat.h>
 #include <avcodec.h>
 #include <channel_layout.h>    
 #include <mathematics.h>
+}
 
 #define MAX_CHUNK_SIZE 10240*8
 // maximum send buffer 262144  =1024 *256
@@ -391,11 +393,7 @@ namespace base {
                   
                     basicaudioframe.mstimestamp = startTime + framecount;
                    
-                    if( resetParser ) 
-                    {
-                          fragmp4_muxer->sendMeta();
-                          resetParser =false;
-                    }
+ 
                     framecount = framecount + AUDIOSAMPLE ;
                     fragmp4_muxer->run(&basicaudioframe);
 
@@ -466,7 +464,6 @@ namespace base {
 //               SDebug<< " FFParse::reset()"<<  "Stream both Video & Audio";
 //            }
               
-            resetParser = true;
             
         }
 
@@ -729,10 +726,10 @@ namespace base {
                     basicvideoframe.mstimestamp = startTime +  framecount;
                     basicvideoframe.fillPars();
 
-                    if (resetParser && basicvideoframe.h264_pars.frameType == H264SframeType::i && basicvideoframe.h264_pars.slice_type == H264SliceType::idr) //AUD Delimiter
+                    if ( basicvideoframe.h264_pars.frameType == H264SframeType::i && basicvideoframe.h264_pars.slice_type == H264SliceType::idr) //AUD Delimiter
                     {
                         fragmp4_muxer->sendMeta();
-                        resetParser = false;
+                       // resetParser = false;
                     }
                     
                     if (basicvideoframe.h264_pars.slice_type == H264SliceType::sps ||  basicvideoframe.h264_pars.slice_type == H264SliceType::pps) //AUD Delimiter
@@ -847,7 +844,7 @@ namespace base {
            
            AVRational  videotimebase;//= (AVRational){ 1, };
            videotimebase.num = 1;
-           videotimebase.den = STREAM_FRAME_RATE;
+           videotimebase.den = 25;
 
            AVRational  audiotimebase ;//= (AVRational){ 1,SAMPLINGRATE };
            audiotimebase.num = 1;
@@ -887,10 +884,10 @@ namespace base {
                        basicvideoframe.mstimestamp = startTime +  videoframecount;
                        basicvideoframe.fillPars();
 
-                       if (resetParser && basicvideoframe.h264_pars.frameType == H264SframeType::i && basicvideoframe.h264_pars.slice_type == H264SliceType::idr) //AUD Delimiter
+                       if ( basicvideoframe.h264_pars.frameType == H264SframeType::i && basicvideoframe.h264_pars.slice_type == H264SliceType::idr) //AUD Delimiter
                        {
                            fragmp4_muxer->sendMeta();
-                           resetParser = false;
+
                        }
 
                        if (basicvideoframe.h264_pars.slice_type == H264SliceType::sps ||  basicvideoframe.h264_pars.slice_type == H264SliceType::pps) //AUD Delimiter
@@ -1007,10 +1004,6 @@ namespace base {
        }
        
         
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void FFParse::mediaContent(std::string mediaContent) {
-         //   txt->go(mediaContent);
-       }
 
       }// ns mp4
 

@@ -17,12 +17,14 @@
 #include "base/thread.h"
 #include <string>
 #include <vector>
-//#include "muxframe.h"
+//#include "frame.h"
 #include "framefilter.h"
 // #include "net/netInterface.h"
 // #include "http/HttpsClient.h"
 
 
+
+extern "C" {
  
 // #include <libavutil/avassert.h>    
  #include <avcodec.h>
@@ -33,6 +35,7 @@
 // #else
 // #include <libavresample/avresample.h>
 // #endif
+}
 
  
 
@@ -125,11 +128,10 @@ class ReadMp4;
     int stream_index{0};
     void parseMuxContent();
     
-    void mediaContent(std::string mediaContent);
-       
+      
  private:
      
-    std::atomic< bool > resetParser { false };
+    //std::atomic< bool > resetParser { false };
     std::atomic< bool > mute { false };
     std::atomic< bool > hd { false };
     std::atomic< bool > keeprunning { true };
