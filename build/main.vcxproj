@@ -86,7 +86,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\dev\work\crash_fix_game\socketIO\.\client\src\base\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http_parser;E:\dev\work\crash_fix_game\socketIO\.\client\src\json\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\net\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\http\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\libuv\src;E:\dev\work\crash_fix_game\socketIO\.\client\src\signal\include;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\ffmpeg;E:\dev\work\crash_fix_game\socketIO\.\client\src\rtsp\include;E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpegDlls\include;E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpegDlls\include\libavformat;E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpegDlls\include\libavcodec;E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpegDlls\include\libavutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -114,8 +114,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>Debug\uv_a.lib;advapi32.lib;iphlpapi.lib;psapi.lib;shell32.lib;user32.lib;userenv.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;swresample.lib;swscale.lib;Debug\uv_a.lib;advapi32.lib;iphlpapi.lib;psapi.lib;shell32.lib;user32.lib;userenv.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpegDlls\bin-video;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -363,98 +363,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\request.cpp" />
     <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\httputil.cpp" />
     <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\response.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\aac_ac3_parser.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\ac3_parser.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\ac3tab.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\aes.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\aes_ctr.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\allcodecs.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\allformats.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\atomic.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\audio_frame_queue.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\audiointerleave.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avc.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avfft.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avio.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\aviobuf.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avpacket.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\avstring.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\bitstream.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\bitstream_filters.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\bprint.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\bsf.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\channel_layout.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\codec_desc.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\color_utils.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\cpu.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\crc.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\cuvid.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\dct.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\dict.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\error.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\eval.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\faandct.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\fdctdsp.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\fifo.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\file_open.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\format.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\frame_thread_encoder.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\h264_mp4toannexb_bsf.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\hwcontext.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\id3v1.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\id3v2.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\imgutils.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\intmath.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\isom.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\libfdk-aacdec.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\libfdk-aacenc.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\log.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mathematics.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mem.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\metadata.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mov_chan.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\movenc.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\movenccenc.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\movenchint.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpeg12data.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpeg4_unpack_bframes_bsf.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpeg4audio.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegaudiodata.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegpicture.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegutils.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegvideodsp.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mpegvideoencdsp.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\mux.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\network.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\opt.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\options.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\options_avformat.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\os_support.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\parseutils.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\pixdesc.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\profiles.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\protocols.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\pthread.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\pthread_frame.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\pthread_slice.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\random_seed.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\ratecontrol.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\rational.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\raw.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\rawutils.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\rdft.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\reverse.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\riff.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\riffenc.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\rl.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\samplefmt.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\sha.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\stereo3d.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\timecode.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\utils.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\utils_avformat.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\utils_avutil.cpp" />
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\ffmpeg\vpcc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="E:\dev\work\crash_fix_game\socketIO\build\ZERO_CHECK.vcxproj">
