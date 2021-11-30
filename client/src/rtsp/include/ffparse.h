@@ -21,7 +21,7 @@
 #include "framefilter.h"
 // #include "net/netInterface.h"
 // #include "http/HttpsClient.h"
-
+#include "H264Framer.h"
 
 
 extern "C" {
@@ -134,7 +134,7 @@ class ReadMp4;
  private:
      
     //std::atomic< bool > resetParser { false };
-    std::atomic< bool > mute { false };
+    std::atomic< bool > mute { true };
     std::atomic< bool > hd { false };
     std::atomic< bool > keeprunning { true };
 
@@ -144,6 +144,18 @@ class ReadMp4;
     FrameFilter *txt;
     
     //std::string fileName;
+
+   
+    bool foundsps{false};
+    bool foundpps{false};
+  
+
+    int fps{0};
+    int width{0};
+    int height{0};
+    
+  
+    H264Framer obj;
     
  #if 0   
     /* Add an output stream. */

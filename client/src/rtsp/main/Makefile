@@ -1,5 +1,11 @@
+################################################################################
+### CUSTOMIZE BELOW HERE #######################################################
+
 LIVE555_ROOT = /workspace/live
-CXX     = clang++
+FFMPEG_ROOT = /export/views/video/ffmpeg
+
+CC	= gcc
+CXX     = g++
 TARGET=mediaserver # define the name of the executable
 SOURCES    = $(wildcard *.cpp ../src/*.cpp ../ffmpeg/*.cpp ../../libuv/src/*.cpp ../../libuv/src/unix/*.cpp ../../base/src/*.cpp ../../json/src/*.cpp ../../crypto/src/*.cpp ../../net/src/*.cpp ../../http/src/*.cpp  ../../http_parser/*.cpp )
 
@@ -11,11 +17,11 @@ CPPFLAGS   := -I../../rtsp/include/ -I../ffmpeg -I../../json/include/ -I../../cr
 LDFLAGS   := -L/export/views/video/ffmpeg/Obj/
 
 #/export/views/video/ffmpeg/libavutil/libavutil.a /export/views/video/ffmpeg/libavcodec/libavcodec.a
-LDLIBS    := -lpthread -lm -ldl -lssl -lcrypto -lfdk-aac 
+LDLIBS    := -lpthread -lm -ldl  -lssl -lcrypto -lz -lfdk-aac  
 
 #SLIBS     := $(OUT_FILE_NAME) 
 
-SLIBS     := $(OUT_FILE_NAME) ${LIVE555_ROOT}/liveMedia/libliveMedia.a  ${LIVE555_ROOT}/groupsock/libgroupsock.a   ${LIVE555_ROOT}/BasicUsageEnvironment/libBasicUsageEnvironment.a  ${LIVE555_ROOT}/UsageEnvironment/libUsageEnvironment.a
+SLIBS     := $(OUT_FILE_NAME) ${FFMPEG_ROOT}/libavformat/libavformat.a ${FFMPEG_ROOT}/libavcodec/libavcodec.a ${FFMPEG_ROOT}/libavutil/libavutil.a ${FFMPEG_ROOT}/libswresample/libswresample.a /usr/local/lib/libx264.a
 
 
 
