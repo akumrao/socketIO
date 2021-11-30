@@ -154,6 +154,9 @@
     <ClCompile Include="..\client\src\rtsp\src\H264Framer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\client\src\rtsp\src\BitVector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="E:\dev\work\crash_fix_game\socketIO\CMakeLists.txt" />

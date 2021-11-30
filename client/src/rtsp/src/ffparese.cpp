@@ -722,17 +722,17 @@ namespace base {
                     }
                     else if (foundsps && foundpps  )
                     {
-                    //info->run(&basicvideoframe);
+                        info->run(&basicvideoframe);
                         fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                         basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
 
                          framecount++;
 
-			  uint64_t deltaTimeMillis =CurrentTime_microseconds() - currentTime;
-                          std::this_thread::sleep_for(std::chrono::microseconds(100000 - deltaTimeMillis));
+			             uint64_t deltaTimeMillis =CurrentTime_microseconds() - currentTime;
+                         std::this_thread::sleep_for(std::chrono::microseconds(100000 - deltaTimeMillis));
 
                      }
-		}
+		        }
                 else
                 {
                      if (fseek(fileVideo, 0, SEEK_SET))

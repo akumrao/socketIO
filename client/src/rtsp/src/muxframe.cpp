@@ -88,7 +88,7 @@ void BasicFrame::print(std::ostream &os) const {
 
 std::string BasicFrame::dumpPayload() {
   std::stringstream tmp;
-  for(std::vector<uint8_t>::iterator it=payload.begin(); it<min(payload.end(),payload.begin()+20); ++it) {
+  for(std::vector<uint8_t>::iterator it=payload.begin(); it < ( (payload.size() < 20) ? payload.end(): payload.begin()+20) ; ++it) {
     tmp << int(*(it)) <<" ";
   }
   return tmp.str();
