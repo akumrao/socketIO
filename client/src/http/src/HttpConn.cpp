@@ -70,7 +70,7 @@ namespace base {
             }
            catch(...) {
            
-               SInfo << "Excetion at parser ";
+               SError << "Excetion at parser ";
            }
              
           //  if(!wsAdapter)
