@@ -317,6 +317,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\client\src\rtsp\src\H264Framer.cpp" />
     <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\main\fMp4tests.cpp" />
     <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\src\ffparese.cpp" />
     <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\src\fmp4.cpp" />
