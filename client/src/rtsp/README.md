@@ -767,3 +767,24 @@ Created new TCP socket 3 for connection
 InfoFrameFilter: info start dump>> 
 InfoFrameFilter: FRAME   : <SetupFrame: timestamp=1623835234697 subsession_index=0 slot=2 / media_type=0 codec_id=28>
 In
+
+
+
+
+
+
+
+
+
+NT Service or Windows Service
+Reference Link:- https://www.wintips.org/how-to-run-an-application-as-service/
+
+Steps:-
+1. Download nssm from "http://nssm.cc/download" and unzip in some project specific folder.
+2.  Start cmd prompt in admin and go to nssm application folder As per your machine architecture
+3. type "nssm install".
+4, Now fill all basic details like application to run as service, its arguments and service name.
+5.  click "Install Servcie"
+6. Open services in admin and start your service.
+7. if required, change user account for running service.
+
