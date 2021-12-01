@@ -100,7 +100,7 @@ void TextFrameFilter::go(Frame *frame) {
        SDebug << "Send Text Message : " << this->name << " : got frame : " << txt->txt ;
         
       if(conn)
-         conn->broadcast((const char*)txt->txt.c_str(), txt->txt.size(), false, false );
+         conn->broadcast((const char*)txt->txt.c_str(), txt->txt.size(), false, false ); //sanjay given last argument as false to match count of params
    
 }
 

@@ -175,12 +175,13 @@ namespace base {
               //  resbuf.base = (char *) res.c_str();
                // resbuf.len = res.size();
              
-                auto cb =  onSendCallback([closure ](bool sent)
+                auto cb =  onSendCallback([&closure ](bool sent)
                 {
                     if (sent)
                     {
                         closure->con->Close();
-                        delete closure;
+                        //delete closure; //Sanjay modified for preventing excption double delete in queue
+                        //closure = NULL;
                     }
                 }
                 
