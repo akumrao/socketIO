@@ -479,19 +479,20 @@ namespace base {
         
         void FFParse::reopen()
         {
+            fragmp4_muxer->deActivate();
             fclose(fileAudio);
             fileAudio = nullptr;
             
             fclose(fileVideo);
             fileVideo = nullptr;
-
+            hd = (++hd)%2;
             if (hd)
             {
-                hd= true;
+               
                 SInfo << "Open HD";
                 
-                const char* audioFile = AUDIOFILE1;
-                const char* videofile = VIDEOFILE1;
+                const char* audioFile = AUDIOFILE;
+                const char* videofile = VIDEOFILE;
                 
                 fileAudio = fopen(audioFile,"rb");
                 if(fileAudio){
@@ -512,9 +513,9 @@ namespace base {
             }
             else
             {
-                hd= false;
-                const char* audioFile = AUDIOFILE;
-                const char* videofile =VIDEOFILE;
+              
+                const char* audioFile = AUDIOFILE1;
+                const char* videofile =VIDEOFILE1;
                 
             
                 SInfo << "Open SD";
@@ -735,6 +736,7 @@ namespace base {
 		        }
                 else
                 {
+                    reopen();
                      if (fseek(fileVideo, 0, SEEK_SET))
                     return;
 
@@ -745,13 +747,15 @@ namespace base {
                     if (cur_videosize == 0)
                         break;
                     cur_videoptr = in_videobuffer;
+
+                    
                 }
             }
 
-	       av_packet_free(&videopkt);	
+	        av_packet_free(&videopkt);	
             free(in_videobuffer);
 
-        }
+       }
         
        void FFParse::parseMuxContent() 
        {
@@ -947,11 +951,11 @@ namespace base {
 
                        basicaudioframe.mstimestamp = startTime + audioframecount;
 
-//                        if( resetParser ) 
-//                        {
+//                     if( resetParser ) 
+//                     {
 //                              fragmp4_muxer->sendMeta();
 //                              resetParser =false;
-//                        }
+//                     }
                        audioframecount = audioframecount + AUDIOSAMPLE;
                        fragmp4_muxer->run(&basicaudioframe);
 
@@ -959,7 +963,7 @@ namespace base {
 
                        av_packet_unref(&audiopkt);
 
-                   //     std::this_thread::sleep_for(std::chrono::microseconds(21000));
+                       //std::this_thread::sleep_for(std::chrono::microseconds(21000));
 
                    }
                }//audio 

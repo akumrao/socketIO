@@ -29,8 +29,14 @@
 #define AUDIOFILE  "./hindi.pcm"               
 #define VIDEOFILE  "./test.264"
 
-#define AUDIOFILE1  "/var/tmp/songs/quintin.pcm"               
-#define VIDEOFILE1  "/var/tmp/videos/test1.264"  
+#define AUDIOFILE1  "./hindi.pcm"               
+#define VIDEOFILE1  "./goal.264"  
+
+
+#define AUDIOFILE2  "./hindi.pcm"               
+#define VIDEOFILE2  "./goal.264"  
+
+
 
 #define FILEPARSER 1
 

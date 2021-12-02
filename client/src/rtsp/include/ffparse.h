@@ -135,7 +135,7 @@ class ReadMp4;
      
     //std::atomic< bool > resetParser { false };
     std::atomic< bool > mute { true };
-    std::atomic< bool > hd { false };
+    int hd{0} ;
     std::atomic< bool > keeprunning { true };
 
    // DummyFrameFilter *fragmp4_filter;
