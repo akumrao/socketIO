@@ -58,7 +58,7 @@ namespace base {
 
     namespace fmp4 {
 
-        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpServer(  ip, port,  factory, false) {
+        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpServer(  ip, port,  factory, true) {
 
             self = this;
 
