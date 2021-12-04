@@ -186,7 +186,7 @@ namespace base {
                 }
                 
                 );
-                                
+                  
                 closure->con->tcpsend( res.c_str(), res.size(), cb );
 
              //   client->write_req.data = closure;
@@ -220,12 +220,20 @@ namespace base {
         
        HttpResponder::HttpResponder(net::HttpBase* conn) : ServerResponder(conn) 
        {
-                SInfo << "HttpResponder()" <<  this;
+            closure = new render_baton();
+           
+            SInfo << "HttpResponder()" <<  this;
+                
        }
           
         HttpResponder::~HttpResponder() 
        {
-                SInfo << "~HttpResponder()" <<  this;
+            SInfo << "~HttpResponder()" <<  this;
+            if(closure)
+            delete closure;
+                    
+           closure = nullptr;
+                    
        }
         
         
@@ -233,10 +241,7 @@ namespace base {
             
             SInfo << "onClose close  render_baton " << closure ;
            
-            if(closure)
-            delete closure;
-                    
-                    closure = nullptr;
+         
            // SInfo << ": onClose:\n" ;
         }
 
@@ -271,7 +276,7 @@ namespace base {
 
             SInfo << "Response file Path: " << file_to_open << std::endl;
 
-            closure = new render_baton();
+            
             
             SInfo << "open render_baton " << closure ;
             

@@ -160,7 +160,7 @@ namespace base {
                 net::HttpConnection* cn = (net::HttpConnection*)connection;
                 if(cn)
                 {
-                    net::WebSocketConnection *con = ((net::HttpConnection*)connection)->getWebSocketCon();
+                    net::WebSocketConnection *con = ((net::HttpConnection*)cn)->getWebSocketCon();
                     if(con)
                      con->push(data ,size, binary, is_first );
                 }
