@@ -570,7 +570,7 @@ namespace base {
             setupframe.mstimestamp          = CurrentTime_milliseconds();
             // send setup frame
             
-            info->run(&setupframe);
+            //info->run(&setupframe);
             fragmp4_muxer->run(&setupframe);
 
   
@@ -691,7 +691,7 @@ namespace base {
 
                                     // SInfo <<  " Got SPS fps "  << fps << " width "  << width  <<  " height " << height ;
 
-                                    info->run(&basicvideoframe);
+                                    //info->run(&basicvideoframe);
                                     fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                                     basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                             }
@@ -706,7 +706,7 @@ namespace base {
                            
                            // SInfo <<  " Got PPS fps ";
                             
-                            info->run(&basicvideoframe);
+                            //info->run(&basicvideoframe);
                             fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                             basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                             
@@ -723,7 +723,7 @@ namespace base {
                     }
                     else if (foundsps && foundpps  )
                     {
-                        info->run(&basicvideoframe);
+                        //info->run(&basicvideoframe);
                         fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                         basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
 

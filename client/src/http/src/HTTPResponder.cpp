@@ -180,8 +180,8 @@ namespace base {
                     if (sent)
                     {
                         closure->con->Close();
-                        //delete closure; //Sanjay modified for preventing excption double delete in queue
-                        //closure = NULL;
+                        delete closure; //Sanjay modified for preventing excption double delete in queue
+                        closure = NULL;
                     }
                 }
                 

@@ -536,15 +536,15 @@ namespace base
               
 
             // // Remove the TcpConnectionBase from the set.
-            // if( this->connections.find(connection) != this->connections.end() )
-            // {
-            //     UserOnTcpConnectionClosed(connection);
-            //     this->connections.erase(connection);
-            //     // Notify the subclass.
+             if( this->connections.find(connection) != this->connections.end() )
+             {
+                 UserOnTcpConnectionClosed(connection);
+                 this->connections.erase(connection);
+                 // Notify the subclass.
                  
-            //     // Delete it.
-            //     delete connection;
-            // }
+                 // Delete it.
+                 delete connection;
+             }
         }
         
         uv_tcp_t* TcpServerBase::BindTcp(std::string &ip, int port) {
