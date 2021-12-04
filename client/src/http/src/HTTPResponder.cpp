@@ -180,8 +180,8 @@ namespace base {
                     if (sent)
                     {
                         closure->con->Close();
-                        delete closure; //Sanjay modified for preventing excption double delete in queue
-                        closure = NULL;
+                       // delete closure; //Sanjay modified for preventing excption double delete in queue
+                      //  closure = NULL;
                     }
                 }
                 
@@ -215,6 +215,30 @@ namespace base {
             connection()->send((const char *) "hello universe", 14);
             connection()->Close();  // wrong we should close close after write is successful. Check the callback onSendCallback function
         }
+        
+        
+        
+       HttpResponder::HttpResponder(net::HttpBase* conn) : ServerResponder(conn) 
+       {
+                SInfo << "HttpResponder()" <<  this;
+       }
+          
+        HttpResponder::~HttpResponder() 
+       {
+                SInfo << "~HttpResponder()" <<  this;
+       }
+        
+        
+        void  HttpResponder::onClose() {
+            
+            SInfo << "onClose close  render_baton " << closure ;
+           
+            if(closure)
+            delete closure;
+                    
+                    closure = nullptr;
+           // SInfo << ": onClose:\n" ;
+        }
 
         void HttpResponder::onRequest(net::Request& request, net::Response& response) {
             STrace << "On complete" << std::endl;
@@ -225,7 +249,7 @@ namespace base {
             auto& request1 = connection()->_request;
 
             // Log incoming requests
-            SInfo << ": response:\n" << response << std::endl;
+            SInfo << ": response:\n" << response ;
 
 
             //  response.setContentLength(14); // headers will be auto flushed
@@ -247,7 +271,9 @@ namespace base {
 
             SInfo << "Response file Path: " << file_to_open << std::endl;
 
-            render_baton *closure = new render_baton();
+            closure = new render_baton();
+            
+            SInfo << "open render_baton " << closure ;
             
             
             closure->path = file_to_open;
