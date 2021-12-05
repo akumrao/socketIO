@@ -37,7 +37,7 @@ namespace base
                // free_write_req(req);
               //  uv_close((uv_handle_t*) req->handle, nullptr);
                
-             //   free(req);
+                free(req);
          #else
           free(req->data);
           free(req); 
