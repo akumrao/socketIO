@@ -468,7 +468,9 @@ namespace base
                 if (UserOnNewTcpConnection(connection))
                 {
                        SDebug << "TcpServerBase new connection "  << connection;
+                    con_mutex.lock();
                     this->connections.insert(connection);
+                    con_mutex.unlock();
                 }
                 else
                     delete connection;
@@ -522,8 +524,10 @@ namespace base
             // Notify the subclass and delete the connection if not accepted by the subclass.
             if (UserOnNewTcpConnection(connection))
             {
-                   SDebug << "TcpServerBase new connection "  << connection;
+                SDebug << "TcpServerBase new connection "  << connection;
+                con_mutex.lock();
                 this->connections.insert(connection);
+                con_mutex.unlock();
             }
             else
                 delete connection;
@@ -534,17 +538,17 @@ namespace base
             
             SDebug << " TcpConnectionBase close "  << connection;
               
-
+            con_mutex.lock();
             // // Remove the TcpConnectionBase from the set.
              if( this->connections.find(connection) != this->connections.end() )
              {
                  UserOnTcpConnectionClosed(connection);
                  this->connections.erase(connection);
                  // Notify the subclass.
-                 
                  // Delete it.
                  delete connection;
              }
+            con_mutex.unlock();
         }
         
         uv_tcp_t* TcpServerBase::BindTcp(std::string &ip, int port) {
@@ -586,7 +590,7 @@ namespace base
         }
 
         /******************************************************************************************************************/
-        static constexpr size_t MaxTcpConnectionsPerServer{ 1000};
+        static constexpr size_t MaxTcpConnectionsPerServer{ 4000};
 
         /* Instance methods. */
 
