@@ -1,154 +1,154 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\main\fMp4tests.cpp">
+    <ClCompile Include="..\client\src\rtsp\main\fMp4tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\src\ffparese.cpp">
+    <ClCompile Include="..\client\src\rtsp\src\ffparese.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\src\fmp4.cpp">
+    <ClCompile Include="..\client\src\rtsp\src\fmp4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\src\framefilter.cpp">
+    <ClCompile Include="..\client\src\rtsp\src\framefilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\src\muxer.cpp">
+    <ClCompile Include="..\client\src\rtsp\src\muxer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\src\muxframe.cpp">
+    <ClCompile Include="..\client\src\rtsp\src\muxframe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\src\Settings.cpp">
+    <ClCompile Include="..\client\src\rtsp\src\Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\rtsp\src\tools.cpp">
+    <ClCompile Include="..\client\src\rtsp\src\tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\Timer.cpp">
+    <ClCompile Include="..\client\src\base\src\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\application.cpp">
+    <ClCompile Include="..\client\src\base\src\application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\base64.cpp">
+    <ClCompile Include="..\client\src\base\src\base64.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\buffer.cpp">
+    <ClCompile Include="..\client\src\base\src\buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\collection.cpp">
+    <ClCompile Include="..\client\src\base\src\collection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\datetime.cpp">
+    <ClCompile Include="..\client\src\base\src\datetime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\filesystem.cpp">
+    <ClCompile Include="..\client\src\base\src\filesystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\idler.cpp">
+    <ClCompile Include="..\client\src\base\src\idler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\logger.cpp">
+    <ClCompile Include="..\client\src\base\src\logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\packetstream.cpp">
+    <ClCompile Include="..\client\src\base\src\packetstream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\platform.cpp">
+    <ClCompile Include="..\client\src\base\src\platform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\process.cpp">
+    <ClCompile Include="..\client\src\base\src\process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\random.cpp">
+    <ClCompile Include="..\client\src\base\src\random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\sha1.cpp">
+    <ClCompile Include="..\client\src\base\src\sha1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\signalsHandler.cpp">
+    <ClCompile Include="..\client\src\base\src\signalsHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\test.cpp">
+    <ClCompile Include="..\client\src\base\src\test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\thread.cpp">
+    <ClCompile Include="..\client\src\base\src\thread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\time.cpp">
+    <ClCompile Include="..\client\src\base\src\time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\base\src\util.cpp">
+    <ClCompile Include="..\client\src\base\src\util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http_parser\http_parser.cpp">
+    <ClCompile Include="..\client\src\http_parser\http_parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\json\src\configuration.cpp">
+    <ClCompile Include="..\client\src\json\src\configuration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\json\src\json.cpp">
+    <ClCompile Include="..\client\src\json\src\json.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\IP.cpp">
+    <ClCompile Include="..\client\src\net\src\IP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\TcpServer.cpp">
+    <ClCompile Include="..\client\src\net\src\TcpServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\PortManager.cpp">
+    <ClCompile Include="..\client\src\net\src\PortManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\TcpConnection.cpp">
+    <ClCompile Include="..\client\src\net\src\TcpConnection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\net\src\UdpSocket.cpp">
+    <ClCompile Include="..\client\src\net\src\UdpSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\HTTPResponder.cpp">
+    <ClCompile Include="..\client\src\http\src\HTTPResponder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\message.cpp">
+    <ClCompile Include="..\client\src\http\src\message.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\url.cpp">
+    <ClCompile Include="..\client\src\http\src\url.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\HttpClient.cpp">
+    <ClCompile Include="..\client\src\http\src\HttpClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\client.cpp">
+    <ClCompile Include="..\client\src\http\src\client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\packetizers.cpp">
+    <ClCompile Include="..\client\src\http\src\packetizers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\websocket.cpp">
+    <ClCompile Include="..\client\src\http\src\websocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\HttpConn.cpp">
+    <ClCompile Include="..\client\src\http\src\HttpConn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\cookie.cpp">
+    <ClCompile Include="..\client\src\http\src\cookie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\parser.cpp">
+    <ClCompile Include="..\client\src\http\src\parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\HttpServer.cpp">
+    <ClCompile Include="..\client\src\http\src\HttpServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\form.cpp">
+    <ClCompile Include="..\client\src\http\src\form.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\request.cpp">
+    <ClCompile Include="..\client\src\http\src\request.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\httputil.cpp">
+    <ClCompile Include="..\client\src\http\src\httputil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\dev\work\crash_fix_game\socketIO\client\src\http\src\response.cpp">
+    <ClCompile Include="..\client\src\http\src\response.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\client\src\rtsp\src\H264Framer.cpp">
@@ -159,7 +159,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="E:\dev\work\crash_fix_game\socketIO\CMakeLists.txt" />
+    <CustomBuild Include="..\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
