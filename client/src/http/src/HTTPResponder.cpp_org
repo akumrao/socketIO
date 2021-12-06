@@ -46,27 +46,18 @@ namespace base {
         
             void render(uv_work_t* req)
             {
-                
-                 render_baton *closure = static_cast<render_baton *> (req->data);       
+                render_baton *closure = static_cast<render_baton *> (req->data);
                // client_t* client = (client_t*) closure->client;
                 //LOGF("[ %5d ] render\n", client->request_num);
 
-                render_baton *closeBat  = new  render_baton();
-                closeBat->response_code = "200 OK";
+                //closure->result = "hello universe";
+                closure->response_code = "200 OK";
 
                 
                 //#if 0
                 std::string filepath(".");
                 //std::string filepath("/workspace/mediaserver/src/rtsp/main");
-                
-                try
-                {
                 filepath += closure->path;
-                }
-                catch(...)
-                {
-                    SInfo << "exception render";
-                }
                 
                 
                 std::string index_path = (filepath + "index.html");
@@ -79,8 +70,8 @@ namespace base {
                     uv_fs_t scandir_req;
                     uv_fs_scandir(req->loop, &scandir_req, filepath.c_str(), 0, NULL);
                     uv_dirent_t dent;
-                    closeBat->content_type = "text/html";
-                    closeBat->result = "<html><body><ul>";
+                    closure->content_type = "text/html";
+                    closure->result = "<html><body><ul>";
                     while (UV_EOF != uv_fs_scandir_next(&scandir_req, &dent))
                     {
                         std::string name = dent.name;
@@ -88,14 +79,14 @@ namespace base {
                         {
                             name += "/";
                         }
-                        closeBat->result += "<li><a href='";
-                        closeBat->result += name;
-                        closeBat->result += "'>";
-                        closeBat->result += name;
-                        closeBat->result += "</a></li>";
-                        closeBat->result += "\n";
+                        closure->result += "<li><a href='";
+                        closure->result += name;
+                        closure->result += "'>";
+                        closure->result += name;
+                        closure->result += "</a></li>";
+                        closure->result += "\n";
                     }
-                    closeBat->result += "</ul></body></html>";
+                    closure->result += "</ul></body></html>";
                     uv_fs_req_cleanup(&scandir_req);
                 } else
                 {
@@ -108,8 +99,8 @@ namespace base {
                     bool exists =  base::fs::exists(file_to_open); //(access(file_to_open.c_str(), R_OK) != -1);
                     if (!exists)
                     {
-                        closeBat->result = "no access";
-                        closeBat->response_code = "404 Not Found";
+                        closure->result = "no access";
+                        closure->response_code = "404 Not Found";
                         return;
                     }
                     FILE * f = fopen(file_to_open.c_str(), "rb");
@@ -118,35 +109,35 @@ namespace base {
                         std::fseek(f, 0, SEEK_END);
                         unsigned size = std::ftell(f);
                         std::fseek(f, 0, SEEK_SET);
-                        closeBat->result.resize(size);
-                        std::fread(&closeBat->result[0], size, 1, f);
+                        closure->result.resize(size);
+                        std::fread(&closure->result[0], size, 1, f);
 
-                        //std::cout << &closeBat->result[0] << std::endl;
+                        //std::cout << &closure->result[0] << std::endl;
 
                         fclose(f);
                         if (endswith(file_to_open, "html"))
                         {
-                            closeBat->content_type = "text/html";
+                            closure->content_type = "text/html";
                         } else if (endswith(file_to_open, "css"))
                         {
-                            closeBat->content_type = "text/css";
+                            closure->content_type = "text/css";
                         } else if (endswith(file_to_open, "js"))
                         {
-                            closeBat->content_type = "application/javascript";
+                            closure->content_type = "application/javascript";
                         }
                         else if (endswith(file_to_open, "ico"))
                         {
-                              closeBat->content_type = "image/x-icon";  
+                              closure->content_type = "image/x-icon";  
                         } else if (endswith(file_to_open, "gif")) 
                         {
-                             closeBat->content_type = "image/gif"; 
+                             closure->content_type = "image/gif"; 
                              
                         } else if (endswith(file_to_open, "jpeg"))
                         {
-                             closeBat->content_type = "image/jpeg"; 
+                             closure->content_type = "image/jpeg"; 
                         } else if (endswith(file_to_open, "png")) 
                         {
-                             closeBat->content_type = "image/png"; 
+                             closure->content_type = "image/png"; 
                         } else {
                             SError << "file format not supported " << file_to_open;
                         }
@@ -154,28 +145,9 @@ namespace base {
                         
                     } else
                     {
-                        closeBat->result = "failed to open";
-                        closeBat->response_code = "404 Not Found";
+                        closure->result = "failed to open";
+                        closure->response_code = "404 Not Found";
                     }
-                    
-                    
-                            
-                    try
-                    {
-                       
-                        closure->content_type =  closeBat->content_type;
-                        closure->result  =  closeBat->result;
-                        closure->response_code   =closeBat->response_code ;
-                       
-                    }
-                    catch(...)
-                    {
-                        SInfo << "Excpetion at render";
-                    }
-                    
-                    delete closeBat ;
-                    
-                    
                 }
                 //#endif
             }
@@ -185,25 +157,17 @@ namespace base {
                // client_t* client = (client_t*) closure->client;
 
                // LOGF("[ %5d ] after render\n", client->request_num);
+
                 std::ostringstream rep;
-                 std::string res;
-                try
-                {
-                    
-                    rep << "HTTP/1.1 " << closure->response_code << "\r\n"
-                            << "Content-Type: " << closure->content_type << "\r\n"
-                            //<< "Connection: keep-alive\r\n"
-                            << "Connection: close\r\n"
-                            << "Content-Length: " << closure->result.size() << "\r\n"
-                            << "Access-Control-Allow-Origin: *" << "\r\n"
-                            << "\r\n";
-                    rep << closure->result;
-                    res = rep.str();
-                }
-                catch(...)
-                {
-                
-                }
+                rep << "HTTP/1.1 " << closure->response_code << "\r\n"
+                        << "Content-Type: " << closure->content_type << "\r\n"
+                        //<< "Connection: keep-alive\r\n"
+                        << "Connection: close\r\n"
+                        << "Content-Length: " << closure->result.size() << "\r\n"
+                        << "Access-Control-Allow-Origin: *" << "\r\n"
+                        << "\r\n";
+                rep << closure->result;
+                std::string res = rep.str();
 
                // SInfo << res;
 
