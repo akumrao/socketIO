@@ -781,10 +781,12 @@ Reference Link:- https://www.wintips.org/how-to-run-an-application-as-service/
 
 Steps:-
 1. Download nssm from "http://nssm.cc/download" and unzip in some project specific folder.
-2.  Start cmd prompt in admin and go to nssm application folder As per your machine architecture
+2. Start cmd prompt in admin and go to nssm application folder As per your machine architecture
 3. type "nssm install".
-4, Now fill all basic details like application to run as service, its arguments and service name.
-5.  click "Install Servcie"
-6. Open services in admin and start your service.
-7. if required, change user account for running service.
+4. Now fill all basic details like application to run as service, its arguments, startup dir, startup type  and service name.
+5. Select run as Local system account.
+6. Ensure restart on stop/exit option is selected in case of exit action tab. 
+7. click "Install Servcie"
+8. Open services in admin and start your service to test for first time.
+9. if required, change user account for running service.
 
