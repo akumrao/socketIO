@@ -232,7 +232,7 @@ namespace base {
 
             std::string storeBuf;
 
-            void send(const char* data, size_t len, bool binary =false);
+            void send(const char* data, size_t len, bool binary =false, onSendCallback cb=nullptr);
             
 
            // void send(const char* data, size_t len, int flags) ; // flags = Text || Binary
@@ -290,6 +290,7 @@ namespace base {
             
             bool dropping{false};
             int first_frame{1};
+            int qsize{ 0 };
         };
 
 
