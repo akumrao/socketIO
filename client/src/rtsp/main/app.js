@@ -380,6 +380,7 @@ var hiddenInput = undefined;
                          } catch (e) 
                          {
                             console.log("sourceBuffer.appendBuffer = " + e.toString())
+                            reSet();
                          }
 
                         cc = cc + 1;

@@ -91,8 +91,8 @@ class FFParse;
      std::string fileName;
      
  public:
-     
-     void broadcast(const char * data, int size, bool binary,  bool is_first  );
+     //// 1 ftype, 2 moov , 3 first moof( idr frame), 4 P or B frames cane be dropped 
+     void broadcast(const char * data, int size, bool binary,  int frametype   );
      void on_read(net::Listener* connection, const char* msg, size_t len) ;
      
 //    virtual void onConnect(    int socketID                        );

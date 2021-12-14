@@ -242,7 +242,7 @@ namespace base {
             
             void dummy_timer_cb();
             
-            void push( const char* data, size_t len, bool binary, bool is_first);
+            void push( const char* data, size_t len, bool binary, int frametype);
             //
             /// Client side
 
@@ -284,12 +284,12 @@ namespace base {
                 
                 bool binary;
                 std::string buff;  
-                bool isFirstFrame;
+                int frametype;   // 1 ftype, 2 moov , 3 first moof( idr frame), 4 P or B frames cane be dropped 
             };
             std::queue< Store> dummy_queue;
             
             bool dropping{false};
-            bool first_frame{false};
+            int first_frame{1};
         };
 
 

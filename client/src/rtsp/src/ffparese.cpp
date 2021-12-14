@@ -619,7 +619,7 @@ namespace base {
             int cur_videosize=0;
 
             long framecount =0;
-
+            int gop = 0;
             while (!stopped() && keeprunning) 
             {
                  uint64_t currentTime =  CurrentTime_microseconds();
@@ -654,10 +654,20 @@ namespace base {
 
 ////////////////////
 
-                    if ( foundsps && foundpps && basicvideoframe.h264_pars.frameType == H264SframeType::i && basicvideoframe.h264_pars.slice_type == H264SliceType::idr) //AUD Delimiter
+                    if ( foundsps && foundpps && ( basicvideoframe.h264_pars.frameType == H264SframeType::i &&  basicvideoframe.h264_pars.slice_type == H264SliceType::idr)) //AUD Delimiter
                     {
                         fragmp4_muxer->sendMeta();
-                       // fragmp4_muxer->resetParser = false;
+                        
+                       
+                        
+                    #if(_DEBUG)
+                        SInfo << " Key " << basicvideoframe.payload.size();
+                        if (gop)
+                        {
+                            SInfo << "Gop " << gop;
+                        }
+                        gop = 1;
+                    #endif
                     }
 
                     if (basicvideoframe.h264_pars.slice_type == H264SliceType::sps ||  basicvideoframe.h264_pars.slice_type == H264SliceType::pps) //AUD Delimiter
@@ -723,6 +733,30 @@ namespace base {
                     }
                     else if (foundsps && foundpps  )
                     {
+#if(_DEBUG)
+                        if (basicvideoframe.h264_pars.frameType == H264SframeType::p)
+                        {
+                            ++gop;
+                            SInfo << " P frame " << basicvideoframe.payload.size();
+                        }
+                        else if (basicvideoframe.h264_pars.frameType == H264SframeType::b)
+                        {
+                            ++gop;
+                            SInfo << " B frame " << basicvideoframe.payload.size();
+                        }
+                        else if (basicvideoframe.h264_pars.frameType == H264SframeType::i && basicvideoframe.h264_pars.slice_type != H264SliceType::idr)
+                        {
+                            SInfo << " I frame " << basicvideoframe.payload.size() << " gop " << gop;
+                            gop = 1;
+                            
+                        }
+                      
+#endif
+
+
+                              
+
+
                         //info->run(&basicvideoframe);
                         fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                         basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
