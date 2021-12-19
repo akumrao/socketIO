@@ -5,12 +5,12 @@
 #include <iostream>
 #include  <vector>
 
-extern "C"
-{
+//extern "C"
+//{
 //#include <libavutil/timestamp.h>
-#include <libavformat/avformat.h>
-#include <libavcodec/avcodec.h>
-}
+#include <avformat.h>
+#include <avcodec.h>
+//}
 
 //#include "micro.h"
 #include "codec.h"

@@ -24,7 +24,7 @@
 #include "H264Framer.h"
 
 
-extern "C" {
+//extern "C" {
  
 //#include <libavutil/timestamp.h>
 // #include <avformat.h>
@@ -32,12 +32,12 @@ extern "C" {
 // #include <channel_layout.h>    
 // #include <mathematics.h>
 
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include "libavutil/channel_layout.h"
-#include "libavutil/mathematics.h"
+#include <avcodec.h>
+#include <avformat.h>
+#include "channel_layout.h"
+#include "mathematics.h"
 
-}
+//}
 
  
 

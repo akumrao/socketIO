@@ -19,12 +19,12 @@
 //#include "livethread.h"
  #include "Settings.h"
 
-extern "C"
-{
+//extern "C"
+//{
 //#include <libavutil/timestamp.h>
-#include <libavformat/avformat.h>
+#include <avformat.h>
 //#include <libavcodec/avcodec.h>
-}
+//}
 
 #define SERVER_HOST  "127.0.0.1"               
 #define SERVER_PORT 8000

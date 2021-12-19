@@ -20,11 +20,11 @@
 //#include "ff/mediacapture.h"
 
 //#include <libavutil/timestamp.h>
-extern "C"
-{
+//extern "C"
+//{
 //#include <libavutil/timestamp.h>
-#include "libavformat/avformat.h"
-}
+#include "avformat.h"
+//}
 
 using namespace base;
 
