@@ -22,7 +22,7 @@
 //extern "C"
 //{
 //#include <libavutil/timestamp.h>
-#include <avformat.h>
+#include "avformat.h"
 //#include <libavcodec/avcodec.h>
 //}
 

@@ -327,6 +327,7 @@ xcopy $(SolutionDir)..\client\src\rtsp\main $(TargetDir) /Y</Command>
     <ClCompile Include="..\client\src\rtsp\ffmpeg\mpegutils.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\mpegvideodsp.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\mpegvideoencdsp.cpp" />
+    <ClCompile Include="..\client\src\rtsp\ffmpeg\mux.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\network.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\opt.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\options.cpp" />

@@ -14,8 +14,8 @@
 //extern "C"
 //{
 //#include <libavutil/timestamp.h>
-#include <avformat.h>
-#include <avcodec.h>
+#include "avformat.h"
+#include "avcodec.h"
 //}
 
  /*
