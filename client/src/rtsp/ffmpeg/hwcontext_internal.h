@@ -19,6 +19,7 @@
 #ifndef AVUTIL_HWCONTEXT_INTERNAL_H
 #define AVUTIL_HWCONTEXT_INTERNAL_H
 
+#include "config.h"
 #include <stddef.h>
 
 #include "buffer.h"

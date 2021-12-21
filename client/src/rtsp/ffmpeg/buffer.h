@@ -25,6 +25,7 @@
 #ifndef AVUTIL_BUFFER_H
 #define AVUTIL_BUFFER_H
 
+#include "config.h"
 #include <stdint.h>
 
 /**

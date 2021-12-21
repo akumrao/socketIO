@@ -28,7 +28,7 @@
  */
 
     
-
+#include "config.h"
 #include <errno.h>
 #include "samplefmt.h"
 #include "attributes.h"

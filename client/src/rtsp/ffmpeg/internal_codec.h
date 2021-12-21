@@ -24,6 +24,7 @@
 #ifndef AVCODEC_INTERNAL_H
 #define AVCODEC_INTERNAL_H
 
+#include "config.h"
 #include <stdint.h>
 
 #include "buffer.h"

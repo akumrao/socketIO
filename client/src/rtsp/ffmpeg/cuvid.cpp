@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-
+#include "config.h"
 #include "compat/cuda/dynlink_loader.h"
 
 #include "buffer.h"

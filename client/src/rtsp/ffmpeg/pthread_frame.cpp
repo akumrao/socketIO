@@ -22,10 +22,10 @@
  * @see doc/multithreading.txt
  */
 
+#include "config.h"
 #include <atomic>
 
 #include "frame.h"    
-#include "config.h"
 #include <stdint.h>
 
 #include "avcodec.h"

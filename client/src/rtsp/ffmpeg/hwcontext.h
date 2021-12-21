@@ -19,6 +19,7 @@
 #ifndef AVUTIL_HWCONTEXT_H
 #define AVUTIL_HWCONTEXT_H
 
+#include "config.h"
 #include "buffer.h"
 #include "frame.h"
 #include "log.h"

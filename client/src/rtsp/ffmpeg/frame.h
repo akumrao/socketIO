@@ -25,6 +25,7 @@
 #ifndef AVUTIL_FRAME_H
 #define AVUTIL_FRAME_H
 
+#include "config.h"
 #include <stdint.h>
 
 #include "avutil.h"
