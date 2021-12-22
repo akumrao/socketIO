@@ -307,7 +307,11 @@
 #define HAVE_TRUNC 1
 #define HAVE_TRUNCF 1
 #define HAVE_ACCESS 1
+#ifdef _WIN32
 #define HAVE_ALIGNED_MALLOC 1
+#else
+#define HAVE_ALIGNED_MALLOC 0
+#endif
 #define HAVE_ARC4RANDOM 0
 #define HAVE_CLOCK_GETTIME 1
 #ifdef _WIN32

@@ -74,7 +74,11 @@ int ff_network_init(void)
 int ff_network_wait_fd(int fd, int write)
 {
     int ev = write ? POLLOUT : POLLIN;
+#ifdef _WIN32
     struct pollfd p = { .fd = (SOCKET)fd, .events = (short int)ev, .revents = 0 };
+#else
+    struct pollfd p = { .fd = fd, .events = (short int)ev, .revents = 0 };
+#endif
     int ret;
     ret = poll(&p, 1, POLLING_TIME);
     return ret < 0 ? ff_neterrno() : p.revents & (ev | POLLERR | POLLHUP) ? 0 : AVERROR(EAGAIN);
@@ -209,8 +213,11 @@ int ff_listen(int fd, const struct sockaddr *addr,
 int ff_accept(int fd, int timeout, URLContext *h)
 {
     int ret;
+#ifdef _WIN32
     struct pollfd lp = { (SOCKET)fd, POLLIN, 0 };
-
+#else
+    struct pollfd lp = { fd, POLLIN, 0 };
+#endif
     ret = ff_poll_interrupt(&lp, 1, timeout, &h->interrupt_callback);
     if (ret < 0)
         return ret;
@@ -240,7 +247,11 @@ int ff_listen_connect(int fd, const struct sockaddr *addr,
                       socklen_t addrlen, int timeout, URLContext *h,
                       int will_try_next)
 {
+#ifdef	_WIN32
     struct pollfd p = {(SOCKET)fd, POLLOUT, 0};
+#else
+    struct pollfd p = {fd, POLLOUT, 0};
+#endif
     int ret;
     socklen_t optlen;
 

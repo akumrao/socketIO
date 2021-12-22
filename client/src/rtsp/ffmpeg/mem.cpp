@@ -23,10 +23,11 @@
  * implementations (not recommended) you have to link libav* as
  * dynamic libraries and remove -Wl,-Bsymbolic from the linker flags.
  * Note that this will cost performance. */
+#ifdef _WIN32
 #if HAVE_POSIX_MEMALIGN
 #define posix_memalign(p, a, s) (((*(p)) = _aligned_malloc((s), (a))), *(p) ?0 :errno)
-#endif
-  
+#endif	//HAVE_POSIX_MEMALIGN
+#endif //  _WIN32
 
 #include "config.h"
 #include <stdint.h>    
@@ -35,6 +36,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if HAVE_MALLOC_H
+#include <malloc.h>
+#endif
+
 #include "mem.h"
 #include "common.h"
 #include "mem_internal.h"
@@ -42,9 +47,7 @@
 #include "intreadwrite.h"
 
     
-#if HAVE_MALLOC_H
-#include <malloc.h>
-#endif
+
 
  #define CONFIG_MEMORY_POISONING 0
 
