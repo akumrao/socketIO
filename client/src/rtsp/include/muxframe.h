@@ -5,12 +5,9 @@
 #include <iostream>
 #include  <vector>
 
-//extern "C"
-//{
-//#include <libavutil/timestamp.h>
-#include <avformat.h>
-#include <avcodec.h>
-//}
+
+#include "avformat.h"
+#include "avcodec.h"
 
 //#include "micro.h"
 #include "codec.h"
@@ -19,15 +16,6 @@
 
 namespace base {
 namespace fmp4 {
-    
-//#include <algorithm>
-//#include <iterator>
-//#include  <vector>
-
-// #include "ff/ff.h"
- //#include "ff/mediacapture.h"
-
-//#include <libavutil/timestamp.h>
 
 
 /** Enumeration of Frame classes 
