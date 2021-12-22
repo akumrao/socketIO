@@ -34,9 +34,6 @@
     <ClCompile Include="..\client\src\base\src\base64.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\client\src\base\src\buffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\client\src\base\src\collection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -224,9 +221,6 @@
       <Filter>ffmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\client\src\rtsp\ffmpeg\bsf.cpp">
-      <Filter>ffmpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\client\src\rtsp\ffmpeg\buffer.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\client\src\rtsp\ffmpeg\channel_layout.cpp">
@@ -447,6 +441,9 @@
     </ClCompile>
     <ClCompile Include="..\client\src\rtsp\ffmpeg\mux.cpp">
       <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\src\base\src\base_buffer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

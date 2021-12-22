@@ -260,6 +260,7 @@ xcopy $(SolutionDir)..\client\src\rtsp\main $(TargetDir) /Y</Command>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\client\src\base\src\base_buffer.cpp" />
     <ClCompile Include="..\client\src\json\src\json.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\aac_ac3_parser.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\ac3tab.cpp" />
@@ -284,7 +285,6 @@ xcopy $(SolutionDir)..\client\src\rtsp\main $(TargetDir) /Y</Command>
     <ClCompile Include="..\client\src\rtsp\ffmpeg\bitstream_filters.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\bprint.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\bsf.cpp" />
-    <ClCompile Include="..\client\src\rtsp\ffmpeg\buffer.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\channel_layout.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\codec_desc.cpp" />
     <ClCompile Include="..\client\src\rtsp\ffmpeg\color_utils.cpp" />
@@ -371,7 +371,6 @@ xcopy $(SolutionDir)..\client\src\rtsp\main $(TargetDir) /Y</Command>
     <ClCompile Include="..\client\src\base\src\Timer.cpp" />
     <ClCompile Include="..\client\src\base\src\application.cpp" />
     <ClCompile Include="..\client\src\base\src\base64.cpp" />
-    <ClCompile Include="..\client\src\base\src\buffer.cpp" />
     <ClCompile Include="..\client\src\base\src\collection.cpp" />
     <ClCompile Include="..\client\src\base\src\datetime.cpp" />
     <ClCompile Include="..\client\src\base\src\filesystem.cpp" />
