@@ -928,7 +928,9 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             //*/
             memcpy(&metap->name[0], boxname, 4);
 
-             SInfo << "boxname " << boxname ;
+	   #ifdef _DEBUG
+            SInfo << "boxname " << boxname ;
+           #endif
 
             // TODO: get timestamp from the MP4 structure
             // at the moment, internal_frame does not have any timestamp
