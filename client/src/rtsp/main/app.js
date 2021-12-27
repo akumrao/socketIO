@@ -286,7 +286,7 @@ var hiddenInput = undefined;
                  if (videoObj)
                 {
                     videoObj.pause();
-                videoObj.removeAttribute('src'); 
+        	    videoObj.removeAttribute('src'); 
                     videoObj.remove();
                     videoObj = null;
                 }
