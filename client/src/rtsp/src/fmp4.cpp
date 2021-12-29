@@ -58,7 +58,7 @@ namespace base {
 
     namespace fmp4 {
 
-        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpServer(  ip, port,  factory, true) {
+        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpsServer(  ip, port,  factory, true) {
 
             self = this;
 
@@ -146,21 +146,21 @@ namespace base {
         void ReadMp4::broadcast(const char * data, int size, bool binary, int fametype  )
         {
            // conn->send( data, size, binary    );
-            static int noCon =0;
+           // static int noCon =0;
             
-            if(noCon !=this->GetNumConnections())
-                
-            {
-                noCon = this->GetNumConnections();
-                SInfo << "No of Connectons " << noCon;
-            }
+//            if(noCon !=this->GetNumConnections())
+//                
+//            {
+//                noCon = this->GetNumConnections();
+//                SInfo << "No of Connectons " << noCon;
+//            }
 
             for (auto* connection :  this->GetConnections())
             {
-                net::HttpConnection* cn = (net::HttpConnection*)connection;
+                net::HttpsConnection* cn = (net::HttpsConnection*)connection;
                 if(cn)
                 {
-                    net::WebSocketConnection *con = ((net::HttpConnection*)cn)->getWebSocketCon();
+                    net::WebSocketConnection *con = ((net::HttpsConnection*)cn)->getWebSocketCon();
                     if(con)
                      con->push(data ,size, binary, fametype);
                 }
