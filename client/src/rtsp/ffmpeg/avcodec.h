@@ -33,7 +33,7 @@
 #include "samplefmt.h"
 #include "attributes.h"
 #include "avutil.h"
-#include "buffer.h"
+#include "avbuffer.h"
 //#include "libavutil/cpu.h"
 //#include "libavutil/channel_layout.h"
 #include "dict.h"

@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "buffer.h"
+#include "avbuffer.h"
 #include "common.h"
 #include "hwcontext.h"
 #include "hwcontext_internal.h"

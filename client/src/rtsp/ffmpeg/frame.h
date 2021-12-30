@@ -29,7 +29,7 @@
 #include <stdint.h>
 
 #include "avutil.h"
-#include "buffer.h"
+#include "avbuffer.h"
 #include "dict.h"
 #include "rational.h"
 #include "samplefmt.h"

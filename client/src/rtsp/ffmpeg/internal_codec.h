@@ -27,7 +27,7 @@
 #include "config.h"
 #include <stdint.h>
 
-#include "buffer.h"
+#include "avbuffer.h"
 #include "channel_layout.h"
 #include "mathematics.h"
 #include "pixfmt.h"

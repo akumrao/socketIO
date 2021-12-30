@@ -20,7 +20,7 @@
 #define AVUTIL_HWCONTEXT_H
 
 #include "config.h"
-#include "buffer.h"
+#include "avbuffer.h"
 #include "frame.h"
 #include "log.h"
 #include "pixfmt.h"

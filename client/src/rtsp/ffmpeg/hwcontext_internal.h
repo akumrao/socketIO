@@ -22,7 +22,7 @@
 #include "config.h"
 #include <stddef.h>
 
-#include "buffer.h"
+#include "avbuffer.h"
 #include "hwcontext.h"
 #include "frame.h"
 #include "pixfmt.h"

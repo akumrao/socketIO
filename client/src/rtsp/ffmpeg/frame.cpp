@@ -19,7 +19,7 @@
 #include "frame.h"
 #include "channel_layout.h"
 #include "avassert.h"
-#include "buffer.h"
+#include "avbuffer.h"
 #include "common.h"
 #include "dict.h"
 

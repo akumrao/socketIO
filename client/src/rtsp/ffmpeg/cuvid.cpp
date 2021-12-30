@@ -22,7 +22,7 @@
 #include "config.h"
 #include "compat/cuda/dynlink_loader.h"
 
-#include "buffer.h"
+#include "avbuffer.h"
 #include "mathematics.h"
 #include "hwcontext.h"
 #include "hwcontext_cuda_internal.h"
