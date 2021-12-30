@@ -24,7 +24,7 @@
  * mpeg audio layer common tables.
  */
 
-#include <cmath>
+#include <math.h>
 #include "mpegaudiodata.h"
 
 

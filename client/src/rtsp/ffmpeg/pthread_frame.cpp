@@ -45,7 +45,6 @@
 #include "mem.h"
 #include "opt.h"
 #include "avthread.h"
-using namespace std;
 
 enum {
     ///< Set when the thread is awaiting a packet.

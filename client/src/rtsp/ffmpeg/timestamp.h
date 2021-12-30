@@ -54,7 +54,7 @@ static inline char *av_ts_make_string(char *buf, int64_t ts)
 //#define av_ts2str(ts) av_ts_make_string((char[AV_TS_MAX_STRING_SIZE]){0}, ts)
 inline char* av_ts2str(int64_t ts)
 {
-    char buffer[AV_TS_MAX_STRING_SIZE];
+    char buffer[AV_TS_MAX_STRING_SIZE]={0};
     return av_ts_make_string(buffer, ts);     
 }
 /**
