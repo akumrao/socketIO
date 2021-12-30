@@ -21,11 +21,6 @@
 
 #include "avcodec.h"
 #include "bsf.h"
-#include "config.h"
-#ifdef av_restrict
-    #undef av_restrict
-    #define av_restrict 
-#endif
 #include "mpeg4video.h"
 
 typedef struct UnpackBFramesBSFContext {

@@ -27,7 +27,6 @@
 #include "me_cmp.h"
 #include "mpegvideoencdsp.h"
 
-extern uint32_t ff_square_tab[512];
 static int try_8x8basis_c(int16_t rem[64], int16_t weight[64],
                           int16_t basis[64], int scale)
 {
