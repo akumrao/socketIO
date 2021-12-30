@@ -12,7 +12,7 @@ SOURCES    = $(wildcard *.cpp ../src/*.cpp ../ffmpeg/*.cpp ../../libuv/src/*.cpp
 CXXFLAGS   := -g -std=c++14 -Wno-inconsistent-missing-override -Wno-uninitialized -Wno-attributes -Wno-fpermissive -Wno-deprecated-declarations
  
 
-CPPFLAGS   := -I../../rtsp/include/ -I../ffmpeg/ -I../../json/include/ -I../../crypto/include/ -I../../http/include/ -I../../base/include/ -I../../net/include/ -I../../net/uv_multiplex/include/ -I../../libuv/include -I../../libuv/src -I../../../build/ -I../../http_parser/  -I../../rtsp/ \
+CPPFLAGS   := -I../../rtsp/include/ -I../ffmpeg/ -I../ffmpeg/compat/atomics/gcc/ -I../../json/include/ -I../../crypto/include/ -I../../http/include/ -I../../base/include/ -I../../net/include/ -I../../net/uv_multiplex/include/ -I../../libuv/include -I../../libuv/src -I../../../build/ -I../../http_parser/  -I../../rtsp/ \
               -DHTTPSSL
 #LDFLAGS   := -L/export/views/video/ffmpeg/Obj/
 

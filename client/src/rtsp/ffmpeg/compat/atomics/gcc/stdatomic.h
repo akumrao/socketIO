@@ -46,6 +46,10 @@ do {                            \
 
 #define atomic_is_lock_free(obj) 0
 
+#ifndef _Bool
+#define _Bool bool
+#endif
+
 typedef         _Bool      atomic_flag;
 typedef         _Bool      atomic_bool;
 typedef          char      atomic_char;
