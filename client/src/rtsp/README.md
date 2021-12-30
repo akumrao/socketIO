@@ -774,9 +774,9 @@ In
 
 
 
+#########################################################################
+Running an executable as NT Service or Windows Service
 
-
-NT Service or Windows Service
 Reference Link:- https://www.wintips.org/how-to-run-an-application-as-service/
 
 Steps:-
@@ -790,3 +790,31 @@ Steps:-
 8. Open services in admin and start your service to test for first time.
 9. if required, change user account for running service.
 
+#########################################################################
+
+#########################################################################
+Building OpenSSL - For Windows
+
+Download Openssl from github
+	branch - OpenSSL_1_1_1-stable
+	url - https://github.com/openssl/openssl.git
+
+Compiling for Windows x64 (release version) with MSVC support
+	1. Open cross compilation prompt with x86_64
+	2. Verify perl is installed by typing perl --version
+	3. Verify NASM is installed by verifying nasm --version
+	4. Go to openssl directory
+	5. Run configure 
+		"perl Configure VC-WIN64A --prefix=E:\dev\work\OpenSSL_1_1_1-stable\openssl\win64\vc-win64a --openssldir=E:\dev\work\OpenSSL_1_1_1-stable\openssl\win64\SSL"
+		
+	6. Run Build through "nmake"
+	7. Run tests to verify build "nmake test"
+	8. Run install to copy files in earlier given dirs "nmake install"
+	
+Compiling for Windows x64 (debug version) with MSVC support
+	1. Follow steps 1 - 4
+	2. Clean earlier output/build by running "nmake clean"
+	3. Add debug flag in configure command
+		"perl Configure VC-WIN64A --debug --prefix=E:\dev\work\OpenSSL_1_1_1-stable\openssl\win64\vc-win64a --openssldir=E:\dev\work\OpenSSL_1_1_1-stable\openssl\win64\SSL"
+	4. Follow earlier steps 6 - 8
+#########################################################################
