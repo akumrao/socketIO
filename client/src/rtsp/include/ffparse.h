@@ -89,7 +89,7 @@ class ReadMp4;
      
     
      /// Video Begin 
-    bool parseH264Header();
+    bool parseH264Header(int stream_index);
     
     void parseH264Content();
     FILE *fileVideo;
@@ -99,16 +99,19 @@ class ReadMp4;
     /// Audio Begin 
     
     FILE *fileAudio;
-    bool parseAACHeader();
+    bool parseAACHeader(int stream_index);
     void parseAACContent();
-     AVCodecContext *audioContext= NULL;
     
+   bool initAAC();
+    
+    AVCodecContext *audioContext= NULL;
+     const AVCodec *audiocodec = NULL;
     void reset();
     void restart(bool mute);
 
     void resHD(bool hd);
     void reopen();
-
+   
       
     long get_nal_size(uint8_t *buf, long size,  uint8_t **poutbuf, int *poutbuf_size);
       
@@ -119,14 +122,14 @@ class ReadMp4;
    /// Audio End 
     
     long int startTime{0};
-    int stream_index{0};
+   // int stream_index{0};
     void parseMuxContent();
     
       
  private:
      
     //std::atomic< bool > resetParser { false };
-    std::atomic< bool > mute { true };
+    std::atomic< bool > mute { false };
     int hd{0} ;
     std::atomic< bool > keeprunning { true };
 

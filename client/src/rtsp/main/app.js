@@ -73,12 +73,12 @@ var hiddenInput = undefined;
             // *** INTERNAL PARAMETERS ***
             // set mimetype and codec
             var mimeType = "video/mp4";
-            var codecs = "avc1.4D401F"; // https://wiki.whatwg.org/wiki/Video_type_parameters
+           // var codecs = "avc1.4D401F"; // https://wiki.whatwg.org/wiki/Video_type_parameters
             // if your stream has audio, remember to include it in these definitions.. otherwise your mse goes sour
 
             // var codecs = "mp4a.40.2";
 
-           // var codecs = "avc1.4D401F,mp4a.40.2";
+            var codecs = "avc1.4D401F,mp4a.40.2";
             var codecPars = mimeType+';codecs="'+codecs+'"';
             
             //var stream_started = false; // is the source_buffer updateend callback active nor not
@@ -216,23 +216,6 @@ var hiddenInput = undefined;
                     console.log("got frame " + name );
                     return;
                 }
-
-
-                if ((name=="moof") ) {
-                    if (hasFirstSampleFlag(memview)) {
-                       
-                        console.log("got that special moof");
-
-			             if (queue.length  >  30 ) 
-                          {
-                         
-                             queue = [];
-
-                           }
-                    }
-                    
-                }
-
                 
                 // keep the latency to minimum
                 if(videoObj && source_buffer)
@@ -647,22 +630,19 @@ function setupHtmlEvents() {
 	var settingsButton = document.getElementById('settings-button');
 	if (settingsButton) {
 		settingsButton.onclick = function (event) {
-			console.log(`-> SS: Camera Change`);
+			console.log(`-> SS: settings`);
 
-            settingsButton.disabled = true;
-            //let quality = document.getElementById('quality').value;
-            //let minBitrate = document.getElementById('minBitrate').value;
-            //let maxBitrate = document.getElementById('maxBitrate').value;
-            let camera = document.getElementById('camera').value;
-            //let minQP = document.getElementById('minQP').value;
-            //let rateCtrl = document.getElementById('rateCtrl').value;
-            ////let minFPS = document.getElementById('minFPS').value;
-            //let backbuffersize = document.getElementById('backbuffersize').value;
+			//let quality = document.getElementById('quality').value;
+			//let minBitrate = document.getElementById('minBitrate').value;
+			//let maxBitrate = document.getElementById('maxBitrate').value;
+			let resolution = document.getElementById('resolution').value;
+			//let minQP = document.getElementById('minQP').value;
+			//let rateCtrl = document.getElementById('rateCtrl').value;
+			////let minFPS = document.getElementById('minFPS').value;
+			//let backbuffersize = document.getElementById('backbuffersize').value;
 
-            //ws.send(JSON.stringify({ type: 'settings', data:    { "quality": quality, "minBitrate": minBitrate, "maxBitrate": maxBitrate,"resolution": resolution, "rateCtrl":rateCtrl  }    }));
-            pass = -1;
-            ws.send(camera);
-
+			//ws.send(JSON.stringify({ type: 'settings', data:    { "quality": quality, "minBitrate": minBitrate, "maxBitrate": maxBitrate,"resolution": resolution, "rateCtrl":rateCtrl  }    }));
+                        ws.send(resolution );
 		};
 	}
 
@@ -770,8 +750,7 @@ function showPlayOverlay() {
 	setOverlay('clickableState', img, event => {
 		if (videoObj)
 			videoObj.play();
-			//videoObj.muted =false;
-
+			videoObj.muted =false;
 		requestQualityControl();
 
 		showFreezeFrameOverlay();

@@ -107,9 +107,27 @@ namespace base {
             ffparser->join();
             delete ffparser;
         }
+        
+        
+         void ReadMp4::on_close(net::Listener* connection)
+         {
+             
+            /* net::HttpsConnection* cn = (net::HttpsConnection*)connection;
+                if(cn)
+                {
+                    net::WebSocketConnection *con = ((net::HttpsConnection*)cn)->getWebSocketCon();
+                    if(con)
+                    {
+                      SInfo << "on_close " ;
+                    }
+                }
+             
+             */
+             
+         }
 
 
-        void  ReadMp4::on_read(net::Listener* connection, const char* msg, size_t len) {
+        void ReadMp4::on_read(net::Listener* connection, const char* msg, size_t len) {
 
             //connection->send("arvind", 6 );
    

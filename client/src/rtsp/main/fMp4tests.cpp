@@ -19,12 +19,9 @@
 //#include "ff/ff.h"
 //#include "ff/mediacapture.h"
 
-//#include <libavutil/timestamp.h>
-//extern "C"
-//{
+
 //#include <libavutil/timestamp.h>
 #include "avformat.h"
-//}
 
 using namespace base;
 
@@ -120,7 +117,7 @@ int main(int argc, char** argv) {
     
      //SInfo << "Main shutdwon2";
 
-        app.stop();
+    app.stop();
         //app.uvDestroy();
        // delete ch;
         
