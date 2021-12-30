@@ -17,7 +17,7 @@
  */
 
 using namespace std;
-#include <atomic>
+#include "atomic.h"
 
 
 #include <stdint.h>

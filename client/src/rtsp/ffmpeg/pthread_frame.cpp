@@ -23,7 +23,7 @@
  */
 
 #include "config.h"
-#include <atomic>
+#include "atomic.h"
 
 #include "frame.h"    
 #include <stdint.h>
