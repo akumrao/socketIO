@@ -17,7 +17,7 @@
  */
 
 #include <stdint.h>
-#include "atomic.h"
+#include <stdatomic.h>
 
 
 #include "cpu.h"

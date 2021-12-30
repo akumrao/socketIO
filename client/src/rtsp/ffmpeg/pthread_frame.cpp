@@ -23,7 +23,7 @@
  */
 
 #include "config.h"
-#include "atomic.h"
+#include <stdatomic.h>
 
 #include "frame.h"    
 #include <stdint.h>
@@ -223,7 +223,7 @@ static attribute_align_arg void *frame_worker_thread(void *arg)
 
         pthread_mutex_lock(&p->progress_mutex);
 
-        atomic_store<int>(&p->state, STATE_INPUT_READY);
+        atomic_store(&p->state, STATE_INPUT_READY);
 
         pthread_cond_broadcast(&p->progress_cond);
         pthread_cond_signal(&p->output_cond);
@@ -431,7 +431,7 @@ static int submit_packet(PerThreadContext *p, AVCodecContext *user_avctx,
         return ret;
     }
 
-    atomic_store<int>(&p->state, STATE_SETTING_UP);
+    atomic_store(&p->state, STATE_SETTING_UP);
     pthread_cond_signal(&p->input_cond);
     pthread_mutex_unlock(&p->mutex);
 
@@ -462,7 +462,7 @@ static int submit_packet(PerThreadContext *p, AVCodecContext *user_avctx,
                 break;
             }
             if (call_done) {
-                atomic_store<int>(&p->state, STATE_SETTING_UP);
+                atomic_store(&p->state, STATE_SETTING_UP);
                 pthread_cond_signal(&p->progress_cond);
             }
             pthread_mutex_unlock(&p->progress_mutex);
@@ -630,7 +630,7 @@ void ff_thread_finish_setup(AVCodecContext *avctx) {
         av_log(avctx, AV_LOG_WARNING, "Multiple ff_thread_finish_setup() calls\n");
     }
 
-    atomic_store<int>(&p->state, STATE_SETUP_FINISHED);
+    atomic_store(&p->state, STATE_SETUP_FINISHED);
 
     pthread_cond_broadcast(&p->progress_cond);
     pthread_mutex_unlock(&p->progress_mutex);
@@ -925,7 +925,7 @@ static int thread_get_buffer_internal(AVCodecContext *avctx, ThreadFrame *f, int
         pthread_mutex_lock(&p->progress_mutex);
         p->requested_frame = f->f;
         p->requested_flags = flags;
-        atomic_store_explicit<int>(&p->state, STATE_GET_BUFFER, memory_order_release);
+        atomic_store_explicit(&p->state, STATE_GET_BUFFER, memory_order_release);
         pthread_cond_broadcast(&p->progress_cond);
 
         while (atomic_load(&p->state) != STATE_SETTING_UP)
@@ -959,7 +959,7 @@ enum AVPixelFormat ff_thread_get_format(AVCodecContext *avctx, const enum AVPixe
     }
     pthread_mutex_lock(&p->progress_mutex);
     p->available_formats = fmt;
-    atomic_store<int>(&p->state, STATE_GET_FORMAT);
+    atomic_store(&p->state, STATE_GET_FORMAT);
     pthread_cond_broadcast(&p->progress_cond);
 
     while (atomic_load(&p->state) != STATE_SETTING_UP)

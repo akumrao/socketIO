@@ -23,7 +23,6 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <atomic>
 
 #define avpriv_atomic_int_get atomic_int_get_win32
 static inline int atomic_int_get_win32(volatile int *ptr)

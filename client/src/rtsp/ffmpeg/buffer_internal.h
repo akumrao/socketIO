@@ -19,8 +19,7 @@
 #ifndef AVUTIL_BUFFER_INTERNAL_H
 #define AVUTIL_BUFFER_INTERNAL_H
 
-#include "config.h"
-#include "atomic.h"
+#include <stdatomic.h>
 #include <stdint.h>
 
 #include "buffer.h"
