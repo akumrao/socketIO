@@ -12,10 +12,43 @@
 }
 */
 
-#define HAVE_POSIX_MEMALIGN 1
-#define HAVE_AVX 0
+#define _XOPEN_SOURCE 600
 
-#define FF_MEMORY_POISON 0x2a
+#include "config.h"
+
+#include <limits.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#if HAVE_MALLOC_H
+#include <malloc.h>
+#endif
+
+#include "avassert.h"
+#include "avutil.h"
+#include "common.h"
+#include "dynarray.h"   
+#include "intreadwrite.h"
+#include "mem.h"
+#include "internal_util.h"
+
+#ifdef MALLOC_PREFIX
+
+#define malloc         AV_JOIN(MALLOC_PREFIX, malloc)
+#define memalign       AV_JOIN(MALLOC_PREFIX, memalign)
+#define posix_memalign AV_JOIN(MALLOC_PREFIX, posix_memalign)
+#define realloc        AV_JOIN(MALLOC_PREFIX, realloc)
+#define free           AV_JOIN(MALLOC_PREFIX, free)
+
+void *malloc(size_t size);
+void *memalign(size_t align, size_t size);
+int   posix_memalign(void **ptr, size_t align, size_t size);
+void *realloc(void *ptr, size_t size);
+void  free(void *ptr);
+
+#endif /* MALLOC_PREFIX */
+    
+#include "mem_internal.h"
 
 #define ALIGN (HAVE_AVX ? 32 : 16)
 
@@ -23,34 +56,6 @@
  * implementations (not recommended) you have to link libav* as
  * dynamic libraries and remove -Wl,-Bsymbolic from the linker flags.
  * Note that this will cost performance. */
-#ifdef _WIN32
-#if HAVE_POSIX_MEMALIGN
-#define posix_memalign(p, a, s) (((*(p)) = _aligned_malloc((s), (a))), *(p) ?0 :errno)
-#endif	//HAVE_POSIX_MEMALIGN
-#endif //  _WIN32
-
-#include "config.h"
-#include <stdint.h>    
-#include <limits.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-
-#if HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
-#include "mem.h"
-#include "common.h"
-#include "mem_internal.h"
-#include "dynarray.h"   
-#include "intreadwrite.h"
-
-    
-
-
- #define CONFIG_MEMORY_POISONING 0
-
 
 static size_t max_alloc_size= INT_MAX;
 

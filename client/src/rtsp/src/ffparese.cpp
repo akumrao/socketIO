@@ -909,7 +909,7 @@ namespace base {
 
 
 
-                        #if(_DEBUG)
+                        #if(_DEBUG_1)
                             SInfo << " Key " << basicvideoframe.payload.size();
                             if (gop)
                             {
@@ -986,7 +986,7 @@ namespace base {
                         }
                         else if (foundsps && foundpps  )
                         {
-    #if(_DEBUG)
+    #if(_DEBUG_1)
                             if (basicvideoframe.h264_pars.frameType == H264SframeType::p)
                             {
                                 ++gop;

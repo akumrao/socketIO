@@ -31,7 +31,7 @@
 #include "random_seed.h"
 #include "time_internal.h"
 #include "parseutils.h"
-#include "time.h"
+#include "mytime.h"
 
 #ifdef TEST
 
@@ -39,8 +39,7 @@
 static uint32_t av_get_random_seed_deterministic(void);
 
 #define av_gettime() 1331972053200000
-#else
-extern int64_t av_gettime(void);
+
 #endif
 
 int av_parse_ratio(AVRational *q, const char *str, int max,
@@ -710,19 +709,7 @@ int av_parse_time(int64_t *timeval, const char *timestr, int duration)
             is_utc = 1;
         }
         if (today) { /* fill in today's date */
-#if defined(WIN32)
-            struct tm dt2;  //sanjay: replacement gmtime_r and localtime_r
-            if (is_utc)
-            {
-                dt2 = tmbuf = *gmtime(&now);
-            }
-            else
-            {
-                dt2 = tmbuf = *localtime(&now);
-            }
-#else
             struct tm dt2 = is_utc ? *gmtime_r(&now, &tmbuf) : *localtime_r(&now, &tmbuf);
-#endif
             dt2.tm_hour = dt.tm_hour;
             dt2.tm_min  = dt.tm_min;
             dt2.tm_sec  = dt.tm_sec;

@@ -45,7 +45,6 @@
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-using namespace std;
 
 static atomic_int cpu_flags = ATOMIC_VAR_INIT(-1);
 
