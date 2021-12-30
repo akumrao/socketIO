@@ -2449,7 +2449,7 @@ void avformat_close_input(AVFormatContext **s);
  *
  * @see av_opt_find, av_dict_set, avio_open, av_oformat_next, avformat_init_output.
  */
-/*av_warn_unused_result*/ 
+av_warn_unused_result
 int avformat_write_header(AVFormatContext *s, AVDictionary **options);
 
 /**
@@ -2471,7 +2471,7 @@ int avformat_write_header(AVFormatContext *s, AVDictionary **options);
  *
  * @see av_opt_find, av_dict_set, avio_open, av_oformat_next, avformat_write_header.
  */
-/*av_warn_unused_result*/ 
+av_warn_unused_result
 int avformat_init_output(AVFormatContext *s, AVDictionary **options);
 
 /**
