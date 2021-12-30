@@ -370,8 +370,7 @@ char *av_fourcc_make_string(char *buf, uint32_t fourcc);
  */
 inline char* av_fourcc2str(uint32_t fourcc)
 {
-    //char buffer[AV_FOURCC_MAX_STRING_SIZE]={0};
-	char buffer[AV_FOURCC_MAX_STRING_SIZE];
+    char buffer[AV_FOURCC_MAX_STRING_SIZE]={0};
     return av_fourcc_make_string(buffer, fourcc);     
 }
 #endif /* AVUTIL_AVUTIL_H */
