@@ -25,7 +25,7 @@
 #include "config.h"
 #include <stdatomic.h>
 
-#include "frame.h"    
+#include "avframe.h"    
 #include <stdint.h>
 
 #include "avcodec.h"

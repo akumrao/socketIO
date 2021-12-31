@@ -21,7 +21,7 @@
 #include <stdint.h>
 
 #include "common.h"
-#include "frame.h"
+#include "avframe.h"
 #include "pixdesc.h"
 
 #include "avcodec.h"

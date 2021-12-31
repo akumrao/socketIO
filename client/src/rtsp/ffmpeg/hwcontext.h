@@ -21,7 +21,7 @@
 
 #include "config.h"
 #include "avbuffer.h"
-#include "frame.h"
+#include "avframe.h"
 #include "log.h"
 #include "pixfmt.h"
 

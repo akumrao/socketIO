@@ -24,7 +24,7 @@
 
 #include "avbuffer.h"
 #include "hwcontext.h"
-#include "frame.h"
+#include "avframe.h"
 #include "pixfmt.h"
 
 typedef struct HWContextType {

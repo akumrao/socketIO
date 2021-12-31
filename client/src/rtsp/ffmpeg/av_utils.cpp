@@ -33,7 +33,7 @@
 #include "bprint.h"
 #include "channel_layout.h"
 //#include "libavutil/crc.h"
-#include "frame.h"
+#include "avframe.h"
 #include "hwcontext.h"
 #include "internal_codec.h"
 #include "mathematics.h"

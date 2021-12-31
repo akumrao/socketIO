@@ -37,7 +37,7 @@
 //#include "libavutil/cpu.h"
 //#include "libavutil/channel_layout.h"
 #include "dict.h"
-#include "frame.h"   //avframe = frame
+#include "avframe.h"   //avframe = frame
 #include "log.h"
 #include "pixfmt.h"
 #include "rational.h"
