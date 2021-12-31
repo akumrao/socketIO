@@ -22,10 +22,13 @@
 #ifndef AVUTIL_PIXDESC_H
 #define AVUTIL_PIXDESC_H
 
+#include "config.h"
 #include <inttypes.h>
 
 #include "attributes.h"
 #include "pixfmt.h"
+#include "math.h"
+#include "internal_util.h"
 //#include "version.h"
 
 typedef struct AVComponentDescriptor {
@@ -59,7 +62,7 @@ typedef struct AVComponentDescriptor {
 
 #if FF_API_PLUS1_MINUS1
     /** deprecated, use step instead */
-    attribute_deprecated i  nt step_minus1;
+    attribute_deprecated int step_minus1;
 
     /** deprecated, use depth instead */
     attribute_deprecated int depth_minus1;
