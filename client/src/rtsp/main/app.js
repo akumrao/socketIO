@@ -79,7 +79,7 @@ var hiddenInput = undefined;
             // var codecs = "mp4a.40.2";
 
             var codecs = "avc1.4D401F,mp4a.40.2";
-            var codecPars = mimeType+';codecs="'+codecs+'"';
+            var codecPars = mimeType+';codecs="'+codecs+'"'; //Rate in Hz, 0xBB80 for 48 KHz, and 0XAC44 for 44.1 KHz
             
             //var stream_started = false; // is the source_buffer updateend callback active nor not
             
@@ -176,6 +176,7 @@ var hiddenInput = undefined;
                 else if ((name=="moov") && (pass==1)) {
                     pass = pass + 1;
                     
+                    
                     // var arv="";
                     // for( var i = 0 ; i < arr.byteLength; ++i)
                     // {
@@ -184,13 +185,24 @@ var hiddenInput = undefined;
                     //             var x = 0;
                     //      }
 
+                    //      if (memview[i] ==  0xBB && memview[i+1] == 0x80 ) 
+                    //      {
+                    //             var xx = 0;
+                    //      }
+
+
+                    //      if (memview[i] ==  0xAC && memview[i+1] == 0x44 ) 
+                    //      {
+                    //             var xx = 0;
+                    //      }
+
+
                     //     arv += memview[i].toString(16);
                     // }
 
-
                     // console.log("got moov" + arv);
 
-                    if (memview[491] == 0x67) 
+                    if (memview[491] == 0x67  ) 
                     { 
                        var codecPars1 =
                       'video/mp4; codecs="avc1.' +
@@ -199,9 +211,18 @@ var hiddenInput = undefined;
                       memview[494].toString(16) +
                       '"'
                       console.log("Video actual codec:'" + codecPars1 + "'")
-
-                      reOpen();
+                      codecs = "avc1.4D401F";
                     }
+
+
+                    if ((memview[731] == 0xBB  &&  memview[732] == 0x80)  ||  (memview[731] == 0xAC  &&  memview[732] == 0x44))
+                    { 
+                        codecs += ",mp4a.40.2";
+                        
+                    }
+                     
+                    codecPars = mimeType+';codecs="'+codecs+'"';
+                    reOpen();
                 }
                 else if ((name=="moof") && (pass==2)) {
                     if (hasFirstSampleFlag(memview)) {
