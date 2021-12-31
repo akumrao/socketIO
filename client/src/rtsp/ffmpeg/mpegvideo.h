@@ -48,7 +48,7 @@
 #include "pixblockdsp.h"
 #include "put_bits.h"
 #include "ratecontrol.h"
-#include "parser.h"
+#include "avparser.h"
 #include "mpegutils.h"
 #include "mpeg12data.h"
 #include "qpeldsp.h"

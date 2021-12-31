@@ -21,7 +21,7 @@
  */
 
 #include "channel_layout.h"
-#include "parser.h"
+#include "avparser.h"
 #include "ac3_parser.h"
 #include "aac_ac3_parser.h"
 #include "get_bits.h"

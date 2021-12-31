@@ -29,7 +29,7 @@
 #include "mem.h"
 
 #include "internal_util.h"
-#include "parser.h"
+#include "avparser.h"
 
 static AVCodecParser *av_first_parser = NULL;
 

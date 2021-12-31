@@ -22,7 +22,7 @@
 
 #include "channel_layout.h"
 #include "common.h"
-#include "parser.h"
+#include "avparser.h"
 #include "aac_ac3_parser.h"
 
 int ff_aac_ac3_parse(AVCodecParserContext *s1,
