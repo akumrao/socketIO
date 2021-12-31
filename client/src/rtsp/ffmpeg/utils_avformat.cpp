@@ -51,7 +51,7 @@
 #endif
 #include "riff.h"
 #include "url.h"
-#include "mytime.h"
+#include "avtime.h"
 
 //#include "libavutil/ffversion.h"
 const char av_format_ffversion[] = "FFmpeg version 1";

@@ -31,7 +31,7 @@
 #include "random_seed.h"
 #include "time_internal.h"
 #include "parseutils.h"
-#include "mytime.h"
+#include "avtime.h"
 
 #ifdef TEST
 

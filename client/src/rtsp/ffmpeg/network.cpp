@@ -26,7 +26,7 @@
 #include "avutil.h"
 #include "mem.h"
 #include "time.h"
-#include "mytime.h"
+#include "avtime.h"
 
 int ff_tls_init(void)
 {
