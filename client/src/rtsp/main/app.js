@@ -795,7 +795,7 @@ function showPlayOverlay() {
     setOverlay('clickableState', img, event => {
         if (videoObj)
             videoObj.play();
-            //videoObj.muted =false;
+            videoObj.muted =false;
 
         requestQualityControl();
 
