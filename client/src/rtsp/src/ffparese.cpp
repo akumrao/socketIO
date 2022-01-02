@@ -609,6 +609,10 @@ namespace base {
 
             long framecount =0;
             int gop = 0;
+            
+            
+            uint64_t delay =  100000; //minimu delay possible .1 millisec
+                    
             while (!stopped() && keeprunning) 
             {
                 uint64_t currentTime =  CurrentTime_microseconds();
@@ -649,7 +653,8 @@ namespace base {
                         
                        
                         
-                    #if(_DEBUG)
+                    #if(_DEBUG_1)
+
                         SInfo << " Key " << basicvideoframe.payload.size();
                         if (gop)
                         {
@@ -675,7 +680,7 @@ namespace base {
                                     SInfo << "reset parser, with fps " << obj.fps << " width "  <<   obj.width << " height"  << obj.height;
                             }
 
-//uint8_t *p = videopkt->data +4;
+                            //uint8_t *p = videopkt->data +4;
 
 
                             if (!foundpps)
@@ -693,6 +698,13 @@ namespace base {
                                     //info->run(&basicvideoframe);
                                     fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                                     basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
+                                    
+                                    double actual_delay= 1/fps ;
+                                    if (actual_delay< 0.010) {
+                                        actual_delay = 0.010;
+                                    }
+                                    
+                                    delay = (int(actual_delay * 1000 + 0.5))*10000 ; 
                             }
                            
                            foundsps  = true;
@@ -724,7 +736,7 @@ namespace base {
                     }
                     else if (foundsps && foundpps  )
                     {
-#if(_DEBUG)
+#if(_DEBUG_1)
                         if (basicvideoframe.h264_pars.frameType == H264SframeType::p)
                         {
                             ++gop;
@@ -743,10 +755,7 @@ namespace base {
                         }
                       
 #endif
-
-
                               
-
 
                         //info->run(&basicvideoframe);
                         fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
@@ -754,15 +763,18 @@ namespace base {
 
                          framecount++;
 
-			             uint64_t deltaTimeMillis =CurrentTime_microseconds() - currentTime;
-                         std::this_thread::sleep_for(std::chrono::microseconds(100000 - deltaTimeMillis));
+                      
+ 
+			uint64_t deltamicro =CurrentTime_microseconds() - currentTime;
+                        std::this_thread::sleep_for(std::chrono::microseconds(delay- deltamicro));
+                        // std::this_thread::sleep_for(std::chrono::microseconds(100000 - deltaTimeMillis));
 
                      }
-		        }
+		}
                 else
                 {
                     reopen();
-                     if (fseek(fileVideo, 0, SEEK_SET))
+                    if (fseek(fileVideo, 0, SEEK_SET))
                     return;
 
                     cur_videosize = fread(in_videobuffer, 1, in_videobuffer_size, fileVideo);
