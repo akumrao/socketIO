@@ -268,7 +268,7 @@ xcopy $(SolutionDir)..\client\src\rtsp\main $(TargetDir) /E /Y</Command>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\client\src\base\src\base_buffer.cpp" />
+    <ClCompile Include="..\client\src\base\src\buffer.cpp" />
     <ClCompile Include="..\client\src\http\src\HttpsConn.cpp" />
     <ClCompile Include="..\client\src\json\src\json.cpp" />
     <ClCompile Include="..\client\src\net\src\ssladapter.cpp" />
