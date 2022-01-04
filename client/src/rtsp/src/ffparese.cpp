@@ -1034,7 +1034,7 @@ namespace base {
                    }
                    else 
                    {
-		        reopen();
+		                // reopen();
                        if (fseek(fileVideo, 0, SEEK_SET))
                        return;
 
@@ -1111,7 +1111,7 @@ namespace base {
                }//audio 
            
                uint64_t deltaTimeMillis =CurrentTime_microseconds() - currentTime;
-               std::this_thread::sleep_for(std::chrono::microseconds(14500 - deltaTimeMillis));
+               std::this_thread::sleep_for(std::chrono::microseconds(14000 - deltaTimeMillis));
            } //end while
 
            free(in_videobuffer);
