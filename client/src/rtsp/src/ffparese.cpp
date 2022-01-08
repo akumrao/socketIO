@@ -28,7 +28,7 @@
 #define highWaterMark  8 * 1048576
 //maximum buffer = 16 *1048576 where  1024*1024 =1048576
 
-
+#define _DEBUG_1 1
 
 
 #define IOBUFSIZE 40960
@@ -120,32 +120,25 @@ namespace base {
             //fmp4(fileName.c_str(), "fragTmp.mp4");
             //fmp4(fileName.c_str());
         }
-         */
+        */
 
         void FFParse::run() {
 
-            stream_index = 0;
-            //audio only
+           
+            while(  !stopped())
+            { 
+               // reopen();
+                keeprunning = true;
+               
+                
+              //audio only is broken please send ftype and moove box after reset or onconnect. Onneect would be better option
 //            if (parseAACHeader()) {
 //                 ++stream_index;
 //                parseAACContent();
 //            }
 //            return;
 
-            //video only
-//            if (parseH264Header()) {
-//                ++stream_index;
-//                parseH264Content();
-//            }
-//            return;
-
-            //Vidoe and Audio mux
-
-            while(  !stopped())
-            { 
-               // reopen();
-                keeprunning = true;
-                stream_index = 0;
+                
                 
                 fragmp4_muxer->deActivate();
                 if(!mute )
@@ -154,32 +147,23 @@ namespace base {
 //                        mediaContent("avhd");
 //                    else
 //                         mediaContent("avsd"); 
-                    if (parseH264Header()) {
-                        ++stream_index;
-                        if (parseAACHeader()) {
-                            ++stream_index;
-                            parseMuxContent();
-                        }
-                       
-                    }
+                    
+                    
+                    
+                    basicvideoframe.media_type = AVMEDIA_TYPE_VIDEO;
+                    basicvideoframe.codec_id = AV_CODEC_ID_H264;
+                    basicvideoframe.stream_index = 0;
+                        
+                    if( initAAC())
+                     parseMuxContent();
                }
                else
                {   
-//                    if(hd)
-//                        mediaContent("vhd");
-//                    else
-//                         mediaContent("vsd"); 
-                            
-                    // if (parseH264Header()) {
-                    // ++stream_index;
-                    // parseH264Content();
-                    // }
 
                         basicvideoframe.media_type = AVMEDIA_TYPE_VIDEO;
                         basicvideoframe.codec_id = AV_CODEC_ID_H264;
-                        basicvideoframe.stream_index = stream_index;
-
-                        //++stream_index;
+                        basicvideoframe.stream_index = 0;
+                       
                         parseH264Content();
 
 
@@ -228,49 +212,23 @@ namespace base {
             //fmp4(fileName.c_str());
         }
 
+       
+         
+        bool FFParse::initAAC()
+        {
 
- 
-
-        
-        bool FFParse::parseAACHeader() {
-          
-            SetupFrame        setupframe;  ///< This frame is used to send subsession information
-          
-            basicaudioframe.media_type           =AVMEDIA_TYPE_AUDIO;
-            basicaudioframe.codec_id             =AV_CODEC_ID_AAC;
-            basicaudioframe.stream_index     =stream_index;
-            // prepare setup frame
-            setupframe.sub_type             =SetupFrameType::stream_init;
-            setupframe.media_type           =AVMEDIA_TYPE_AUDIO;
-            setupframe.codec_id             =AV_CODEC_ID_AAC;   // what frame types are to be expected from this stream
-            setupframe.stream_index     =stream_index;
-            setupframe.mstimestamp          = CurrentTime_milliseconds();
-            // send setup frame
-            
-            //info->run(&setupframe);
-            fragmp4_muxer->run(&setupframe);
-            
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            
-            const AVCodec *codec;
-            AVCodecContext *c = nullptr ;
-           
-           
-                
-            ///////////////////////////////////////////////////////
-          ///  AVFormatContext *oc;
-            AVDictionary *opt = NULL;
           //  av_dict_set(&opt, "movflags", "empty_moov+omit_tfhd_offset+frag_keyframe+default_base_moof", 0);
             
-    
+            AVCodecContext *c = nullptr ;
+            AVDictionary *opt = NULL;
             //codec = avcodec_find_encoder(AV_CODEC_ID_AAC);
-            codec = avcodec_find_encoder_by_name("libfdk_aac"); //Specify the use of file encoding type
-            if (!codec) {
+            audiocodec = avcodec_find_encoder_by_name("libfdk_aac"); //Specify the use of file encoding type
+            if (!audiocodec) {
                 fprintf(stderr, "Codec not found\n");
                return false ;
             }
 
-            c = avcodec_alloc_context3(codec);
+            c = avcodec_alloc_context3(audiocodec);
             if (!c) {
                 fprintf(stderr, "Could not allocate audio codec context\n");
                 return  false;
@@ -296,21 +254,52 @@ namespace base {
             
                
             /* open it */
-            if (avcodec_open2(c, codec, &opt) < 0) {
+            if (avcodec_open2(c, audiocodec, &opt) < 0) {
                 fprintf(stderr, "Could not open codec\n");
                return false;
             }
              
-             startTime=  setupframe.mstimestamp;
+     
+             audioContext = c;
+
+             
+             return true ;
+        }
+ 
+
+        
+        bool FFParse::parseAACHeader(int stream_index) {
+          
+            SetupFrame        setupframe;  ///< This frame is used to send subsession information
+          
+            basicaudioframe.media_type           =AVMEDIA_TYPE_AUDIO;
+            basicaudioframe.codec_id             =AV_CODEC_ID_AAC;
+            basicaudioframe.stream_index     =stream_index;
+            // prepare setup frame
+            setupframe.sub_type             =SetupFrameType::stream_init;
+            setupframe.media_type           =AVMEDIA_TYPE_AUDIO;
+            setupframe.codec_id             =AV_CODEC_ID_AAC;   // what frame types are to be expected from this stream
+            setupframe.stream_index     =stream_index;
+            setupframe.mstimestamp          = CurrentTime_milliseconds();
+            // send setup frame
+            
+            //info->run(&setupframe);
+            fragmp4_muxer->run(&setupframe);
+            
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            
+                          
+            startTime=  setupframe.mstimestamp;
                 
-             int extrasize = c->extradata_size;
+             int extrasize = audioContext->extradata_size;             
              basicaudioframe.payload.resize(extrasize);
-             memcpy( basicaudioframe.payload.data(),  c->extradata, extrasize) ;
-             basicaudioframe.codec_id = codec->id;
+             memcpy( basicaudioframe.payload.data(),  audioContext->extradata, extrasize) ;
+             basicaudioframe.codec_id = audiocodec->id;
              basicaudioframe.mstimestamp = startTime ;
              fragmp4_muxer->run(&basicaudioframe);
              basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
-             audioContext = c;
+
              
              return true;
         }
@@ -545,7 +534,7 @@ namespace base {
         }
 
         
-        bool FFParse::parseH264Header() 
+        bool FFParse::parseH264Header(int stream_index) 
         {
             int ret = 0;
            // AVCodec *codec = NULL;
@@ -620,9 +609,13 @@ namespace base {
 
             long framecount =0;
             int gop = 0;
+            
+            
+            uint64_t delay =  100000 * fpsType; //minimu delay possible .1 millisec
+                    
             while (!stopped() && keeprunning) 
             {
-                 uint64_t currentTime =  CurrentTime_microseconds();
+                uint64_t currentTime =  CurrentTime_microseconds();
                 if (cur_videosize > 0) 
                 {
 
@@ -660,7 +653,8 @@ namespace base {
                         
                        
                         
-                    #if(_DEBUG)
+                    #if(_DEBUG_1)
+
                         SInfo << " Key " << basicvideoframe.payload.size();
                         if (gop)
                         {
@@ -682,11 +676,11 @@ namespace base {
 
                             if (fps != obj.fps || width != obj.width || height != obj.height)
                             {
-                                    parseH264Header();
+                                    parseH264Header(0);
                                     SInfo << "reset parser, with fps " << obj.fps << " width "  <<   obj.width << " height"  << obj.height;
                             }
 
-//uint8_t *p = videopkt->data +4;
+                            //uint8_t *p = videopkt->data +4;
 
 
                             if (!foundpps)
@@ -704,6 +698,13 @@ namespace base {
                                     //info->run(&basicvideoframe);
                                     fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                                     basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
+                                    
+                                    double actual_delay= 1/fps ;
+                                    if (actual_delay< 0.010) {
+                                        actual_delay = 0.010;
+                                    }
+                                    
+                                    delay = (int(actual_delay * 1000 + 0.5))*10000 ; 
                             }
                            
                            foundsps  = true;
@@ -724,16 +725,18 @@ namespace base {
 
                            
                         }
-                           
+                       
+                        continue;
 
                     }
                     else if (!((basicvideoframe.h264_pars.slice_type == H264SliceType::idr) ||   (basicvideoframe.h264_pars.slice_type == H264SliceType::nonidr))) {
                     //info->run(&basicvideoframe);
                         basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
+			 continue;
                     }
                     else if (foundsps && foundpps  )
                     {
-#if(_DEBUG)
+#if(_DEBUG_1)
                         if (basicvideoframe.h264_pars.frameType == H264SframeType::p)
                         {
                             ++gop;
@@ -752,10 +755,7 @@ namespace base {
                         }
                       
 #endif
-
-
                               
-
 
                         //info->run(&basicvideoframe);
                         fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
@@ -763,15 +763,18 @@ namespace base {
 
                          framecount++;
 
-			             uint64_t deltaTimeMillis =CurrentTime_microseconds() - currentTime;
-                         std::this_thread::sleep_for(std::chrono::microseconds(100000 - deltaTimeMillis));
+                      
+ 
+			uint64_t deltamicro =CurrentTime_microseconds() - currentTime;
+                        std::this_thread::sleep_for(std::chrono::microseconds(delay- deltamicro));
+                        // std::this_thread::sleep_for(std::chrono::microseconds(100000 - deltaTimeMillis));
 
                      }
-		        }
+		}
                 else
                 {
-                    reopen();
-                     if (fseek(fileVideo, 0, SEEK_SET))
+                    //reopen();
+                    if (fseek(fileVideo, 0, SEEK_SET))
                     return;
 
                     cur_videosize = fread(in_videobuffer, 1, in_videobuffer_size, fileVideo);
@@ -781,15 +784,17 @@ namespace base {
                     if (cur_videosize == 0)
                         break;
                     cur_videoptr = in_videobuffer;
-
+                    
+                    continue;
                     
                 }
             }
 
-	        av_packet_free(&videopkt);	
+	    av_packet_free(&videopkt);	
             free(in_videobuffer);
 
        }
+        
         
        void FFParse::parseMuxContent() 
        {
@@ -824,9 +829,7 @@ namespace base {
            
            ////////////////////////////////////
            AVPacket audiopkt;
-            
-    
-           
+          
            int got_output;
             
            AVFrame *frame;
@@ -859,19 +862,31 @@ namespace base {
            
            AVRational  videotimebase;//= (AVRational){ 1, };
            videotimebase.num = 1;
-           videotimebase.den = 25;
+           videotimebase.den = 25;   /// 1000000/25 = 40000
 
            AVRational  audiotimebase ;//= (AVRational){ 1,SAMPLINGRATE };
            audiotimebase.num = 1;
-           audiotimebase.den = SAMPLINGRATE;
+           audiotimebase.den = SAMPLINGRATE;  /// 1000000*1024/ 44100 = 23219.954648526  // almost half of video when 25 frames per secconds
                             
-                   
+//          uint64_t start =  CurrentTime_microseconds();
+          
+          int nCount= 0;
+          int gop = 0;
            while (!stopped() && keeprunning)
            {
+               
                uint64_t currentTime =  CurrentTime_microseconds();
-
-               if ( av_compare_ts(videoframecount, videotimebase,  audioframecount, audiotimebase) <= 0)
-               {
+//               
+//               uint64_t v = (uint64_t)videoframecount* (uint64_t)1000000 / (uint64_t)videotimebase.den;
+//               uint64_t a = (uint64_t)audioframecount*(uint64_t)1000000 / (uint64_t)audiotimebase.den;
+//               
+//               uint64_t tdelta = currentTime -  start ;
+//               
+//               std::cout << nCount++ << " delta :" << tdelta <<  " video no :" <<   videoframecount << " video  t :"  << v   <<  " audio no :" <<  audioframecount/AUDIOSAMPLE << " audio t: " <<  a << std::endl << std::flush;
+//               
+                if ( av_compare_ts(videoframecount, videotimebase,  audioframecount, audiotimebase) <= 0)
+              // if ( tdelta >= v )
+                {
                    if (cur_videosize > 0)
                    {
 
@@ -899,34 +914,128 @@ namespace base {
                        basicvideoframe.mstimestamp = startTime +  videoframecount;
                        basicvideoframe.fillPars();
 
-                       if ( basicvideoframe.h264_pars.frameType == H264SframeType::i && basicvideoframe.h264_pars.slice_type == H264SliceType::idr) //AUD Delimiter
-                       {
-                           fragmp4_muxer->sendMeta();
+                      
+                       
+                        if ( foundsps && foundpps && ( basicvideoframe.h264_pars.frameType == H264SframeType::i &&  basicvideoframe.h264_pars.slice_type == H264SliceType::idr)) //AUD Delimiter
+                        {
+                            fragmp4_muxer->sendMeta();
 
-                       }
 
-                       if (basicvideoframe.h264_pars.slice_type == H264SliceType::sps ||  basicvideoframe.h264_pars.slice_type == H264SliceType::pps) //AUD Delimiter
-                       {
+
+                        #if(_DEBUG_1)
+                            SInfo << " Key " << basicvideoframe.payload.size();
+                            if (gop)
+                            {
+                                SInfo << "Gop " << gop;
+                            }
+                            gop = 1;
+                        #endif
+                        }
+
+                        if (basicvideoframe.h264_pars.slice_type == H264SliceType::sps ||  basicvideoframe.h264_pars.slice_type == H264SliceType::pps) //AUD Delimiter
+                        {
+
+                           unsigned num_units_in_tick, time_scale;
+
+
+                            if(  basicvideoframe.h264_pars.slice_type == H264SliceType::sps  )
+                            {    
+                                obj.analyze_seq_parameter_set_data(videopkt->data + 4, videopkt->size - 4, num_units_in_tick, time_scale);
+
+                                if (fps != obj.fps || width != obj.width || height != obj.height)
+                                {
+                                    videotimebase.den =  obj.fps;
+                                    
+                                    parseH264Header(0);
+                                        
+                                    parseAACHeader(1);
+                                        
+                                    SInfo << "reset parser, with fps " << obj.fps << " width "  <<   obj.width << " height"  << obj.height;
+                                }
+
+                                //uint8_t *p = videopkt->data +4;
+
+                                if (!foundpps)
+                                {
+                                    fps = obj.fps;
+                                    height = obj.height;
+                                    width = obj.width;
+
+                                    basicvideoframe.fps = obj.fps;
+                                    basicvideoframe.height = obj.height;
+                                    basicvideoframe.width = obj.width;
+
+                                     SInfo <<  " Got SPS fps "  << fps << " width "  << width  <<  " height " << height ;
+
+                                        //info->run(&basicvideoframe);
+                                    fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
+                                    basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
+                                }
+
+                               foundsps  = true;
+
+                            }
+
+                            if( !foundpps &&  basicvideoframe.h264_pars.slice_type == H264SliceType::pps  )
+                            {    
+
+                                // SInfo <<  " Got PPS fps ";
+                                //info->run(&basicvideoframe);
+                                fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
+                                basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
+
+                                foundpps  = true;
+
+                            }
+                           
                            continue;
-                       }
-                       else if (!((basicvideoframe.h264_pars.slice_type == H264SliceType::idr) ||   (basicvideoframe.h264_pars.slice_type == H264SliceType::nonidr))) {
-                           continue;
-                       }
 
 
-                       videoframecount++;
+                        }
+                        else if (!((basicvideoframe.h264_pars.slice_type == H264SliceType::idr) ||   (basicvideoframe.h264_pars.slice_type == H264SliceType::nonidr))) {
+                        //info->run(&basicvideoframe);
+                            //basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
+                             continue;
+                        }
+                        else if (foundsps && foundpps  )
+                        {
+    #if(_DEBUG_1)
+                            if (basicvideoframe.h264_pars.frameType == H264SframeType::p)
+                            {
+                                ++gop;
+                                SInfo << " P frame " << basicvideoframe.payload.size();
+                            }
+                            else if (basicvideoframe.h264_pars.frameType == H264SframeType::b)
+                            {
+                                ++gop;
+                                SInfo << " B frame " << basicvideoframe.payload.size();
+                            }
+                            else if (basicvideoframe.h264_pars.frameType == H264SframeType::i && basicvideoframe.h264_pars.slice_type != H264SliceType::idr)
+                            {
+                                SInfo << " I frame " << basicvideoframe.payload.size() << " gop " << gop;
+                                gop = 1;
 
-                      // info->run(&basicvideoframe);
+                            }
 
-                       fragmp4_muxer->run(&basicvideoframe);
-                       basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
+    #endif
 
+
+                            //info->run(&basicvideoframe);
+                            fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
+                            basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
+
+                             videoframecount++;
+
+                            // //int64_t deltaTimeMillis =CurrentTime_microseconds() - currentTime;
+                            // std::this_thread::sleep_for(std::chrono::microseconds(100000 - deltaTimeMillis));
+
+                         }
                     
                    
                    }
                    else 
                    {
-
+		        //reopen();
                        if (fseek(fileVideo, 0, SEEK_SET))
                        return;
 
@@ -940,7 +1049,8 @@ namespace base {
                        continue;
                    }
                }
-               else //audio 
+
+               else if (foundsps && foundpps  )       //if (tdelta  >= a)//audio 
                {
                     if (fread(frame_audobuf, 1, audiosize, fileAudio) <= 0){
                    printf("Failed to read raw data! \n");
@@ -978,11 +1088,10 @@ namespace base {
                        fprintf(stderr, "Error encoding audio frame\n");
                        return ;
                    }
-                   if (got_output) 
+                   if (got_output && basicaudioframe.stream_index) 
                    {
 
                        basicaudioframe.copyFromAVPacket(&audiopkt);
-
                        basicaudioframe.mstimestamp = startTime + audioframecount;
 
 //                     if( resetParser ) 
