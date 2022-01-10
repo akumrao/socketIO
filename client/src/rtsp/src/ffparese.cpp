@@ -611,7 +611,7 @@ namespace base {
             int gop = 0;
             
             
-            uint64_t delay =  100000 * fpsType; //minimu delay possible .1 millisec
+            uint64_t delay = 1000000/25; // default
                     
             while (!stopped() && keeprunning) 
             {
@@ -699,12 +699,8 @@ namespace base {
                                     fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                                     basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                                     
-                                    double actual_delay= 1/fps ;
-                                    if (actual_delay< 0.010) {
-                                        actual_delay = 0.010;
-                                    }
+                                    delay= 1000000/fps ;
                                     
-                                    delay = (int(actual_delay * 1000 + 0.5))*10000 ; 
                             }
                            
                            foundsps  = true;
@@ -721,7 +717,7 @@ namespace base {
                             fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                             basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                             
-                             foundpps  = true;
+                            foundpps  = true;
 
                            
                         }
@@ -767,7 +763,9 @@ namespace base {
  
 			uint64_t deltamicro =CurrentTime_microseconds() - currentTime;
                         std::this_thread::sleep_for(std::chrono::microseconds(delay- deltamicro));
-                        // std::this_thread::sleep_for(std::chrono::microseconds(100000 - deltaTimeMillis));
+                        //std::this_thread::sleep_for(std::chrono::microseconds(100000)); 
+                       // 
+                       //Sleep(67);
 
                      }
 		}
@@ -872,21 +870,26 @@ namespace base {
           
           int nCount= 0;
           int gop = 0;
+          
+          uint64_t vdelay = 1000000/25; // default
+          
+          uint64_t adelay = (uint64_t)(1000000*AUDIOSAMPLE)/(uint64_t)SAMPLINGRATE; 
+           
+          uint64_t vtime =0;
+          
+          int64_t atime = 0;
+          
            while (!stopped() && keeprunning)
            {
                
-               uint64_t currentTime =  CurrentTime_microseconds();
-//               
-//               uint64_t v = (uint64_t)videoframecount* (uint64_t)1000000 / (uint64_t)videotimebase.den;
-//               uint64_t a = (uint64_t)audioframecount*(uint64_t)1000000 / (uint64_t)audiotimebase.den;
-//               
-//               uint64_t tdelta = currentTime -  start ;
-//               
-//               std::cout << nCount++ << " delta :" << tdelta <<  " video no :" <<   videoframecount << " video  t :"  << v   <<  " audio no :" <<  audioframecount/AUDIOSAMPLE << " audio t: " <<  a << std::endl << std::flush;
-//               
+               
+
+              
+                       
+               
                 if ( av_compare_ts(videoframecount, videotimebase,  audioframecount, audiotimebase) <= 0)
-              // if ( tdelta >= v )
                 {
+                    
                    if (cur_videosize > 0)
                    {
 
@@ -970,6 +973,8 @@ namespace base {
                                         //info->run(&basicvideoframe);
                                     fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                                     basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
+                                    
+                                     vdelay= 1000000/fps ;
                                 }
 
                                foundsps  = true;
@@ -1018,6 +1023,15 @@ namespace base {
                             }
 
     #endif
+                            if(vtime > 0)
+                            {
+                               uint64_t vdelta =  CurrentTime_microseconds() -vtime;
+                             
+                               if( vdelay > vdelta )
+                               std::this_thread::sleep_for(std::chrono::microseconds(vdelay - vdelta));
+                               
+                            }
+                            vtime =  CurrentTime_microseconds();
 
 
                             //info->run(&basicvideoframe);
@@ -1026,8 +1040,7 @@ namespace base {
 
                              videoframecount++;
 
-                            // //int64_t deltaTimeMillis =CurrentTime_microseconds() - currentTime;
-                            // std::this_thread::sleep_for(std::chrono::microseconds(100000 - deltaTimeMillis));
+                            
 
                          }
                     
@@ -1099,6 +1112,18 @@ namespace base {
 //                              fragmp4_muxer->sendMeta();
 //                              resetParser =false;
 //                     }
+                       
+                       if(atime > 0)
+                       {
+                           uint64_t adelta =  CurrentTime_microseconds() - atime;
+
+                           if( adelay > adelta )
+                           std::this_thread::sleep_for(std::chrono::microseconds(adelay - adelta));
+
+                       }
+                       atime =  CurrentTime_microseconds();
+
+                            
                        audioframecount = audioframecount + AUDIOSAMPLE;
                        fragmp4_muxer->run(&basicaudioframe);
 
@@ -1109,10 +1134,14 @@ namespace base {
                        //std::this_thread::sleep_for(std::chrono::microseconds(21000));
 
                    }
+                   else
+                   {
+                       continue;
+                   }
                }//audio 
-           
-               uint64_t deltaTimeMillis =CurrentTime_microseconds() - currentTime;
-               std::this_thread::sleep_for(std::chrono::microseconds(14500 - deltaTimeMillis));
+
+             //  uint64_t deltaTimeMillis =CurrentTime_microseconds() - currentTime;
+              // std::this_thread::sleep_for(std::chrono::microseconds(14500 - deltaTimeMillis));
            } //end while
 
            free(in_videobuffer);
