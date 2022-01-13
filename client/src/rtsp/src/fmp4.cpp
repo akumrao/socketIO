@@ -99,8 +99,6 @@ namespace base {
 
         ReadMp4::~ReadMp4() {
             SInfo << "~ReadMp4( )";
-            ffparser->stop();
-            ffparser->join();
             delete ffparser;
         }
 

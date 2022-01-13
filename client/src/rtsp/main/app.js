@@ -89,7 +89,7 @@ var hiddenInput = undefined;
             // queue for incoming media packets
             var queue = [];
 
-            let bothAV;
+            let bothAV = false;
             
             //var videoObj; // the HTMLMediaElement (i.e. <video> element)
             var ws; // websocket
@@ -195,8 +195,7 @@ var hiddenInput = undefined;
                         return;
                     if(sbt.length == 2)
                         bothAV= true;
-                    else
-                        bothAV =false;
+       
 
                     //"moov.trak.mdia.minf.stbl.stsd.mp4a.pinf\""
                     for (var i = 0; i < sbt.length; i++) 
@@ -227,6 +226,8 @@ var hiddenInput = undefined;
                             code += ",mp4a.40.2";
                             else
                             code = "mp4a.40.2";
+
+                           bothAV= true;
 
                         }
                         else
@@ -259,8 +260,6 @@ var hiddenInput = undefined;
                     }
 
 
-
-
                       reOpen();
                 }
                 else if ((name=="moof") && (pass==2)) {
@@ -278,7 +277,7 @@ var hiddenInput = undefined;
                 }
 
 
-              // console.log("show frame " + name );
+               console.log("show frame " + name );
 
                 
                 // keep the latency to minimum
@@ -328,6 +327,7 @@ var hiddenInput = undefined;
             function reSet()
             {
                // console.log("reSet");
+                bothAV= false;
                 pass = -1;
                 stream_started = false; 
                 queue = [];
@@ -339,7 +339,7 @@ var hiddenInput = undefined;
                  if (videoObj)
                 {
                     videoObj.pause();
-        	    videoObj.removeAttribute('src'); 
+                    videoObj.removeAttribute('src'); 
                     videoObj.remove();
                     videoObj = null;
                 }
