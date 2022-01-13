@@ -250,7 +250,7 @@ var hiddenInput = undefined;
                     if (!MediaSource.isTypeSupported(cdars)) {
                         console.log("Mimetype " + cdars +
                                 " not supported");
-                        ws.close();
+                       // ws.close();
                     } else
                     {
                         codecPars = cdars ;
@@ -517,8 +517,9 @@ var hiddenInput = undefined;
                             //queue.shift();
                          } catch (e) 
                          {
+                            console.log("sourceBuffer.appendBuffer = " + e.code);
                             console.log("sourceBuffer.appendBuffer = " + e.toString())
-                           /// reSet();
+                             ws.close();
                          }
 
                         cc = cc + 1;
@@ -1886,8 +1887,8 @@ function registerTouchEvents(playerElement) {
 
     // We need to assign a unique identifier to each finger.
     // We do this by mapping each Touch object to the identifier.
-    var fingers = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
-    var fingerIds = {};
+    let fingers = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+    let fingerIds = {};
 
     function rememberTouch(touch) {
         let finger = fingers.pop();
@@ -1903,7 +1904,7 @@ function registerTouchEvents(playerElement) {
     }
 
     function emitTouchData(type, touches) {
-        let data = new DataView(new ArrayBuffer(2 + 6 * touches.length));
+        let data = new DataView(new ArrayBuffer(2 + 7 * touches.length));
         data.setUint8(0, type);
         data.setUint8(1, touches.length);
         let byte = 2;
@@ -1921,9 +1922,12 @@ function registerTouchEvents(playerElement) {
             byte += 2;
             data.setUint8(byte, fingerIds[touch.identifier], true);
             byte += 1;
-            data.setUint8(byte, 255 * touch.force, true);   // force is between 0.0 and 1.0 so quantize into byte.
+            data.setUint8(byte, 255 * touch.force, true); // force is between 0.0 and 1.0 so quantize into byte.
+            byte += 1;
+            data.setUint8(byte, coord.inRange ? 1 : 0, true); // mark the touch as in the player or not
             byte += 1;
         }
+        
         sendInputData(data.buffer);
     }
 
@@ -2051,7 +2055,9 @@ function registerKeyboardEvents() {
         // Backspace is not considered a keypress in JavaScript but we need it
         // to be so characters may be deleted in a UE4 text entry field.
         if (e.keyCode === SpecialKeyCodes.BackSpace) {
-            document.onkeypress({ charCode: SpecialKeyCodes.BackSpace });
+            document.onkeypress({
+                charCode: SpecialKeyCodes.BackSpace
+            });
         }
         if (inputOptions.suppressBrowserKeys && isKeyCodeBrowserKey(e.keyCode)) {
             e.preventDefault();
@@ -2079,7 +2085,7 @@ function registerKeyboardEvents() {
     };
 }
 
-function onExpandOverlay_Click(/* e */) {
+function onExpandOverlay_Click( /* e */ ) {
     let overlay = document.getElementById('overlay');
     overlay.classList.toggle("overlay-shown");
 }
@@ -2087,7 +2093,9 @@ function onExpandOverlay_Click(/* e */) {
 function start() {
     // update "quality status" to "disconnected" state
     let qualityStatus = document.getElementById("qualityStatus");
-    qualityStatus.className = "grey-status";
+    if (qualityStatus) {
+        qualityStatus.className = "grey-status";
+    }
 
     let statsDiv = document.getElementById("stats");
     if (statsDiv) {
