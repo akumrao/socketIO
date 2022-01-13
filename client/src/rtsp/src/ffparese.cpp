@@ -170,10 +170,10 @@ namespace base {
             fragmp4_muxer->deActivate();
 
   
-           audio->parseAACHeader(0);
-            audio->start();
+          //  audio->parseAACHeader(0);
+          //  audio->start();
             
-            return;
+         //   return;
           
 
             video->audio = audio;
@@ -692,7 +692,7 @@ namespace base {
                 }
             }
 
-	    av_packet_free(&videopkt);	
+	        av_packet_free(&videopkt);	
             free(in_videobuffer);
 
        }
