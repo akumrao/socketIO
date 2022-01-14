@@ -67,90 +67,119 @@ class DummyFrameFilter;
 class FragMP4MuxFrameFilter;
 class InfoFrameFilter;
 class TextFrameFilter;
-class ReadMp4;    
- class FFParse: public Thread
+class ReadMp4;   
+
+class Common
+{
+
+public:
+    Common(FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt) : fragmp4_muxer(fragmp4_muxer), info(info), txt(txt)
+    {
+    }
+    FrameFilter* fragmp4_muxer;
+    FrameFilter* info;
+    FrameFilter* txt;
+};
+
+ class FFParse : public Common
  {
 
  public:
-  
+     class VideoParse;
+     class AudioParse : public Common, public Thread
+     {
+     public:
+         AudioParse(const char* audioFile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt);
+
+         ~AudioParse();
+
+
+        // DummyFrameFilter *fragmp4_filter;
+    
+         /// Audio Begin 
+
+         FILE* fileAudio;
+         bool parseAACHeader(int stream_index);
+         void parseAACContent();
+
+         bool initAAC();
+
+         AVCodecContext* audioContext = NULL;
+         const AVCodec* audiocodec = NULL;
+
+         void reset();
+
+         std::atomic< bool > resetParser{ false };
+
+         void run() override;
+
+         BasicFrame basicaudioframe;
+
+         uint64_t startTime{ 0 };
+
+
+         VideoParse* video{ nullptr };
+     };
+
+
+     class VideoParse : public Common, public Thread
+     {
+     public:
+         VideoParse(const char* videofile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt);
+
+         ~VideoParse();
+
+         bool foundsps{ false };
+         bool foundpps{ false };
+
+         int fps{ 0 };
+         int width{ 0 };
+         int height{ 0 };
+
+         int fpsType;
+
+         H264Framer obj;
+
+         /// Video Begin 
+         bool parseH264Header(int stream_index);
+
+         void parseH264Content();
+         FILE* fileVideo;
+        
+         /// Video End
+        // void reopen();
+
+         long get_nal_size(uint8_t* buf, long size, uint8_t** poutbuf, int* poutbuf_size);
+
+         void run() override;
+
+         BasicFrame basicvideoframe;
+
+         AudioParse* audio{ nullptr };
+        
+
+     };
     
      FFParse(  const char* audioFile, const char*  videofile, FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt  );
      
      ~FFParse( );
-     
-     int fmp4( const char *in_filename, const char *out_filename =nullptr, bool fragmented_mp4_options=true);
-          
-   //virtual void start() override
-   // virtual void stop() override;
-     void run() override;
-     
-     std::vector<uint8_t> outputData;
-     bool looping{true};
-     
-    
-     /// Video Begin 
-    bool parseH264Header(int stream_index);
-    
-    void parseH264Content();
-    FILE *fileVideo;
-    BasicFrame        basicvideoframe;  ///< Data is being copied into this frame
-    /// Video End
-      
-    /// Audio Begin 
-    
-    FILE *fileAudio;
-    bool parseAACHeader(int stream_index);
-    void parseAACContent();
-    
-   bool initAAC();
-    
-    AVCodecContext *audioContext= NULL;
-     const AVCodec *audiocodec = NULL;
-    void reset();
-    void restart(bool mute);
 
-    void resHD(bool hd);
-    void reopen();
-   
-      
-    long get_nal_size(uint8_t *buf, long size,  uint8_t **poutbuf, int *poutbuf_size);
-      
-    
-   // net::ClientConnecton *conn;    
-     
-    BasicFrame        basicaudioframe;  ///< Data is being copied into this frame
-   /// Audio End 
-    
-    long int startTime{0};
-   // int stream_index{0};
-    void parseMuxContent();
+     void start();
+
+        
+    void reset( );
+
     
       
  private:
-     
-    //std::atomic< bool > resetParser { false };
-    std::atomic< bool > mute { false };
-    int hd{0} ;
-    std::atomic< bool > keeprunning { true };
+     AudioParse* audio{ nullptr };
+     VideoParse* video{ nullptr };
+  
 
-   // DummyFrameFilter *fragmp4_filter;
-    FrameFilter *fragmp4_muxer;
-    FrameFilter *info;
-    FrameFilter *txt;
     
     //std::string fileName;
 
-   
-    bool foundsps{false};
-    bool foundpps{false};
-  
 
-    int fps{0};
-    int width{0};
-    int height{0};
-    
-  
-    H264Framer obj;
     
  #if 0   
     /* Add an output stream. */

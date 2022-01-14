@@ -10,8 +10,8 @@
 
 
 
-#ifndef BASE_BUFFER_H
-#define BASE_BUFFER_H
+#ifndef Buffer_H
+#define Buffer_H
 
 
 #include "base/base.h"
@@ -229,5 +229,5 @@ protected:
 } // namespace base
 
 
-#endif // BASE_BUFFER_H
+#endif // Buffer_H
 

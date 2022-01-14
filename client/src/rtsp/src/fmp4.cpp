@@ -58,21 +58,16 @@ namespace base {
 
     namespace fmp4 {
 
-        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpsServer(  ip, port,  factory, true) {
-
-            self = this;
-
-	    fragmp4_filter = new DummyFrameFilter("fragmp4", this);
+        ReadMp4::stParser::stParser(ReadMp4 *mp4this,  const char* audioFile, const char* videofile, int fpsType)
+        {
+            fragmp4_filter = new DummyFrameFilter("fragmp4", mp4this);//  fragmp4_filter = new DummyFrameFilter("fragmp4", mp4this, fpsType);
             fragmp4_muxer = new FragMP4MuxFrameFilter("fragmp4muxer", fragmp4_filter);
-
             info = new InfoFrameFilter("info", nullptr);
-
-            txt = new TextFrameFilter("txt", this);
+             txt = new TextFrameFilter("txt", mp4this );// txt = new TextFrameFilter("txt", mp4this, fpsType );
             
-
             #if FILEPARSER
-            ffparser = new FFParse(AUDIOFILE, VIDEOFILE,  fragmp4_muxer, info, txt );
-
+            //ffparser = new FFParse(audioFile, videofile,  fragmp4_muxer, info, txt, fpsType );
+	    ffparser = new FFParse(audioFile, videofile,  fragmp4_muxer, info, txt );	
             ffparser->start();
             #else
             ffparser = new LiveThread("live");
@@ -90,22 +85,28 @@ namespace base {
 
            #endif
 
+        }
+        
+        ReadMp4::stParser::~stParser()
+        {
+            delete ffparser;
+        }
+        
+        
+        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpsServer(  ip, port,  factory, true) {
 
-            
+            self = this;
 
+	   parser1 = new stParser( this, AUDIOFILE, VIDEOFILE, 1);
+           //parser2 = new stParser( this, AUDIOFILE1, VIDEOFILE1 , 2);
             
 
         }
 
         ReadMp4::~ReadMp4() {
             SInfo << "~ReadMp4( )";
-            
-            
-           
-             
-            ffparser->stop();
-            ffparser->join();
-            delete ffparser;
+            delete parser1;
+           // delete parser2;
         }
         
         
@@ -138,7 +139,7 @@ namespace base {
               #if FILEPARSER
 
               if( got == "reset")
-              ffparser->reset();  
+              parser1->ffparser->reset();  
             
               #else
 
@@ -179,7 +180,7 @@ namespace base {
                 if(cn)
                 {
                     net::WebSocketConnection *con = ((net::HttpsConnection*)cn)->getWebSocketCon();
-                    if(con)
+                    if(con)// if( con && con->fps_type == fps_type)
                      con->push(data ,size, binary, fametype);
                 }
             }

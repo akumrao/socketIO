@@ -160,7 +160,7 @@ public:
     TextFrameFilter(const char *name,  base::fmp4::ReadMp4 *conn,  FrameFilter *next = NULL ); 
      ~TextFrameFilter();
 
-     base::fmp4::ReadMp4 *conn; 
+     base::fmp4::ReadMp4 *conn;
      
   
 public:

@@ -29,6 +29,8 @@
 #define AUDIOFILE  "./hindi.pcm"               
 #define VIDEOFILE  "./test.264"
 
+//#define VIDEOFILE  "./cat5.264"
+
 #define AUDIOFILE1  "./hindi.pcm"               
 #define VIDEOFILE1  "./goal.264"  
 
@@ -75,20 +77,32 @@ class FFParse;
      std::vector<uint8_t> outputData;
      bool looping{true};
      
-      #if FILEPARSER
-         FFParse  *ffparser;
-      #else
-        LiveThread  *ffparser;
-      #endif
      
  private:
      
-     DummyFrameFilter *fragmp4_filter{nullptr};
-     FrameFilter *fragmp4_muxer{nullptr};;
-     FrameFilter *info{nullptr};;
-     FrameFilter *txt{nullptr};;
+     struct stParser
+     {
+        #if FILEPARSER
+        FFParse  *ffparser;
+      #else
+        LiveThread  *ffparser;
+      #endif
+         
+        DummyFrameFilter *fragmp4_filter{nullptr};
+        FrameFilter *fragmp4_muxer{nullptr};;
+        FrameFilter *info{nullptr};;
+        FrameFilter *txt{nullptr};
+        
+        stParser(ReadMp4 *mp4this,  const char* audioFile, const char* videofile, int fpsType);
+        ~stParser();
+       
+     };
+     
+     
+     stParser *parser1;
+    // stParser *parser2;
 
-     std::string fileName;
+    // std::string fileName;
      
  public:
      //// 1 ftype, 2 moov , 3 first moof( idr frame), 4 P or B frames cane be dropped 
