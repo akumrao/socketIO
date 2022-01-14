@@ -167,6 +167,22 @@ public:
                 
         std::atomic<uint64_t> vframecount{0};
      };
+     
+     
+     class BothParse : public VideoParse, public AudioParse
+     {
+     public:
+         BothParse(const char* audioFile, const char*  videofile, FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt);
+
+         ~BothParse();
+         void parseMuxContent() ;
+         void run() override;
+         
+         void start();
+       
+     };
+     
+     
     
      FFParse(  const char* audioFile, const char*  videofile, FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt  );
      
@@ -182,7 +198,7 @@ public:
  private:
      AudioParse* audio{ nullptr };
      VideoParse* video{ nullptr };
-  
+     BothParse* both{ nullptr };
 
     
     //std::string fileName;
