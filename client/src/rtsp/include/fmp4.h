@@ -54,7 +54,7 @@ class ReadMp4;
 class LiveConnectionContext;
 class FFParse;
 
- class ReadMp4: public Thread, public net::HttpServer 
+ class ReadMp4: public Thread, public net::HttpsServer 
  {
      
      
@@ -77,25 +77,40 @@ class FFParse;
      std::vector<uint8_t> outputData;
      bool looping{true};
      
-      #if FILEPARSER
-         FFParse  *ffparser;
-      #else
-        LiveThread  *ffparser;
-      #endif
      
  private:
      
-     DummyFrameFilter *fragmp4_filter{nullptr};
-     FrameFilter *fragmp4_muxer{nullptr};;
-     FrameFilter *info{nullptr};;
-     FrameFilter *txt{nullptr};;
+     struct stParser
+     {
+        #if FILEPARSER
+        FFParse  *ffparser;
+      #else
+        LiveThread  *ffparser;
+      #endif
+         
+        DummyFrameFilter *fragmp4_filter{nullptr};
+        FrameFilter *fragmp4_muxer{nullptr};;
+        FrameFilter *info{nullptr};;
+        FrameFilter *txt{nullptr};
+        
+        stParser(ReadMp4 *mp4this,  const char* audioFile, const char* videofile, int fpsType);
+        ~stParser();
+       
+     };
+     
+     
+     stParser *parser1;
+    // stParser *parser2;
 
-     std::string fileName;
+    // std::string fileName;
      
  public:
      //// 1 ftype, 2 moov , 3 first moof( idr frame), 4 P or B frames cane be dropped 
      void broadcast(const char * data, int size, bool binary,  int frametype   );
      void on_read(net::Listener* connection, const char* msg, size_t len) ;
+     
+     void on_close(net::Listener* connection);
+     
      
 //    virtual void onConnect(    int socketID                        );
 //    virtual void onMessage(    int socketID, const string& data    );

@@ -58,21 +58,16 @@ namespace base {
 
     namespace fmp4 {
 
-        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpServer(  ip, port,  factory, true) {
-
-            self = this;
-
-	    fragmp4_filter = new DummyFrameFilter("fragmp4", this);
+        ReadMp4::stParser::stParser(ReadMp4 *mp4this,  const char* audioFile, const char* videofile, int fpsType)
+        {
+            fragmp4_filter = new DummyFrameFilter("fragmp4", mp4this);//  fragmp4_filter = new DummyFrameFilter("fragmp4", mp4this, fpsType);
             fragmp4_muxer = new FragMP4MuxFrameFilter("fragmp4muxer", fragmp4_filter);
-
             info = new InfoFrameFilter("info", nullptr);
-
-            txt = new TextFrameFilter("txt", this);
+             txt = new TextFrameFilter("txt", mp4this );// txt = new TextFrameFilter("txt", mp4this, fpsType );
             
-
             #if FILEPARSER
-            ffparser = new FFParse(AUDIOFILE, VIDEOFILE,  fragmp4_muxer, info, txt );
-
+            //ffparser = new FFParse(audioFile, videofile,  fragmp4_muxer, info, txt, fpsType );
+	    ffparser = new FFParse(audioFile, videofile,  fragmp4_muxer, info, txt );	
             ffparser->start();
             #else
             ffparser = new LiveThread("live");
@@ -90,20 +85,52 @@ namespace base {
 
            #endif
 
+        }
+        
+        ReadMp4::stParser::~stParser()
+        {
+          // ffparser->stop();
+           // ffparser->join();
+            delete ffparser;
+        }
+        
+        
+        ReadMp4::ReadMp4( std::string ip, int port, net::ServerConnectionFactory *factory ): net::HttpsServer(  ip, port,  factory, true) {
 
-            
+            self = this;
 
+	   parser1 = new stParser( this, AUDIOFILE, VIDEOFILE, 1);
+           //parser2 = new stParser( this, AUDIOFILE1, VIDEOFILE1 , 2);
             
 
         }
 
         ReadMp4::~ReadMp4() {
             SInfo << "~ReadMp4( )";
-            delete ffparser;
+            delete parser1;
+           // delete parser2;
         }
+        
+        
+         void ReadMp4::on_close(net::Listener* connection)
+         {
+             
+            /* net::HttpsConnection* cn = (net::HttpsConnection*)connection;
+                if(cn)
+                {
+                    net::WebSocketConnection *con = ((net::HttpsConnection*)cn)->getWebSocketCon();
+                    if(con)
+                    {
+                      SInfo << "on_close " ;
+                    }
+                }
+             
+             */
+             
+         }
 
 
-        void  ReadMp4::on_read(net::Listener* connection, const char* msg, size_t len) {
+        void ReadMp4::on_read(net::Listener* connection, const char* msg, size_t len) {
 
             //connection->send("arvind", 6 );
    
@@ -114,7 +141,7 @@ namespace base {
               #if FILEPARSER
 
               if( got == "reset")
-              ffparser->reset();  
+              parser1->ffparser->reset();  
             
               #else
 
@@ -140,22 +167,22 @@ namespace base {
         void ReadMp4::broadcast(const char * data, int size, bool binary, int fametype  )
         {
            // conn->send( data, size, binary    );
-            static int noCon =0;
+           // static int noCon =0;
             
-            if(noCon !=this->GetNumConnections())
-                
-            {
-                noCon = this->GetNumConnections();
-                SInfo << "No of Connectons " << noCon;
-            }
+//            if(noCon !=this->GetNumConnections())
+//                
+//            {
+//                noCon = this->GetNumConnections();
+//                SInfo << "No of Connectons " << noCon;
+//            }
 
             for (auto* connection :  this->GetConnections())
             {
-                net::HttpConnection* cn = (net::HttpConnection*)connection;
+                net::HttpsConnection* cn = (net::HttpsConnection*)connection;
                 if(cn)
                 {
-                    net::WebSocketConnection *con = ((net::HttpConnection*)cn)->getWebSocketCon();
-                    if(con)
+                    net::WebSocketConnection *con = ((net::HttpsConnection*)cn)->getWebSocketCon();
+                    if(con)// if( con && con->fps_type == fps_type)
                      con->push(data ,size, binary, fametype);
                 }
             }
