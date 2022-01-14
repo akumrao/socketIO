@@ -31,21 +31,17 @@
 
 
 
-//#define VIDEOFILE  "/experiment/fmp4/kunal720.264"
+#define AUDIOFILE  "./hindi.pcm"               
+//#define VIDEOFILE  "./test.264"
+
+#define VIDEOFILE  "./cat5.264"
+
+#define AUDIOFILE1  "./hindi.pcm"               
+#define VIDEOFILE1  "./goal.264"  
 
 
-//#define MAX_CHUNK_SIZE 10240*8
-// maximum send buffer 262144  =1024 *256
-
-//#define highWaterMark  8 * 1048576
-//maximum buffer = 16 *1048576 where  1024*1024 =1048576
-
-
-
-
-//#define IOBUFSIZE 40960
-//40960*6
-
+#define AUDIOFILE2  "./hindi.pcm"               
+#define VIDEOFILE2  "./goal.264"  
 
 
 #include "http/websocket.h"

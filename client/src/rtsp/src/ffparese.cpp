@@ -71,6 +71,13 @@ namespace base {
             {
                 SError << "can't open audio engine! ";
             }
+            
+            
+           videotimebase.num = 1;
+           videotimebase.den = 25;   /// 1000000/25 = 40000
+       
+           audiotimebase.num = 1;
+           audiotimebase.den = SAMPLINGRATE;  /// 1000000*1024/ 44100 = 23219.954648526  // almost half of video when 25 frames per secconds
 
         }
 
@@ -165,17 +172,21 @@ namespace base {
 
         void FFParse::start() {
 
-           
-                
-            fragmp4_muxer->deActivate();
-
-  
-            audio->parseAACHeader(0);
-            audio->start();
-            
-            return;
+             // Audio only                
+//            fragmp4_muxer->deActivate();
+//
+//  
+//            audio->parseAACHeader(0);
+//            audio->start();
+//            
+//            return;
           
-
+           // video only
+            
+            video->start();
+            return;
+            
+            // video and audio  only
             video->audio = audio;
             video->start();
             
@@ -312,7 +323,8 @@ namespace base {
             uint8_t* frame_audobuf = (uint8_t *)av_malloc(audiosize);
 
             
-            long framecount =0;
+           
+            
             while(!stopped())
             {   
                 uint64_t currentTime = CurrentTime_microseconds();
@@ -365,17 +377,34 @@ namespace base {
                         fragmp4_muxer->sendMeta();
                         resetParser = false;
                     }
- 
-                    framecount = framecount + AUDIOSAMPLE ;
-                    fragmp4_muxer->run(&basicaudioframe);
+                    
+                    
+                    if ( video && (av_compare_ts(video->vframecount, videotimebase,  aframecount, audiotimebase) <= 0))
+                    {
+                       
+                       
+                       basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
+                 
+                       av_packet_unref(&audiopkt);
+                       
+                       uint64_t deltamicro = CurrentTime_microseconds() - currentTime;
+                       std::this_thread::sleep_for(std::chrono::microseconds(AUDIOSLEEP/2 - deltamicro));
+                    }
+                    else
+                    {
+                       aframecount = aframecount + AUDIOSAMPLE ;
+                       fragmp4_muxer->run(&basicaudioframe);
+                       
+                        basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
+                 
+                       av_packet_unref(&audiopkt);
+                       
+                       SInfo << "Audio Frame " << aframecount;
+                       uint64_t deltamicro = CurrentTime_microseconds() - currentTime;
+                       std::this_thread::sleep_for(std::chrono::microseconds(AUDIOSLEEP - deltamicro));
+                    
+                    }
 
-                    basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
-                                       
-                    av_packet_unref(&audiopkt);
-                    
-                    
-                    uint64_t deltamicro = CurrentTime_microseconds() - currentTime;
-                    std::this_thread::sleep_for(std::chrono::microseconds(AUDIOSLEEP - deltamicro));
                     
                 }
             }
@@ -512,7 +541,7 @@ namespace base {
             unsigned char *cur_videoptr = nullptr;
             int cur_videosize=0;
 
-            long framecount =0;
+            
             int gop = 0;
             
             
@@ -545,7 +574,7 @@ namespace base {
                     //SInfo << "    PTS=" << pkt->pts << ", DTS=" << pkt->dts << ", Duration=" << pkt->duration << ", KeyFrame=" << ((pkt->flags & AV_PKT_FLAG_KEY) ? 1 : 0) << ", Corrupt=" << ((pkt->flags & AV_PKT_FLAG_CORRUPT) ? 1 : 0) << ", StreamIdx=" << pkt->stream_index << ", PktSize=" << pkt->size;
                     // BasicFrame        basicframe;
                     basicvideoframe.copyFromAVPacket(videopkt);
-                    basicvideoframe.mstimestamp =  framecount;
+                    basicvideoframe.mstimestamp =  vframecount;
                     basicvideoframe.fillPars();
 
        
@@ -581,11 +610,8 @@ namespace base {
 
                             if (fps != obj.fps || width != obj.width || height != obj.height)
                             {
-                                    parseH264Header(0);
-
-                                    if(audio)
-                                    audio->parseAACHeader(1);
-                                    SInfo << "reset parser, with fps " << obj.fps << " width "  <<   obj.width << " height"  << obj.height;
+                                
+                                 SError << "reset parser, with fps " << obj.fps << " width "  <<   obj.width << " height"  << obj.height;
                             }
 
                             //uint8_t *p = videopkt->data +4;
@@ -596,6 +622,15 @@ namespace base {
                                     fps = obj.fps;
                                     height = obj.height;
                                     width = obj.width;
+                                    
+                                    parseH264Header(0);
+
+                                    if(audio)
+                                    {
+                                       audio->videotimebase.den = fps;   /// 1000000/25 = 40000
+                                       audio->parseAACHeader(1);
+
+                                    }
 
                                     basicvideoframe.fps = obj.fps;
                                     basicvideoframe.height = obj.height;
@@ -617,11 +652,10 @@ namespace base {
 
                         if( !foundpps &&  basicvideoframe.h264_pars.slice_type == H264SliceType::pps  )
                         {    
-                          
                            
                            // SInfo <<  " Got PPS fps ";
                             
-                            //info->run(&basicvideoframe);
+                           //info->run(&basicvideoframe);
                             fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                             basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                             
@@ -660,15 +694,13 @@ namespace base {
                       
 #endif
                               
-
                         //info->run(&basicvideoframe);
                         fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                         basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
-                        framecount++;
-                        int64_t deltamicro =CurrentTime_microseconds() - currentTime;
+                        vframecount++;
+                        uint64_t deltamicro =CurrentTime_microseconds() - currentTime;
                         std::this_thread::sleep_for(std::chrono::microseconds(delay- deltamicro));
                         //std::this_thread::sleep_for(std::chrono::microseconds(100000)); 
-                       // 
                        //Sleep(67);
 
                      }

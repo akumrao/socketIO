@@ -26,18 +26,6 @@
 #include "http/HttpServer.h" 
 #include "muxer.h"
 
-#define AUDIOFILE  "./hindi.pcm"               
-#define VIDEOFILE  "./test.264"
-
-//#define VIDEOFILE  "./cat5.264"
-
-#define AUDIOFILE1  "./hindi.pcm"               
-#define VIDEOFILE1  "./goal.264"  
-
-
-#define AUDIOFILE2  "./hindi.pcm"               
-#define VIDEOFILE2  "./goal.264"  
-
 
 
 #define FILEPARSER 1

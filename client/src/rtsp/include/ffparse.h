@@ -119,6 +119,12 @@ public:
 
 
          VideoParse* video{ nullptr };
+         
+          AVRational  videotimebase;//= (AVRational){ 1, };
+         AVRational  audiotimebase ;//= (AVRational){ 1,SAMPLINGRATE };
+         
+        
+        std::atomic<uint64_t> aframecount{0};
      };
 
 
@@ -156,8 +162,10 @@ public:
          BasicFrame basicvideoframe;
 
          AudioParse* audio{ nullptr };
-        
-
+         
+         
+                
+        std::atomic<uint64_t> vframecount{0};
      };
     
      FFParse(  const char* audioFile, const char*  videofile, FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt  );
