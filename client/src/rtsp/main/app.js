@@ -277,7 +277,7 @@ var hiddenInput = undefined;
                 }
 
 
-               console.log("show frame " + name );
+               //console.log("show frame " + name );
 
                 
                 // keep the latency to minimum

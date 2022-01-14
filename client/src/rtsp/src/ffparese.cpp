@@ -170,10 +170,10 @@ namespace base {
             fragmp4_muxer->deActivate();
 
   
-          //  audio->parseAACHeader(0);
-          //  audio->start();
+            audio->parseAACHeader(0);
+            audio->start();
             
-         //   return;
+            return;
           
 
             video->audio = audio;
@@ -360,7 +360,7 @@ namespace base {
                   
                  //   basicaudioframe.mstimestamp = startTime + framecount;
                     
-                    if (resetParser)
+                    if (resetParser && !video)
                     {
                         fragmp4_muxer->sendMeta();
                         resetParser = false;
