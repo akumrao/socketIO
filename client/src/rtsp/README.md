@@ -790,6 +790,11 @@ Steps:-
 8. Open services in admin and start your service to test for first time.
 9. if required, change user account for running service.
 
+
+To delete existing service "SC DELETE shortservicename"
+  SC DELETE "Arvind Panda2 Service"
+
+  
 #########################################################################
 
 #########################################################################
