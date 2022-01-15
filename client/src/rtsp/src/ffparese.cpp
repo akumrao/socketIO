@@ -23,8 +23,22 @@
 
 
 
+#define AUDIOFILE  "./hindi.pcm"               
+#define VIDEOFILE  "./test.264"
 
-#define _DEBUG_1 1
+//#define VIDEOFILE  "./cat5.264"
+
+#define AUDIOFILE1  "./hindi.pcm"               
+#define VIDEOFILE1  "./goal.264"  
+
+
+#define AUDIOFILE2  "./hindi.pcm"               
+#define VIDEOFILE2  "./goal.264"  
+
+
+
+
+//#define _DEBUG_1 1
 //#define AUDIOSLEEP 21000
 //#define AUDIOSLEEP 15300
 #define AUDIOSLEEP 23220
@@ -182,12 +196,9 @@ namespace base {
 
         void FFParse::start() {
             
-            both->start();
-            
-            return;
 
              // Audio only                
-//            fragmp4_muxer->deActivate();
+           fragmp4_muxer->deActivate();
 //
 //  
 //            audio->parseAACHeader(0);
@@ -197,15 +208,23 @@ namespace base {
           
            // video only
             
-            video->start();
+           video->start();
             return;
             
-            // video and audio  only
-            video->audio = audio;
-            video->start();
+//            // video and audio  with two separate threads
+//            video->audio = audio;
+//            video->start();
+//            
+//            audio->video = video;
+//            audio->start();
+//            
+//            return;
             
-            audio->video = video;
-            audio->start();
+            // video and audio  without thread
+            
+           // both->start();
+            
+            return;
 
 
             }
@@ -295,7 +314,7 @@ namespace base {
              basicaudioframe.payload.resize(extrasize);
              memcpy( basicaudioframe.payload.data(),  audioContext->extradata, extrasize) ;
              basicaudioframe.codec_id = audiocodec->id;
-             basicaudioframe.mstimestamp = startTime ;
+             //basicaudioframe.mstimestamp = startTime ;
              fragmp4_muxer->run(&basicaudioframe);
              basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
 
@@ -390,10 +409,10 @@ namespace base {
                         resetParser = false;
                     }
                     
-                    
+                   // video->mut_sync.lock();   
                     if ( video && (av_compare_ts(video->vframecount, videotimebase,  aframecount, audiotimebase) <= 0))
                     {
-                       
+                        // video->mut_sync.unlock();   
                        
                        basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
                  
@@ -404,6 +423,7 @@ namespace base {
                     }
                     else
                     {
+                       //video->mut_sync.unlock();   
                        aframecount = aframecount + AUDIOSAMPLE ;
                        fragmp4_muxer->run(&basicaudioframe);
                        
@@ -411,7 +431,7 @@ namespace base {
                  
                        av_packet_unref(&audiopkt);
                        
-                       SInfo << "Audio Frame " << aframecount;
+                     //  SInfo << "Audio Frame " << aframecount;
                        uint64_t deltamicro = CurrentTime_microseconds() - currentTime;
                        std::this_thread::sleep_for(std::chrono::microseconds(AUDIOSLEEP - deltamicro));
                     
@@ -474,6 +494,46 @@ namespace base {
             parseAACContent();
         }
 
+        
+        void FFParse::VideoParse::reopen()
+        {
+            fragmp4_muxer->deActivate();
+
+            
+            fclose(fileVideo);
+            fileVideo = nullptr;
+            hd = (++hd)%2;
+            if (hd)
+            {
+               
+                SInfo << "Open HD";
+                const char* videofile = VIDEOFILE;
+
+                fileVideo = fopen(videofile,"rb");
+                if(fileVideo){
+                    av_log(NULL,AV_LOG_INFO,"open file success \n");
+                }else{
+                    SError << "can't open file! " <<  videofile;
+                }
+            }
+            else
+            {
+              
+          
+                const char* videofile =VIDEOFILE1;
+                SInfo << "Open SD";
+ 
+
+                fileVideo = fopen(videofile,"rb");
+                if(fileVideo){
+                    av_log(NULL,AV_LOG_INFO,"open file success \n");
+                }else{
+                    av_log(NULL,AV_LOG_ERROR,"can't open file! \n");
+                }
+            }
+            
+        }
+
         void FFParse::VideoParse::run()
         {
             parseH264Content();
@@ -484,7 +544,7 @@ namespace base {
             int ret = 0;
            // AVCodec *codec = NULL;
           //  AVCodecContext *cdc_ctx = NULL;
-            //fragmp4_muxer->deActivate();
+            fragmp4_muxer->deActivate();
             foundsps = false;
             foundpps = false;
 
@@ -522,6 +582,8 @@ namespace base {
             return  true;
 
         }
+        
+
   
         
         void FFParse::VideoParse::parseH264Content() {
@@ -620,10 +682,16 @@ namespace base {
                             if (fps != obj.fps || width != obj.width || height != obj.height)
                             {
                                 
-                                 SError << "reset parser, with fps " << obj.fps << " width "  <<   obj.width << " height"  << obj.height;
-                            }
+                                parseH264Header(0);
 
-                            //uint8_t *p = videopkt->data +4;
+                                if(audio)
+                                {
+                                   audio->videotimebase.den = fps;   /// 1000000/25 = 40000
+                                   audio->parseAACHeader(1);
+                                }
+
+                               SError << "reset parser, with fps " << obj.fps << " width "  <<   obj.width << " height"  << obj.height;
+                            }
 
 
                             if (!foundpps)
@@ -631,15 +699,6 @@ namespace base {
                                     fps = obj.fps;
                                     height = obj.height;
                                     width = obj.width;
-                                    
-                                    parseH264Header(0);
-
-                                    if(audio)
-                                    {
-                                       audio->videotimebase.den = fps;   /// 1000000/25 = 40000
-                                       audio->parseAACHeader(1);
-
-                                    }
 
                                     basicvideoframe.fps = obj.fps;
                                     basicvideoframe.height = obj.height;
@@ -702,11 +761,13 @@ namespace base {
                         }
                       
 #endif
-                              
+                        //mut_sync.lock();      
                         //info->run(&basicvideoframe);
                         fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                         basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                         vframecount++;
+                       // mut_sync.unlock();  
+                        
                         uint64_t deltamicro =CurrentTime_microseconds() - currentTime;
                         std::this_thread::sleep_for(std::chrono::microseconds(delay- deltamicro));
                         //std::this_thread::sleep_for(std::chrono::microseconds(100000)); 
@@ -716,7 +777,7 @@ namespace base {
 		}
                 else
                 {
-                    //reopen();
+                    reopen();
                     if (fseek(fileVideo, 0, SEEK_SET))
                     return;
 
@@ -733,7 +794,7 @@ namespace base {
                 }
             }
 
-	        av_packet_free(&videopkt);	
+	    av_packet_free(&videopkt);	
             free(in_videobuffer);
 
        }
@@ -868,7 +929,7 @@ namespace base {
                        //SInfo << "    PTS=" << pkt->pts << ", DTS=" << pkt->dts << ", Duration=" << pkt->duration << ", KeyFrame=" << ((pkt->flags & AV_PKT_FLAG_KEY) ? 1 : 0) << ", Corrupt=" << ((pkt->flags & AV_PKT_FLAG_CORRUPT) ? 1 : 0) << ", StreamIdx=" << pkt->stream_index << ", PktSize=" << pkt->size;
                        // BasicFrame        basicframe;
                        basicvideoframe.copyFromAVPacket(videopkt);
-                       basicvideoframe.mstimestamp = startTime +  vframecount;
+                       basicvideoframe.mstimestamp =   vframecount;
                        basicvideoframe.fillPars();
 
                       
@@ -1059,7 +1120,7 @@ namespace base {
                    {
 
                        basicaudioframe.copyFromAVPacket(&audiopkt);
-                       basicaudioframe.mstimestamp = startTime + aframecount;
+                       basicaudioframe.mstimestamp =  aframecount;
 
 //                     if( resetParser ) 
 //                     {

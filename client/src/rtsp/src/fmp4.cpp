@@ -32,9 +32,9 @@
 
 
 #define AUDIOFILE  "./hindi.pcm"               
-//#define VIDEOFILE  "./test.264"
+#define VIDEOFILE  "./test.264"
 
-#define VIDEOFILE  "./cat5.264"
+//#define VIDEOFILE  "./cat5.264"
 
 #define AUDIOFILE1  "./hindi.pcm"               
 #define VIDEOFILE1  "./goal.264"  

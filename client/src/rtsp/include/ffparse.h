@@ -115,7 +115,7 @@ public:
 
          BasicFrame basicaudioframe;
 
-         uint64_t startTime{ 0 };
+//         uint64_t startTime{ 0 };
 
 
          VideoParse* video{ nullptr };
@@ -153,7 +153,7 @@ public:
          FILE* fileVideo;
         
          /// Video End
-        // void reopen();
+         void reopen();
 
          long get_nal_size(uint8_t* buf, long size, uint8_t** poutbuf, int* poutbuf_size);
 
@@ -163,9 +163,12 @@ public:
 
          AudioParse* audio{ nullptr };
          
-         
+        // std::mutex mut_sync;
                 
         std::atomic<uint64_t> vframecount{0};
+	
+        //long int startTime{0};
+	int hd{0} ;
      };
      
      
