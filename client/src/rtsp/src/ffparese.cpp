@@ -29,7 +29,7 @@
 //#define VIDEOFILE  "./cat5.264"
 
 #define AUDIOFILE1  "./hindi.pcm"               
-#define VIDEOFILE1  "./cat5.264"
+#define VIDEOFILE1  "./buny45fps.264"
 
 
 #define AUDIOFILE2  "./hindi.pcm"               
