@@ -29,7 +29,7 @@
 //#define VIDEOFILE  "./cat5.264"
 
 #define AUDIOFILE1  "./hindi.pcm"               
-#define VIDEOFILE1  "./goal.264"  
+#define VIDEOFILE1  "./cat5.264"
 
 
 #define AUDIOFILE2  "./hindi.pcm"               
@@ -198,9 +198,9 @@ namespace base {
             
 
              // Audio only                
-           fragmp4_muxer->deActivate();
+//            fragmp4_muxer->deActivate();
 //
-//  
+////  
 //            audio->parseAACHeader(0);
 //            audio->start();
 //            
@@ -208,10 +208,10 @@ namespace base {
           
            // video only
             
-           video->start();
-            return;
+           //video->start();
+          //  return;
             
-//            // video and audio  with two separate threads
+            // video and audio  with two separate threads
 //            video->audio = audio;
 //            video->start();
 //            
@@ -222,7 +222,7 @@ namespace base {
             
             // video and audio  without thread
             
-           // both->start();
+            both->start();
             
             return;
 
@@ -811,6 +811,7 @@ namespace base {
         {
             parseMuxContent();
         } 
+       
         
         FFParse::BothParse::~BothParse() {
             SInfo << "~BothParse( )";
@@ -819,12 +820,12 @@ namespace base {
             
         }
         
+        
         void FFParse::BothParse::start()
         {
             VideoParse::start() ;
         }
          
-
         
        void FFParse::BothParse::parseMuxContent() 
        {
@@ -899,10 +900,11 @@ namespace base {
           
           int64_t atime = 0;
           
+          
            while (!VideoParse::stopped() )
            {
                
-                if ( av_compare_ts(vframecount, videotimebase,  aframecount, audiotimebase) <= 0)
+                if ( av_compare_ts(vframecount, videotimebase,  aframecount*AUDIOSAMPLE, audiotimebase) <= 0)
                 {
                     
                    if (cur_videosize > 0)
@@ -932,7 +934,6 @@ namespace base {
                        basicvideoframe.mstimestamp =   vframecount;
                        basicvideoframe.fillPars();
 
-                      
                        
                         if ( foundsps && foundpps && ( basicvideoframe.h264_pars.frameType == H264SframeType::i &&  basicvideoframe.h264_pars.slice_type == H264SliceType::idr)) //AUD Delimiter
                         {
@@ -1053,17 +1054,17 @@ namespace base {
                             VideoParse::fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                             basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
 
-                             vframecount++;
-
-                            
+                            vframecount++;
 
                          }
-                    
                    
                    }
                    else 
                    {
-		        //reopen();
+                       vframecount = 0;
+                       aframecount = 0;
+                               
+		       reopen();
                        if (fseek(fileVideo, 0, SEEK_SET))
                        return;
 
@@ -1139,7 +1140,7 @@ namespace base {
                        atime =  CurrentTime_microseconds();
 
                             
-                       aframecount = aframecount + AUDIOSAMPLE;
+                       ++aframecount;
                        VideoParse::fragmp4_muxer->run(&basicaudioframe);
 
                        basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
@@ -1171,6 +1172,69 @@ namespace base {
 
          
        }
+       
+       
+       
+        void FFParse::BothParse::pushVideoFrame( const unsigned char *buff, int size)
+        {
+
+            
+            static uint64_t  previous=0;
+           // static uint64_t  framecount = 0;
+            static uint64_t  total = 0;
+
+    
+            if (previous)
+            {
+                uint64_t delta = CurrentTime_microseconds() - previous;
+
+                if (!total)
+                {
+                    total = delta;
+                }
+                else
+                    total = (total + delta) / 2;
+
+     
+                videofps = 1000000 / total;
+
+                  // UE_LOG(PixelStreamer, Log, TEXT("pushVideoFrame fps= %lld"), 1000000 / vidoefps);
+                   
+                std::cout << "videofps "    <<    videofps;
+
+            }
+
+             previous = CurrentTime_microseconds();
+               
+       
+
+
+            //if (total > (40000 + 900) || total < 40000 - 900)
+            //{
+                //UE_LOG(PixelStreamer, Error, TEXT("Frame rate should be around 1/40000(=25 fps), right now it is %d"),  total);
+                //return;
+            ///}
+
+
+
+            if (videolist.size() > 7)
+            {
+                //UE_LOG(PixelStreamer, Error, TEXT("Frame buffer very high %d, frame rate is around %d"), videolist.size() , avgofVideorame);
+                 std::cout << "Frame buffer very high "  ;
+            }
+
+            std::vector<uint8_t>vbuffer;
+
+            //std::unique_lock<std::mutex> lock(mtxEvent);
+            mtxVideo.lock();
+            vbuffer.insert(vbuffer.end(), buff, buff + size);
+            videolist.push_back(vbuffer);
+             // cv.notify_all();
+            mtxVideo.unlock();
+
+          
+        }
+
        
         
 

@@ -17,7 +17,7 @@
 #include "base/thread.h"
 #include <string>
 #include <vector>
-//#include "frame.h"
+#include <list>
 #include "framefilter.h"
 // #include "net/netInterface.h"
 // #include "http/HttpsClient.h"
@@ -180,9 +180,18 @@ public:
          ~BothParse();
          void parseMuxContent() ;
          void run() override;
-         
          void start();
+         
+         
+         // TArray<uint8_t> RecordingBuffer;
+        std::vector<int8_t> RecordingBuffer;
+        std::list< std::vector<uint8_t>> videolist;
+        std::mutex mtxSnd;
+        std::mutex mtxVideo;
        
+        void pushVideoFrame( const unsigned char *buff, int size);
+        int videofps{0};
+        
      };
      
      
