@@ -86,6 +86,7 @@ public:
 
  public:
      class VideoParse;
+     class BothParse;
      class AudioParse : public Common, public Thread
      {
      public:
@@ -120,11 +121,13 @@ public:
 
          VideoParse* video{ nullptr };
          
-          AVRational  videotimebase;//= (AVRational){ 1, };
+         
          AVRational  audiotimebase ;//= (AVRational){ 1,SAMPLINGRATE };
          
-        
+         int audiosize;
         std::atomic<uint64_t> aframecount{0};
+        
+        
      };
 
 
@@ -150,6 +153,7 @@ public:
          bool parseH264Header(int stream_index);
 
          void parseH264Content();
+         
          FILE* fileVideo;
         
          /// Video End
@@ -163,12 +167,17 @@ public:
 
          AudioParse* audio{ nullptr };
          
-        // std::mutex mut_sync;
                 
-        std::atomic<uint64_t> vframecount{0};
+         AVRational  videotimebase;//= (AVRational){ 1, };
+                  
+         std::atomic<uint64_t> vframecount{0};
 	
         //long int startTime{0};
 	int hd{0} ;
+
+	 uint64_t timescale{0};
+         
+         void parseH264Content_sleep();
      };
      
      
@@ -189,9 +198,15 @@ public:
         std::mutex mtxSnd;
         std::mutex mtxVideo;
        
+/*
         void pushVideoFrame( const unsigned char *buff, int size);
-        int videofps{0};
+        void pushAudioFrame( const unsigned char *buff, int size);
         
+        
+        void parseMuxContent_live();
+        
+        uint64_t timescale{0};
+  */      
      };
      
      
