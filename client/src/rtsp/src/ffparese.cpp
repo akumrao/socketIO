@@ -43,6 +43,43 @@ namespace base {
         // based on https://ffmpeg.org/doxygen/trunk/remuxing_8c-example.html
 
 
+        void FFParse::start() {
+
+
+            // Audio only                
+            fragmp4_muxer->deActivate();
+            //
+            ////  
+                        audio->parseAACHeader(0);
+                        audio->start();
+            //            
+            //            return;
+            //          
+                       // video only
+
+            //           video->start();
+            //            return;
+
+                        // video and audio  with two separate threads
+            video->audio = audio;
+            audio->video = video;
+
+            video->start();
+            audio->start();
+
+            return;
+
+            // video and audio  without thread
+//             both->start();
+//             return;
+            //
+
+
+
+            return;
+
+
+        }
     
 
         FFParse::FFParse(  const char* audioFile, const char* videofile,  FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt ) : Common(fragmp4_muxer, info, txt) {
@@ -143,94 +180,8 @@ namespace base {
            // fclose(fileAudio);
             fclose(fileVideo);
         }
-        /*
-        void FFParse::run() {
-
-            int64_t startTime = time::hrtime();
-
-
-
-            std::ifstream bunnyFile;
-            bunnyFile.open("/var/tmp/test.mp4", std::ios_base::in | std::ios_base::binary);
-
-            char buf[ MAX_CHUNK_SIZE];
-
-            memset(buf, 'A', MAX_CHUNK_SIZE);
-
-            while (!stopped()) {
-
-
-                // dc->sendDataMsg("ravind");
-
-                pc->sendDataBinary((const uint8_t *) buf, MAX_CHUNK_SIZE);
-
-                do {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(5));
-                     SInfo << "slee for 5 mlsec";
-                } while (pc->data_channel_->buffered_amount() > highWaterMark);
-
-                // while( pc->data_channel_->buffered_amount()  > highWaterMark )
-                // std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
-                int64_t lastTimestamp = time::hrtime(); //nanosecondtime
-                auto nsdelay = lastTimestamp - startTime;
-                
-
-                SInfo << "Sent message seed MByte " <<  (pc->data_channel_->bytes_sent()*1000)/nsdelay ;
-            }
-
-
-
-
-
-            SInfo << "fmp4 thread exit";
-
-            // fileName = "/var/tmp/videos/test.mp4";
-            fileName = "/var/tmp/kunal720.mp4";
-            //fmp4(fileName.c_str(), "fragTmp.mp4");
-            //fmp4(fileName.c_str());
-        }
-        */
-
-        void FFParse::start() {
-            
-
-             // Audio only                
-            fragmp4_muxer->deActivate();
-//
-////  
-//            audio->parseAACHeader(0);
-//            audio->start();
-//            
-//            return;
-//          
-           // video only
-            
-//           video->start();
-//            return;
-            
-            // video and audio  with two separate threads
-            video->audio = audio;
-            audio->video = video;
-            
-            video->start();
-            audio->start();
-            
-            return;
-            
-            // video and audio  without thread
-//             both->start();
-//             return;
-            //
-
-        
-            
-            return;
-
-
-            }
-  
-
+       
+     
       
          
         bool FFParse::AudioParse::initAAC()
@@ -411,7 +362,7 @@ namespace base {
                     }
                     
                    // video->mut_sync.lock();   
-                    while ( video && (av_compare_ts(video->vframecount, video->videotimebase,  aframecount, audiotimebase) <= 0))
+                    while ( video && (av_compare_ts(video->vframecount, video->videotimebase,  aframecount* AUDIOSAMPLE, audiotimebase) <= 0))
                     {
         
                        std::this_thread::sleep_for(std::chrono::microseconds(WAITTILLFIND ));
@@ -420,7 +371,9 @@ namespace base {
                     
                     {
                        //video->mut_sync.unlock();   
-                       aframecount = aframecount + AUDIOSAMPLE ;
+                       //aframecount = aframecount + AUDIOSAMPLE ;
+
+                       ++aframecount;
                        fragmp4_muxer->run(&basicaudioframe);
                        
                         basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
@@ -1349,8 +1302,7 @@ namespace base {
                    {
                        vframecount = 0;
                        aframecount = 0;
-                               
-		       reopen();
+                       reopen();
                        if (fseek(fileVideo, 0, SEEK_SET))
                        return;
 
