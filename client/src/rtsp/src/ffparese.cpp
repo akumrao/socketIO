@@ -57,10 +57,11 @@ namespace base {
             //          
                        // video only
 
-            video->start();
-             return;
+            //video->start();
+            // return;
 
-                        // video and audio  with two separate threads
+            //#define LIVE 1  // for different framerate
+            // video and audio  with two separate threads
             video->audio = audio;
             audio->video = video;
 
@@ -758,7 +759,7 @@ namespace base {
                         //info->run(&basicvideoframe);
                      
                               // video->mut_sync.lock();   
-                        while ( audio && (av_compare_ts(vframecount, videotimebase,  audio->aframecount, audio->audiotimebase) > 0))
+                        while ( audio && (av_compare_ts(vframecount, videotimebase,  audio->aframecount*AUDIOSAMPLE, audio->audiotimebase) > 0))
                         {
 
                        
@@ -988,7 +989,7 @@ namespace base {
                         //info->run(&basicvideoframe);
                      
                               // video->mut_sync.lock();   
-                        while ( audio && (av_compare_ts(vframecount, videotimebase,  audio->aframecount, audio->audiotimebase) > 0))
+                        while ( audio && (av_compare_ts(vframecount, videotimebase,  audio->aframecount*AUDIOSAMPLE, audio->audiotimebase) > 0))
                         {
 
                        
