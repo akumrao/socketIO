@@ -46,19 +46,19 @@ namespace base {
         void FFParse::start() {
 
 
-            // Audio only                
+                          
             fragmp4_muxer->deActivate();
             //
-            ////  
-                        audio->parseAACHeader(0);
-                        audio->start();
-            //            
-            //            return;
+            //// Audio only  
+//            audio->parseAACHeader(0);
+//            audio->start();
+//                        
+//            return;
             //          
                        // video only
 
-            //           video->start();
-            //            return;
+            video->start();
+             return;
 
                         // video and audio  with two separate threads
             video->audio = audio;
