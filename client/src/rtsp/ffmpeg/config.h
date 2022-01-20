@@ -187,7 +187,8 @@
 #else
 #define HAVE_ATOMICS_GCC 1
 #define HAVE_ATOMICS_SUNCC 0
-#define HAVE_ATOMICS_WIN32 0	
+#define HAVE_ATOMICS_WIN32 0
+#define HAVE_SLEEP 0
 #endif
 #define HAVE_ATOMIC_CAS_PTR 0
 #define HAVE_MACHINE_RW_BARRIER 0
@@ -271,6 +272,7 @@
 #define HAVE_UDPLITE_H 0
 #ifdef _WIN32
 #define HAVE_UNISTD_H 0
+#define HAVE_SLEEP 1
 #else
 #define HAVE_UNISTD_H 1
 #endif
@@ -396,7 +398,7 @@
 #define HAVE_SETCONSOLECTRLHANDLER 0
 #define HAVE_SETMODE 0
 #define HAVE_SETRLIMIT 1
-#define HAVE_SLEEP 0
+
 #define HAVE_STRERROR_R 1
 #define HAVE_SYSCONF 1
 #ifdef _WIN32
