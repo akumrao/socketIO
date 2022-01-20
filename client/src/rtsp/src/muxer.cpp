@@ -698,7 +698,10 @@ void MuxFrameFilter::writeFrame(BasicFrame* basicframe) {
 //    // std::cout << "FileFrameFilter: deActivate: bye" << std::endl;
 //}
 
-FragMP4MuxFrameFilter::FragMP4MuxFrameFilter(const char* name, FrameFilter *next) :
+
+int FragMP4MuxFrameFilter::info=1;// one extra byte is send for audo, video, games  packet type.
+
+FragMP4MuxFrameFilter::FragMP4MuxFrameFilter(const char* name,  FrameFilter *next) :
 MuxFrameFilter(name, next), got_ftyp(false), got_moov(false) {
     internal_frame.meta_type = MuxMetaType::fragmp4;
     internal_frame.meta_blob.resize(sizeof (FragMP4Meta));
@@ -863,8 +866,8 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             std::cout << " ==> len: " << len << std::endl;
 #endif
 
-            internal_frame.reserve(len); // does nothing if already has this capacity
-            internal_frame.resize(len);
+            internal_frame.reserve(len+info); // does nothing if already has this capacity
+            internal_frame.resize(len+info);
         }
 
 #ifdef MUXPARSE
@@ -872,7 +875,7 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
 #endif
 
         if ((cc + len) > buf_size) { // required number of bytes is larger than the buffer
-            memcpy(internal_frame.payload.data() + ccf, buf + cc, buf_size - cc); // copy the rest of the buffer
+            memcpy(internal_frame.payload.data() + ccf+info, buf + cc, buf_size - cc); // copy the rest of the buffer
             ccf += buf_size - cc;
             missing = len - (buf_size - cc); // next time this is called, ingest more bytes
 #ifdef MUXPARSE
@@ -881,7 +884,7 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             cc += buf_size;
         } else
         { // all required bytes are in the buffer
-            memcpy(internal_frame.payload.data() + ccf, buf + cc, len);
+            memcpy(internal_frame.payload.data() + ccf+info, buf + cc, len);
             missing = 0;
 #ifdef MUXPARSE
             std::cout << "FragMP4MuxFrameFilter: OUT: len: " << internal_frame.payload.size() << " dump:" << internal_frame.dumpPayload() << std::endl;
@@ -889,7 +892,7 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             ccf = 0;
             cc += len;
 
-            getLenName(internal_frame.payload.data(), boxlen, boxname);
+            getLenName(internal_frame.payload.data()+info, boxlen, boxname);
 #ifdef MUXPARSE
             std::cout << "FragMP4MuxFrameFilter: got box " << std::string(boxname) << std::endl;
 #endif
@@ -902,7 +905,7 @@ int FragMP4MuxFrameFilter::write_packet(void *opaque, uint8_t *buf, int buf_size
             // set values in-place:
             ///*
             if (strncmp(boxname, "moof", 4) == 0) {
-                metap->is_first = moofHasFirstSampleFlag(internal_frame.payload.data());
+                metap->is_first = moofHasFirstSampleFlag(internal_frame.payload.data()+info);
                 //#ifdef MUXPARSE
                
                 if (metap->is_first)

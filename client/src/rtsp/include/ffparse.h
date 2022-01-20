@@ -73,12 +73,13 @@ class Common
 {
 
 public:
-    Common(FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt) : fragmp4_muxer(fragmp4_muxer), info(info), txt(txt)
+    Common(FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt, int fpsType ) : fragmp4_muxer(fragmp4_muxer), info(info), txt(txt), fpsType(fpsType)
     {
     }
     FrameFilter* fragmp4_muxer;
     FrameFilter* info;
     FrameFilter* txt;
+    int fpsType;
 };
 
  class FFParse : public Common
@@ -90,7 +91,7 @@ public:
      class AudioParse : public Common, public Thread
      {
      public:
-         AudioParse(const char* audioFile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt);
+         AudioParse(const char* audioFile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt, int fpsType);
 
          ~AudioParse();
 
@@ -134,7 +135,7 @@ public:
      class VideoParse : public Common, public Thread
      {
      public:
-         VideoParse(const char* videofile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt);
+         VideoParse(const char* videofile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt, int fpsType );
 
          ~VideoParse();
 
@@ -184,7 +185,7 @@ public:
      class BothParse : public VideoParse, public AudioParse
      {
      public:
-         BothParse(const char* audioFile, const char*  videofile, FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt);
+         BothParse(const char* audioFile, const char*  videofile, FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt, int fpsType );
 
          ~BothParse();
          void parseMuxContent() ;
@@ -211,7 +212,7 @@ public:
      
      
     
-     FFParse(  const char* audioFile, const char*  videofile, FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt  );
+     FFParse(  const char* audioFile, const char*  videofile, FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt , int fpsType  );
      
      ~FFParse( );
 

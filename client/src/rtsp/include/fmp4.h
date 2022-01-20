@@ -88,6 +88,7 @@ class FFParse;
      
      
      stParser *parser1;
+     stParser *parser2;
     // stParser *parser2;
 
     // std::string fileName;

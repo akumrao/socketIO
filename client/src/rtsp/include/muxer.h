@@ -118,6 +118,8 @@ protected:
 
 public: // API calls    
     void sendMeta();
+    
+static int info;// one extra byte is send for audo, video, games  packet type.
    
 protected:
     static int write_packet(void *opaque, uint8_t *buf, int buf_size_);

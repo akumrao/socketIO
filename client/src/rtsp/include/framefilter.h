@@ -138,12 +138,12 @@ public: // API
 class DummyFrameFilter : public FrameFilter { 
 
 public:                                                                                
-    DummyFrameFilter(const char *name,  base::fmp4::ReadMp4 *conn , bool verbose = true, FrameFilter *next = NULL); 
+    DummyFrameFilter(const char *name,  base::fmp4::ReadMp4 *conn , int fpsType, FrameFilter *next = NULL); 
      ~DummyFrameFilter();
 
      base::fmp4::ReadMp4 *conn; 
 protected:
-    bool verbose;
+    int  fpsType;
    
 
 protected:

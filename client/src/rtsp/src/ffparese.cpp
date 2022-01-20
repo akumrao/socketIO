@@ -56,8 +56,15 @@ namespace base {
 //            return;
             //          
                        // video only
-
-            video->start();
+             if(fpsType == 1)
+             video->start();
+            
+             if(fpsType == 2)
+             {
+                 audio->parseAACHeader(0);
+                audio->start();
+             }
+            
              return;
 
             //#define LIVE 1  // for different framerate
@@ -83,13 +90,13 @@ namespace base {
         }
     
 
-        FFParse::FFParse(  const char* audioFile, const char* videofile,  FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt ) : Common(fragmp4_muxer, info, txt) {
+        FFParse::FFParse(  const char* audioFile, const char* videofile,  FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt, int fpsType ) : Common(fragmp4_muxer, info, txt, fpsType) {
 
-            audio = new AudioParse(audioFile, fragmp4_muxer, info, txt);
+            audio = new AudioParse(audioFile, fragmp4_muxer, info, txt, fpsType);
 
-            video = new VideoParse(videofile, fragmp4_muxer, info, txt);
+            video = new VideoParse(videofile, fragmp4_muxer, info, txt, fpsType);
             
-            both = new BothParse(audioFile, videofile, fragmp4_muxer, info, txt);
+            both = new BothParse(audioFile, videofile, fragmp4_muxer, info, txt, fpsType);
          
         }
 
@@ -109,7 +116,7 @@ namespace base {
         
         
 
-        FFParse::AudioParse::AudioParse(const char* audioFile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt) : Common(fragmp4_muxer, info, txt)
+        FFParse::AudioParse::AudioParse(const char* audioFile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt, int fpsType ) : Common(fragmp4_muxer, info, txt, fpsType)
         {
 
             fileAudio = fopen(audioFile, "rb");
@@ -154,7 +161,7 @@ namespace base {
 
 
 
-        FFParse::VideoParse::VideoParse(const char* videofile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt) : Common(fragmp4_muxer, info, txt)
+        FFParse::VideoParse::VideoParse(const char* videofile, FrameFilter* fragmp4_muxer, FrameFilter* info, FrameFilter* txt, int fpsType ) : Common(fragmp4_muxer, info, txt, fpsType)
         {
 
             fileVideo = fopen(videofile, "rb");
@@ -1041,7 +1048,7 @@ namespace base {
         
         
           
-        FFParse::BothParse::BothParse(  const char* audioFile, const char* videofile,  FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt ) : AudioParse(audioFile, fragmp4_muxer, info, txt), VideoParse(videofile, fragmp4_muxer, info, txt)
+        FFParse::BothParse::BothParse(  const char* audioFile, const char* videofile,  FrameFilter *fragmp4_muxer , FrameFilter *info , FrameFilter *txt, int fpsType ) : AudioParse(audioFile, fragmp4_muxer, info, txt, fpsType), VideoParse(videofile, fragmp4_muxer, info, txt,fpsType)
         {
          
         }

@@ -7,7 +7,7 @@
 namespace base {
 namespace fmp4 {
 
-//#define DUMPFMP4 1
+#define DUMPFMP4 1
 
 // #define TIMESTAMPFILTER_DEBUG // keep this commented
 
@@ -26,7 +26,7 @@ void FrameFilter::run(Frame *frame)
 }
 
 // subclass like this:
-DummyFrameFilter::DummyFrameFilter(const char *name,  ReadMp4 *conn, bool verbose, FrameFilter *next) : conn(conn), FrameFilter(name, next), verbose(verbose)
+DummyFrameFilter::DummyFrameFilter(const char *name,  ReadMp4 *conn, int  fpsType, FrameFilter *next) : conn(conn), FrameFilter(name, next), fpsType(fpsType)
 {
     #if DUMPFMP4 
     // std::cout << ">>>>>>" << verbose << std::endl;
@@ -68,12 +68,15 @@ void DummyFrameFilter::go(Frame *frame) {
        // *meta = *meta_;
        
         #if DUMPFMP4 
-        int ret = fwrite(muxframe->payload.data(), meta->size, 1, fp_out);
+        int ret = fwrite(muxframe->payload.data()+1, meta->size, 1, fp_out);
         tolalMp4Size +=ret;
         #endif
         
+        unsigned char *tmp= muxframe->payload.data();
+        tmp[0]=fpsType;
+        
         if(conn)
-         conn->broadcast((const char*)muxframe->payload.data(), meta->size, true , muxframe->frametype );
+         conn->broadcast((const char*)muxframe->payload.data(), muxframe->payload.size(), true , muxframe->frametype );
         
         STrace << " Mp4 Wrote: "<<   meta->size << " Toltal Mp4 Size: " << tolalMp4Size ;
 
