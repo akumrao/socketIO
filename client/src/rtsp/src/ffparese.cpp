@@ -57,22 +57,22 @@ namespace base {
             //          
                        // video only
 
-            //video->start();
-            // return;
+            video->start();
+             return;
 
             //#define LIVE 1  // for different framerate
             // video and audio  with two separate threads
-            video->audio = audio;
-            audio->video = video;
+//            video->audio = audio;
+//            audio->video = video;
+//
+//            video->start();
+//            audio->start();
 
-            video->start();
-            audio->start();
-
-            return;
+//            return;
 
             // video and audio  without thread
-//             both->start();
-//             return;
+             both->start();
+             return;
             //
 
 
@@ -671,7 +671,7 @@ namespace base {
                             
                             int actualfps  = 1000000 / timescale;
                             obj.fps = actualfps;
-                            if (fps != obj.fps ||   fps != actualfps  ||  width != obj.width || height != obj.height)
+                            if (fps != obj.fps ||   width != obj.width || height != obj.height)
                             {
                                 
                                 
