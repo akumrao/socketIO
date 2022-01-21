@@ -121,11 +121,7 @@ var hiddenInput = undefined;
 
                 }
                   
-                // age() 
-                // {
-                //     let date = new Date();
-                //     return date.getFullYear() - this.year;
-                // }
+              
 
 
                 putPacket(memview) { 
@@ -1126,26 +1122,11 @@ function setupWebRtcPlayer(htmlElement, config) {
      videoObj.autoplay = true;
      videoObj.muted = true;
      //videoObj.controls = true;
-
-
             
 
 
     htmlElement.appendChild(videoObj);
     htmlElement.appendChild(freezeFrameOverlay);
-
-
-
-    
-     //videoObj.controls = true;
-
-     
-            
-
-
-   // htmlElement.appendChild(audioObj);
-
-
 
 
     // webRtcPlayerObj.onWebRtcrequestOffer = function (offer) {
