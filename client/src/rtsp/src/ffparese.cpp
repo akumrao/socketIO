@@ -49,14 +49,16 @@ namespace base {
                           
             fragmp4_muxer->deActivate();
             //
-            //// Audio only  
-//            audio->parseAACHeader(0);
-//            audio->start();
-//                        
-//            return;
+            //// Audio only   Test case 1
+            /*
+            audio->parseAACHeader(0);
+            audio->start();
+                        
+            return;
+            */
             //          
-                       // video only
-             if(fpsType == 1)
+            // video only Test case 2
+             /*if (fpsType == 1)
              video->start();
             
              if(fpsType == 2)
@@ -64,9 +66,9 @@ namespace base {
                  audio->parseAACHeader(0);
                 audio->start();
              }
-            
+             
              return;
-
+             */
             //#define LIVE 1  // for different framerate
             // video and audio  with two separate threads
 //            video->audio = audio;
@@ -81,11 +83,6 @@ namespace base {
              both->start();
              return;
             //
-
-
-
-            return;
-
 
         }
     
@@ -172,8 +169,8 @@ namespace base {
                 SError << "can't open file! " << videofile;
             }
             
-           videotimebase.num = 1;
-           videotimebase.den = 25;   /// 1000000/25 = 40000
+            videotimebase.num = 1;
+            videotimebase.den = 25;   /// 1000000/25 = 40000
 
             basicvideoframe.media_type = AVMEDIA_TYPE_VIDEO;
             basicvideoframe.codec_id = AV_CODEC_ID_H264;
@@ -315,10 +312,12 @@ namespace base {
 
             
             uint64_t adelay = (uint64_t)(1000000*AUDIOSAMPLE)/(uint64_t)SAMPLINGRATE; 
+
+            uint64_t start = CurrentTime_microseconds();
             
             while(!stopped())
             {   
-                uint64_t currentTime = CurrentTime_microseconds();
+               
 
                if (fread(frame_audobuf, 1, audiosize, fileAudio) <= 0){
                     printf("Failed to read raw data! \n");
@@ -348,7 +347,7 @@ namespace base {
                 //i++;
 
                 //if (c->oformat->flags & AVFMT_GLOBALHEADER)
-	       //c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+	            //c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
 
 
                 ret = avcodec_encode_audio2(audioContext, &audiopkt, frame, &got_output);
@@ -384,14 +383,22 @@ namespace base {
                        ++aframecount;
                        fragmp4_muxer->run(&basicaudioframe);
                        
-                        basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
+                      // basicaudioframe.payload.resize(basicaudioframe.payload.capacity());
                  
-                       av_packet_unref(&audiopkt);
+                      av_packet_unref(&audiopkt);
                        
                      //  SInfo << "Audio Frame " << aframecount;
-                       uint64_t deltamicro = CurrentTime_microseconds() - currentTime;
-                       std::this_thread::sleep_for(std::chrono::microseconds(adelay - deltamicro));
-                    
+                       uint64_t deltamicro = CurrentTime_microseconds() - start;
+                     //  std::this_thread::sleep_for(std::chrono::microseconds(adelay - deltamicro));
+                      // std::this_thread::sleep_for(std::chrono::microseconds(14000 - deltamicro));
+
+                       while (deltamicro < aframecount * adelay)
+                       {
+                           std::this_thread::sleep_for(std::chrono::microseconds(10000));
+                           deltamicro = CurrentTime_microseconds() - start;
+                       }
+
+                      // Sleep_micro(adelay - deltamicro);     // 1000 000
                     }
 
                     
@@ -584,11 +591,13 @@ namespace base {
             int cur_videosize=0;
 
             int gop = 0;
-            uint64_t delay = 1000000/15; // default
+            uint64_t vdelay = 1000000/15; // default
             
             timescale = 1000000/15;
             
             videotimebase.den = 15;
+
+            uint64_t start = CurrentTime_microseconds();
                     
             while (!stopped()) 
             {
@@ -619,7 +628,7 @@ namespace base {
             
                 
                 
-                uint64_t currentTime =  CurrentTime_microseconds();
+               
                 if (cur_videosize > 0) 
                 {
 
@@ -710,7 +719,7 @@ namespace base {
                                     fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                                     basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                                     
-                                    delay= 1000000/fps ;
+                                    vdelay= 1000000/fps ;
                                     
                             }
                            
@@ -776,10 +785,18 @@ namespace base {
                         fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                         basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                         vframecount++;
+
+                        uint64_t deltamicro = CurrentTime_microseconds() - start;
+                        while (deltamicro < vframecount * vdelay)
+                        {
+                            std::this_thread::sleep_for(std::chrono::microseconds(20000));
+                            deltamicro = CurrentTime_microseconds() - start;
+                        }
+
                        // mut_sync.unlock();  
                         
-                        uint64_t deltamicro =CurrentTime_microseconds() - currentTime;
-                        std::this_thread::sleep_for(std::chrono::microseconds(delay- deltamicro));
+                      // 
+                       // std::this_thread::sleep_for(std::chrono::microseconds(delay- deltamicro));
                      
                        //Sleep(67);
 
@@ -848,11 +865,12 @@ namespace base {
             int cur_videosize=0;
 
             int gop = 0;
-            uint64_t delay = 1000000/25; // default
-                    
+            uint64_t vdelay = 1000000/25; // default
+           
+            uint64_t start = CurrentTime_microseconds();
             while (!stopped()) 
             {
-                uint64_t currentTime =  CurrentTime_microseconds();
+               
                 if (cur_videosize > 0) 
                 {
 
@@ -940,7 +958,7 @@ namespace base {
                                     fragmp4_muxer->run(&basicvideoframe); // starts the frame filter chain
                                     basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                                     
-                                    delay= 1000000/fps ;
+                                    vdelay= 1000000/fps ;
                                     
                             }
                            
@@ -1007,9 +1025,17 @@ namespace base {
                         basicvideoframe.payload.resize(basicvideoframe.payload.capacity());
                         vframecount++;
                        // mut_sync.unlock();  
+
+
+                        uint64_t deltamicro = CurrentTime_microseconds() - start;
+                        while (deltamicro < vframecount * vdelay)
+                        {
+                            std::this_thread::sleep_for(std::chrono::microseconds(20000));
+                            deltamicro = CurrentTime_microseconds() - start;
+                        }
                         
-                        uint64_t deltamicro =CurrentTime_microseconds() - currentTime;
-                        std::this_thread::sleep_for(std::chrono::microseconds(delay- deltamicro));
+                       // uint64_t deltamicro =CurrentTime_microseconds() - currentTime;
+                       // std::this_thread::sleep_for(std::chrono::microseconds(delay- deltamicro));
                      
                        //Sleep(67);
 
@@ -1018,8 +1044,7 @@ namespace base {
                 else
                 {
                     reopen();
-                    
-                    vframecount = 0;
+          
                     if(audio)
                     {
                       audio->aframecount = 0;
@@ -1035,6 +1060,11 @@ namespace base {
                     if (cur_videosize == 0)
                         break;
                     cur_videoptr = in_videobuffer;
+
+
+                    start = CurrentTime_microseconds();
+                    vframecount = 0;
+
                     
                     continue;
                     
@@ -1143,10 +1173,10 @@ namespace base {
           
           uint64_t adelay = (uint64_t)(1000000*AUDIOSAMPLE)/(uint64_t)SAMPLINGRATE; 
            
-          uint64_t vtime =0;
+         // uint64_t vtime =0;
           
-          uint64_t atime = 0;
-          
+          //uint64_t atime = 0;
+          uint64_t start = CurrentTime_microseconds();
           
            while (!VideoParse::stopped() )
            {
@@ -1286,15 +1316,15 @@ namespace base {
                             }
 
     #endif
-                            if(vtime > 0)
-                            {
-                               uint64_t vdelta =  CurrentTime_microseconds() -vtime;
-                             
-                               if( vdelay > vdelta )
-                               std::this_thread::sleep_for(std::chrono::microseconds(vdelay - vdelta));
+                          
+                               uint64_t vdelta =  CurrentTime_microseconds() -start;
+                               while (vdelta < vdelay * vframecount)
+                               {
+                                   std::this_thread::sleep_for(std::chrono::microseconds(10000));
+                                   vdelta = CurrentTime_microseconds() - start;
+                               }
                                
-                            }
-                            vtime =  CurrentTime_microseconds();
+                         
 
 
                             //info->run(&basicvideoframe);
@@ -1308,8 +1338,7 @@ namespace base {
                    }
                    else 
                    {
-                       vframecount = 0;
-                       aframecount = 0;
+                    
                        reopen();
                        if (fseek(fileVideo, 0, SEEK_SET))
                        return;
@@ -1321,6 +1350,10 @@ namespace base {
                        if (cur_videosize == 0)
                            break;
                        cur_videoptr = in_videobuffer;
+
+                       vframecount = 0;
+                       aframecount = 0;
+                       start = CurrentTime_microseconds() ;
                        continue;
                    }
                }
@@ -1375,15 +1408,13 @@ namespace base {
 //                              resetParser =false;
 //                     }
                        
-                       if(atime > 0)
+                       
+                       uint64_t adelta = CurrentTime_microseconds() - start;
+                       while (adelta < adelay * aframecount)
                        {
-                           uint64_t adelta =  CurrentTime_microseconds() - atime;
-
-                           if( adelay > adelta )
-                           std::this_thread::sleep_for(std::chrono::microseconds(adelay - adelta));
-
+                           std::this_thread::sleep_for(std::chrono::microseconds(10000));
+                           adelta = CurrentTime_microseconds() - start;
                        }
-                       atime =  CurrentTime_microseconds();
 
                             
                        ++aframecount;

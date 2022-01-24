@@ -94,8 +94,8 @@ namespace base {
 
             self = this;
 
-	       //parser1 = new stParser( this, AUDIOFILE, VIDEOFILE, 1);
-           parser2 = new stParser( this, AUDIOFILE, VIDEOFILE , 2);
+	       parser1 = new stParser( this, AUDIOFILE, VIDEOFILE, 1);
+           //parser2 = new stParser( this, AUDIOFILE, VIDEOFILE , 2);
             
 
         }
