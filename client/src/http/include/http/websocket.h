@@ -288,11 +288,12 @@ namespace base {
             };
             std::queue< Store> dummy_queue;
             
-           
+            bool dropping{false};
             int first_frame{1};
-        public:
             int qsize{ 0 };
-            int fps_type{1};  // fast 0 , medium 1 , low  2
+            
+        public:
+            std::string key;
         };
 
 

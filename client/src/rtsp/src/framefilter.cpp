@@ -30,7 +30,7 @@ DummyFrameFilter::DummyFrameFilter(const char *name,  ReadMp4 *conn, int  fpsTyp
 {
     #if DUMPFMP4 
     // std::cout << ">>>>>>" << verbose << std::endl;
-    const char *input_file = "/tmp/test.mp4"; 
+    const char *input_file = "./test.mp4"; 
     if ((fp_out = fopen(input_file, "wb")) == NULL) {
         fprintf(stderr, "fopen %s failed.\n", input_file);
         // goto ret7;

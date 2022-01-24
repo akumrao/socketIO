@@ -87,8 +87,8 @@ class FFParse;
      };
      
      
-     stParser *parser1;
-     stParser *parser2;
+     stParser* parser1{nullptr};
+     stParser *parser2{nullptr};
     // stParser *parser2;
 
     // std::string fileName;
@@ -96,9 +96,9 @@ class FFParse;
  public:
      //// 1 ftype, 2 moov , 3 first moof( idr frame), 4 P or B frames cane be dropped 
      void broadcast(const char * data, int size, bool binary,  int frametype   );
-     void on_read(net::Listener* connection, const char* msg, size_t len) ;
+     void on_wsread(net::Listener* connection, const char* msg, size_t len) ;
      
-     void on_close(net::Listener* connection);
+     void on_wsclose(net::Listener* connection);
      
      
 //    virtual void onConnect(    int socketID                        );

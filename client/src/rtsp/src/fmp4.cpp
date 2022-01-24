@@ -94,7 +94,7 @@ namespace base {
 
             self = this;
 
-	   parser1 = new stParser( this, AUDIOFILE, VIDEOFILE, 1);
+	       //parser1 = new stParser( this, AUDIOFILE, VIDEOFILE, 1);
            parser2 = new stParser( this, AUDIOFILE, VIDEOFILE , 2);
             
 
@@ -102,13 +102,16 @@ namespace base {
 
         ReadMp4::~ReadMp4() {
             SInfo << "~ReadMp4( )";
+
+            if (parser1)
             delete parser1;
+
             if(parser2)
             delete parser2;
         }
         
         
-         void ReadMp4::on_close(net::Listener* connection)
+         void ReadMp4::on_wsclose(net::Listener* connection)
          {
              
             /* net::HttpsConnection* cn = (net::HttpsConnection*)connection;
@@ -126,7 +129,7 @@ namespace base {
          }
 
 
-        void ReadMp4::on_read(net::Listener* connection, const char* msg, size_t len) {
+        void ReadMp4::on_wsread(net::Listener* connection, const char* msg, size_t len) {
 
             //connection->send("arvind", 6 );
    
@@ -138,7 +141,9 @@ namespace base {
 
               if( got == "reset")
               {
+                if(parser1)
                 parser1->ffparser->reset();  
+
                 if(parser2)
                 parser2->ffparser->reset();  
               }
