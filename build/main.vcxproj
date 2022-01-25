@@ -91,7 +91,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\client\src\rtsp\ffmpeg;..\client\src\base\include;..\client\src\http_parser;..\client\src\json\include;..\client\src\net\include;..\client\src\http\include;..\client\src\libuv\include;..\client\src\libuv\src;..\client\src\signal\include;..\client\src\rtsp\include;..\client\src\rtsp;..\client\src\zlib;..\client\src\rtsp\openssl\include;..\client\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\client\src\rtsp\ffmpeg;..\client\src\base\include;..\client\src\http_parser;..\client\src\json\include;..\client\src\net\include;..\client\src\http\include;..\client\src\libuv\include;..\client\src\libuv\src;..\client\src\signal\include;..\client\src\rtsp\include;..\client\src\rtsp;..\client/src\rtsp\ffmpeg\compat\zlib;..\client\src\rtsp\openssl\include;..\client\src;..\client/src\rtsp\ffmpeg\compat\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
