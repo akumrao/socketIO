@@ -7,12 +7,12 @@ FFMPEG_ROOT = /workspace/ffmpeg
 CC	= gcc
 CXX     = g++
 TARGET=mediaserver # define the name of the executable
-SOURCES    = $(wildcard *.cpp ../src/*.cpp ../ffmpeg/*.cpp ../../libuv/src/*.cpp ../../libuv/src/unix/*.cpp ../../base/src/*.cpp ../../json/src/*.cpp ../../crypto/src/*.cpp ../../net/src/*.cpp ../../http/src/*.cpp  ../../http_parser/*.cpp )
+SOURCES    = $(wildcard *.cpp ../src/*.cpp ../../ffmpeg/ffmpeg_cpp/*.cpp ../../libuv/src/*.cpp ../../libuv/src/unix/*.cpp ../../base/src/*.cpp ../../json/src/*.cpp ../../crypto/src/*.cpp ../../net/src/*.cpp ../../http/src/*.cpp  ../../http_parser/*.cpp )
 
 CXXFLAGS   := -g -std=c++14 -Wno-inconsistent-missing-override -Wno-uninitialized -Wno-attributes -Wno-fpermissive -Wno-deprecated-declarations
  
 
-CPPFLAGS   := -I../../rtsp/include/ -I../ffmpeg/ -I../ffmpeg/compat/atomics/gcc/ -I../../json/include/ -I../../crypto/include/ -I../../http/include/ -I../../base/include/ -I../../net/include/ -I../../net/uv_multiplex/include/ -I../../libuv/include -I../../libuv/src -I../../../build/ -I../../http_parser/  -I../../rtsp/ \
+CPPFLAGS   := -I../../rtsp/include/ -I../../ffmpeg/ffmpeg_cpp/ -I../../ffmpeg/ffmpeg_cpp/compat/atomics/gcc/ -I../../json/include/ -I../../crypto/include/ -I../../http/include/ -I../../base/include/ -I../../net/include/ -I../../net/uv_multiplex/include/ -I../../libuv/include -I../../libuv/src -I../../../build/ -I../../http_parser/  -I../../rtsp/ \
               -DHTTPSSL
 #LDFLAGS   := -L/export/views/video/ffmpeg/Obj/
 
