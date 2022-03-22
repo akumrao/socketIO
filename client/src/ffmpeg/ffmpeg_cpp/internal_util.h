@@ -102,7 +102,7 @@
 
 #define LOCAL_ALIGNED_A(a, t, v, s, o, ...)             \
     uint8_t la_##v[sizeof(t s o) + (a)];                \
-    t (*v) o = (void *)FFALIGN((uintptr_t)la_##v, a)
+    t (*v) o = (t (*) o )FFALIGN((uintptr_t)la_##v, a)
 
 #define LOCAL_ALIGNED_D(a, t, v, s, o, ...)             \
     DECLARE_ALIGNED(a, t, la_##v) s o;                  \
@@ -130,7 +130,7 @@
 
 #define FF_ALLOC_OR_GOTO(ctx, p, size, label)\
 {\
-    p = av_malloc(size);\
+    p = (__typeof__(p))av_malloc(size);\
     if (!(p) && (size) != 0) {\
         av_log(ctx, AV_LOG_ERROR, "Cannot allocate memory.\n");\
         goto label;\
@@ -139,7 +139,7 @@
 
 #define FF_ALLOCZ_OR_GOTO(ctx, p, size, label)\
 {\
-    p = av_mallocz(size);\
+    p = (__typeof__(p))av_mallocz(size);\
     if (!(p) && (size) != 0) {\
         av_log(ctx, AV_LOG_ERROR, "Cannot allocate memory.\n");\
         goto label;\
@@ -148,7 +148,7 @@
 
 #define FF_ALLOC_ARRAY_OR_GOTO(ctx, p, nelem, elsize, label)\
 {\
-    p = av_malloc_array(nelem, elsize);\
+    p = (__typeof__(p))av_malloc_array(nelem, elsize);\
     if (!p) {\
         av_log(ctx, AV_LOG_ERROR, "Cannot allocate memory.\n");\
         goto label;\
@@ -157,14 +157,14 @@
 
 #define FF_ALLOCZ_ARRAY_OR_GOTO(ctx, p, nelem, elsize, label)\
 {\
-    p = (uint8_t *)av_mallocz_array(nelem, elsize);\
+    p = (__typeof__(p))av_mallocz_array(nelem, elsize);\
     if (!p) {\
         av_log(ctx, AV_LOG_ERROR, "Cannot allocate memory.\n");\
         goto label;\
     }\
 }
 
-//#include "libm.h"
+#include "libm.h"
 
 /**
  * Return NULL if CONFIG_SMALL is true, otherwise the argument

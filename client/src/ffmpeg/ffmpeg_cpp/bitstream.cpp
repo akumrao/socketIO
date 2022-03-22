@@ -28,7 +28,6 @@
  * bitstream api.
  */
 
-
 #include "avassert.h"
 #include "qsort.h"
 #include "avcodec.h"

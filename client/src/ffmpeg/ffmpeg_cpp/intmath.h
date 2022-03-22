@@ -50,7 +50,7 @@
 
 
 //#define av_log2       ff_log2
-#define av_log2_16bit ff_log2_16bit
+//#define av_log2_16bit ff_log2_16bit
 
 
 

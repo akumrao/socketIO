@@ -34,7 +34,7 @@
 #include "avassert.h"
 #include "avcodec.h"
 #include "mathops.h"
-//#include "vlc.h"
+#include "vlc.h"
 
 /*
  * Safe bitstream reading:
@@ -553,20 +553,20 @@ static inline const uint8_t *align_get_bits(GetBitContext *s)
  *                  = (max_vlc_length + bits - 1) / bits
  * @returns the code parsed or -1 if no vlc matches
  */
-//static av_always_inline int get_vlc2(GetBitContext *s, VLC_TYPE (*table)[2],
-//                                     int bits, int max_depth)
-//{
-//    int code;
-//
-//    OPEN_READER(re, s);
-//    UPDATE_CACHE(re, s);
-//
-//    GET_VLC(code, re, s, table, bits, max_depth);
-//
-//    CLOSE_READER(re, s);
-//
-//    return code;
-//}
+static av_always_inline int get_vlc2(GetBitContext *s, VLC_TYPE (*table)[2],
+                                    int bits, int max_depth)
+{
+   int code;
+
+   OPEN_READER(re, s);
+   UPDATE_CACHE(re, s);
+
+   GET_VLC(code, re, s, table, bits, max_depth);
+
+   CLOSE_READER(re, s);
+
+   return code;
+}
 
 static inline int decode012(GetBitContext *gb)
 {

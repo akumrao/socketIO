@@ -58,8 +58,7 @@ void av_fft_permute(FFTContext *s, FFTComplex *z);
  */
 void av_fft_calc(FFTContext *s, FFTComplex *z);
 
-// Sanjay  removed it 
-//void av_fft_end(FFTContext *s);
+void av_fft_end(FFTContext *s);
 
 FFTContext *av_mdct_init(int nbits, int inverse, double scale);
 void av_imdct_calc(FFTContext *s, FFTSample *output, const FFTSample *input);
