@@ -1,25 +1,27 @@
-################################################################################
-### CUSTOMIZE BELOW HERE #######################################################
+
+FFMPEG_ROOT = /workspace/ffmpeg/
 
 CC	= gcc
-CXX     = g++
-FFMPEG_ROOT = /workspace/ffmpeg
+CXX  = g++
+TARGET=h264Encoder_sample # define the name of the executable
+SOURCES    = $(wildcard *.cpp  ../ffmpeg_cpp/*.cpp  ../ffmpeg_cpp/decoder/*.cpp   ../ffmpeg_cpp/decoder/x86/*.cpp  )
+
+CXXFLAGS   := -g -std=c++14  -Wno-reserved-user-defined-literal -Wno-inconsistent-missing-override -Wno-uninitialized -Wno-attributes -Wno-fpermissive -Wno-deprecated-declarations -fPIC 
+ 
+
+CPPFLAGS   := -I./h264Decoder/ -I../ffmpeg_cpp/ -I../ffmpeg_cpp/compat/atomics/gcc/ -I../ffmpeg_cpp/decoder/ -I../ffmpeg_cpp/decoder/x86/
+#LDFLAGS   := -L/export/views/video/ffmpeg/Obj/
+
+#/export/views/video/ffmpeg/libavutil/libavutil.a /export/views/video/ffmpeg/libavcodec/libavcodec.a
+LDLIBS    := -lpthread -lm -ldl  -lssl -lcrypto -lz -lfdk-aac -no-pie
 
 
-TARGET=runH264Encoder # define the name of the executable
-SOURCES=$(wildcard *.cpp  ../h24Decoder/H*.cpp  )
-
-CXXFLAGS   := -g -std=c++14 -Wno-inconsistent-missing-override -Wno-uninitialized
-
-CPPFLAGS   := -I../h24Decoder/ -I../../json/include/ -I../../ffmpeg/include -I../../signal/include -I../../base/include/ -I../../net/include/ -I../../libuv/include -I../../libuv/src -I../../../build/ -I../../http_parser/ 
-              
-LDFLAGS   := -L/usr/lib/x86_64-linux-gnu
-
-LDLIBS    := -lpthread -lm -ldl -lz -lssl -lcrypto -lfdk-aac
-
-SLIBS     := ${FFMPEG_ROOT}/libavformat/libavformat.a ${FFMPEG_ROOT}/libavcodec/libavcodec.a ${FFMPEG_ROOT}/libavutil/libavutil.a ${FFMPEG_ROOT}/libswresample/libswresample.a  /usr/local/lib/libx264.a
+#SLIBS     := $(OUT_FILE_NAME)
+SLIBS     := $(OUT_FILE_NAME)  /usr/local/lib/libx264.a
 
 
+
+#SLIBS     := /data/mozilla/webrtc-builds/out/webrtc-22215-d8831bb-linux-x64/lib/x64/Debug/libwebrtc_full.a
 
 
 ################################################################################
