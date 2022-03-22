@@ -7,17 +7,17 @@ FFMPEG_ROOT = /workspace/ffmpeg
 CC	= gcc
 CXX     = g++
 TARGET=mediaserver # define the name of the executable
-SOURCES    = $(wildcard *.cpp ../src/*.cpp ../../ffmpeg/ffmpeg_cpp/*.cpp ../../libuv/src/*.cpp ../../libuv/src/unix/*.cpp ../../base/src/*.cpp ../../json/src/*.cpp ../../crypto/src/*.cpp ../../net/src/*.cpp ../../http/src/*.cpp  ../../http_parser/*.cpp )
+SOURCES    = $(wildcard *.cpp ../src/*.cpp ../../ffmpeg/ffmpeg_cpp/*.cpp ../../ffmpeg/ffmpeg_cpp/decoder/*.cpp  ../../ffmpeg/ffmpeg_cpp/decoder/x86/*.cpp   ../../libuv/src/*.cpp ../../libuv/src/unix/*.cpp ../../base/src/*.cpp ../../json/src/*.cpp ../../crypto/src/*.cpp ../../net/src/*.cpp ../../http/src/*.cpp  ../../http_parser/*.cpp )
 
-CXXFLAGS   := -g -std=c++14 -Wno-inconsistent-missing-override -Wno-uninitialized -Wno-attributes -Wno-fpermissive -Wno-deprecated-declarations
+CXXFLAGS   := -g -std=c++14  -Wno-reserved-user-defined-literal -Wno-inconsistent-missing-override -Wno-uninitialized -Wno-attributes -Wno-fpermissive -Wno-deprecated-declarations -fPIC
  
 
-CPPFLAGS   := -I../../rtsp/include/ -I../../ffmpeg/ffmpeg_cpp/ -I../../ffmpeg/ffmpeg_cpp/compat/atomics/gcc/ -I../../ffmpeg/ffmpeg_cpp/decoder -I../../json/include/ -I../../crypto/include/ -I../../http/include/ -I../../base/include/ -I../../net/include/ -I../../net/uv_multiplex/include/ -I../../libuv/include -I../../libuv/src -I../../../build/ -I../../http_parser/  -I../../rtsp/ \
+CPPFLAGS   := -I../../rtsp/include/ -I../../ffmpeg/ffmpeg_cpp/ -I../../ffmpeg/ffmpeg_cpp/compat/atomics/gcc/ -I../../ffmpeg/ffmpeg_cpp/decoder -I../../ffmpeg/ffmpeg_cpp/decoder/x86/ -I../../json/include/ -I../../crypto/include/ -I../../http/include/ -I../../base/include/ -I../../net/include/ -I../../net/uv_multiplex/include/ -I../../libuv/include -I../../libuv/src -I../../../build/ -I../../http_parser/  -I../../rtsp/ \
               -DHTTPSSL
 #LDFLAGS   := -L/export/views/video/ffmpeg/Obj/
 
 #/export/views/video/ffmpeg/libavutil/libavutil.a /export/views/video/ffmpeg/libavcodec/libavcodec.a
-LDLIBS    := -lpthread -lm -ldl  -lssl -lcrypto -lz -lfdk-aac  
+LDLIBS    := -lpthread -lm -ldl  -lssl -lcrypto -lz -lfdk-aac  -no-pie
 
 #SLIBS     := $(OUT_FILE_NAME) 
 

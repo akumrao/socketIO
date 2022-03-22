@@ -200,7 +200,7 @@ static void register_all(void)
     // REGISTER_ENCDEC (H263,              h263);
     // REGISTER_DECODER(H263I,             h263i);
     // REGISTER_ENCDEC (H263P,             h263p);
-    // REGISTER_DECODER(H264,              h264);
+    REGISTER_DECODER(H264,              h264);
     // REGISTER_DECODER(H264_CRYSTALHD,    h264_crystalhd);
     // REGISTER_DECODER(H264_MEDIACODEC,   h264_mediacodec);
     // REGISTER_DECODER(H264_MMAL,         h264_mmal);
@@ -696,7 +696,7 @@ static void register_all(void)
     // REGISTER_PARSER(GSM,                gsm);
     // REGISTER_PARSER(H261,               h261);
     // REGISTER_PARSER(H263,               h263);
-    // REGISTER_PARSER(H264,               h264);
+       REGISTER_PARSER(H264,               h264);
     // REGISTER_PARSER(HEVC,               hevc);
     // REGISTER_PARSER(MJPEG,              mjpeg);
     // REGISTER_PARSER(MLP,                mlp);

@@ -31,6 +31,7 @@
 
 #include "intreadwrite.h"
 #include "avassert.h"
+#include "log.h"
 
 typedef struct PutBitContext {
     uint32_t bit_buf;
