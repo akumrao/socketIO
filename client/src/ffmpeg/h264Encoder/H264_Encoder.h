@@ -33,13 +33,13 @@
 #include <tinylib.h>
 #endif
 
-// extern "C" {
+extern "C" {
 #include <libavcodec/avcodec.h>
 
 #include <libavutil/opt.h>
 #include <libavutil/imgutils.h>
 
-// }
+}
 
 typedef void(*h264_encoder_callback)(AVFrame* frame, AVPacket* pkt, void* user);         /* the decoder callback, which will be called when we have decoded a frame */
 

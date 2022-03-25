@@ -1,17 +1,17 @@
-// #include "base/define.h"
-// #include "base/test.h"
-// #include "base/filesystem.h"
-// #include "base/application.h"
-// #include "base/packetstream.h"
-// #include "base/packet.h"
-// #include "base/packetqueue.h"
-// #include "base/platform.h"
+//#include "base/define.h"
+//#include "base/test.h"
+//#include "base/filesystem.h"
+//#include "base/application.h"
+//#include "base/packetstream.h"
+//#include "base/packet.h"
+//#include "base/packetqueue.h"
+//#include "base/platform.h"
 
 #include "H264_Encoder.h"
 
 
-// using namespace std;
-// using namespace base;
+using namespace std;
+//using namespace base;
 
 
 #include <stdio.h>
@@ -35,7 +35,31 @@ int main(int argc, char **argv)
 {
    
 
-  
+    //H264_Decoder decoder(frame_callback, NULL);
+
+   // YUV420P_Player player;
+
+    //player_ptr = &player;
+//        decoder_ptr = &decoder;
+
+//    if(!decoder.load( "/var/tmp/test1.264", 30.0f)) {
+//      ::exit(EXIT_FAILURE);
+//    }
+
+    
+//     if(!decoder.load( "/workspace/live/mediaServer/test4.264", 30.0f)) {
+//      ::exit(EXIT_FAILURE);
+//    }
+//
+//    
+//    
+//
+//
+//    while(1)
+//    {
+//      decoder.readFrame();
+//    }
+//   
     
     
      encoder.load( std::string("/tmp/test2.264") , 25,  800, 600);
