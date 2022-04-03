@@ -80,8 +80,8 @@ void frame_callback(AVFrame* frame, AVPacket* pkt, void* user) {
     playback_initialized = true;
   }
 
-  
-    encoder.encodeFrame(frame->data[0], frame->linesize[0] , frame->data[1], frame->linesize[1], frame->data[2], frame->linesize[2] );
+   // very old TODONE
+    //encoder.encodeFrame(frame->data[0], frame->linesize[0] , frame->data[1], frame->linesize[1], frame->data[2], frame->linesize[2] );
     
 //  if(player_ptr) {
 //    player_ptr->setYPixels(frame->data[0], frame->linesize[0]);
