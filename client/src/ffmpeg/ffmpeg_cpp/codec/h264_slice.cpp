@@ -2557,8 +2557,10 @@ static int decode_slice(struct AVCodecContext *avctx, void *arg)
             ret = ff_h264_decode_mb_cabac(h, sl);
             // STOP_TIMER("decode_mb_cabac")
 
+	    #ifndef MOTION_VECTOR  
             if (ret >= 0)
                 ff_h264_hl_decode_mb(h, sl);
+        #endif
 
             // FIXME optimal? or let mb_decode decode 16x32 ?
             if (ret >= 0 && FRAME_MBAFF(h)) {
@@ -2628,8 +2630,10 @@ static int decode_slice(struct AVCodecContext *avctx, void *arg)
 
             ret = ff_h264_decode_mb_cavlc(h, sl);
 
+#ifndef MOTION_VECTOR  
             if (ret >= 0)
                 ff_h264_hl_decode_mb(h, sl);
+#endif
 
             // FIXME optimal? or let mb_decode decode 16x32 ?
             if (ret >= 0 && FRAME_MBAFF(h)) {

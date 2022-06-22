@@ -58,7 +58,7 @@
         "cmova  %%ecx       , " range"                      \n\t"\
         "sbb    %%rcx       , %%rcx                        \n\t"\
         "and    %%ecx       , " tmp"                        \n\t"\
-        "xor    %%rcx       , "retq"                       \n\t"\
+        "xor    %%rcx       , " retq"                       \n\t"\
         "sub    " tmp"       , " low"                        \n\t"
 #else /* HAVE_FAST_CMOV */
 #define BRANCHLESS_GET_CABAC_UPDATE(ret, retq, low, range, tmp) \
@@ -80,14 +80,14 @@
         "mov    " range"     , " tmp"                                     \n\t"\
         "and    $0xC0       , " range"                                   \n\t"\
         "lea    (" ret", " range", 2), %%ecx                              \n\t"\
-        "movzbl "lps_off"("tables", %%rcx), " range"                     \n\t"\
+        "movzbl " lps_off"(" tables", %%rcx), " range"                     \n\t"\
         "sub    " range"     , " tmp"                                     \n\t"\
         "mov    " tmp"       , %%ecx                                     \n\t"\
         "shl    $17         , " tmp"                                     \n\t"\
         BRANCHLESS_GET_CABAC_UPDATE(ret, retq, low, range, tmp)              \
-        "movzbl " norm_off"("tables", "rangeq"), %%ecx                   \n\t"\
+        "movzbl " norm_off"(" tables", " rangeq"), %%ecx                   \n\t"\
         "shl    %%cl        , " range"                                   \n\t"\
-        "movzbl " mlps_off"+128("tables", "retq"), " tmp"                 \n\t"\
+        "movzbl " mlps_off"+128(" tables", " retq"), " tmp"                 \n\t"\
         "shl    %%cl        , " low"                                     \n\t"\
         "mov    " tmpbyte"   , " statep"                                  \n\t"\
         "test   " lowword"   , " lowword"                                 \n\t"\
@@ -102,7 +102,7 @@
         "shr    $15         , %%ecx                                     \n\t"\
         "bswap  " tmp"                                                   \n\t"\
         "shr    $15         , " tmp"                                     \n\t"\
-        "movzbl " norm_off"("tables", %%rcx), %%ecx                      \n\t"\
+        "movzbl " norm_off"(" tables", %%rcx), %%ecx                      \n\t"\
         "sub    $0xFFFF     , " tmp"                                     \n\t"\
         "neg    %%ecx                                                   \n\t"\
         "add    $7          , %%ecx                                     \n\t"\

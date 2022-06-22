@@ -60,15 +60,27 @@ int main(int argc, char **argv)
 //   
     
 #ifdef __linux__ 
-    encoder.load( std::string("/tmp/test2.264") , 25,  800, 600);
+    
+    std::string fileName("/tmp/test2.264");
+    if (argc > 1) {
+      fileName = argv[1];
+    }
+
+    encoder.load(fileName, 25, 800, 600);
 #elif _WIN32
-   encoder.load( std::string("e:/test2.264") , 25,  800, 600);
+    std::string fileName("e:/test2.264");
+    if (argc > 1) {
+      fileName = argv[1];
+    }
+    encoder.load(fileName, 25, 800, 600);
 #else
      encoder.load( std::string("/tmp/test2.264") , 25,  800, 600);
 #endif
      
-     for(int x=0; x < 100 ;++x )
-     encoder.encodeFrame();
+     for (int x = 0; x < 100000; ++x) {
+      encoder.encodeFrame();
+       _sleep(1);
+    }
      
 }
     

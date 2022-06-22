@@ -174,55 +174,55 @@ void av_frame_free(AVFrame **frame)
 static int get_video_buffer(AVFrame *frame, int align)
 {
     
-    exit(0);
+    //exit(0);
     
-//    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(frame->format);
-//    int ret, i;
-//
-//    if (!desc)
-//        return AVERROR(EINVAL);
-//
-//    if ((ret = av_image_check_size(frame->width, frame->height, 0, NULL)) < 0)
-//        return ret;
-//
-//    if (!frame->linesize[0]) {
-//        for(i=1; i<=align; i+=i) {
-//            ret = av_image_fill_linesizes(frame->linesize, frame->format,
-//                                          FFALIGN(frame->width, i));
-//            if (ret < 0)
-//                return ret;
-//            if (!(frame->linesize[0] & (align-1)))
-//                break;
-//        }
-//
-//        for (i = 0; i < 4 && frame->linesize[i]; i++)
-//            frame->linesize[i] = FFALIGN(frame->linesize[i], align);
-//    }
-//
-//    for (i = 0; i < 4 && frame->linesize[i]; i++) {
-//        int h = FFALIGN(frame->height, 32);
-//        if (i == 1 || i == 2)
-//            h = AV_CEIL_RSHIFT(h, desc->log2_chroma_h);
-//
-//        frame->buf[i] = av_buffer_alloc(frame->linesize[i] * h + 16 + 16/*STRIDE_ALIGN*/ - 1);
-//        if (!frame->buf[i])
-//            goto fail;
-//
-//        frame->data[i] = frame->buf[i]->data;
-//    }
-//    if (desc->flags & AV_PIX_FMT_FLAG_PAL || desc->flags & AV_PIX_FMT_FLAG_PSEUDOPAL) {
-//        av_buffer_unref(&frame->buf[1]);
-//        frame->buf[1] = av_buffer_alloc(AVPALETTE_SIZE);
-//        if (!frame->buf[1])
-//            goto fail;
-//        frame->data[1] = frame->buf[1]->data;
-//    }
-//
-//    frame->extended_data = frame->data;
-//
-//    return 0;
-//fail:
-//    av_frame_unref(frame);
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get((AVPixelFormat)frame->format);
+    int ret, i;
+
+    if (!desc)
+        return AVERROR(EINVAL);
+
+    if ((ret = av_image_check_size(frame->width, frame->height, 0, NULL)) < 0)
+        return ret;
+
+    if (!frame->linesize[0]) {
+        for(i=1; i<=align; i+=i) {
+            ret = av_image_fill_linesizes(frame->linesize, (AVPixelFormat)frame->format,
+                                          FFALIGN(frame->width, i));
+            if (ret < 0)
+                return ret;
+            if (!(frame->linesize[0] & (align-1)))
+                break;
+        }
+
+        for (i = 0; i < 4 && frame->linesize[i]; i++)
+            frame->linesize[i] = FFALIGN(frame->linesize[i], align);
+    }
+
+    for (i = 0; i < 4 && frame->linesize[i]; i++) {
+        int h = FFALIGN(frame->height, 32);
+        if (i == 1 || i == 2)
+            h = AV_CEIL_RSHIFT(h, desc->log2_chroma_h);
+
+        frame->buf[i] = av_buffer_alloc(frame->linesize[i] * h + 16 + 16/*STRIDE_ALIGN*/ - 1);
+        if (!frame->buf[i])
+            goto fail;
+
+        frame->data[i] = frame->buf[i]->data;
+    }
+    if (desc->flags & AV_PIX_FMT_FLAG_PAL || desc->flags & AV_PIX_FMT_FLAG_PSEUDOPAL) {
+        av_buffer_unref(&frame->buf[1]);
+        frame->buf[1] = av_buffer_alloc(AVPALETTE_SIZE);
+        if (!frame->buf[1])
+            goto fail;
+        frame->data[1] = frame->buf[1]->data;
+    }
+
+    frame->extended_data = frame->data;
+
+    return 0;
+fail:
+    av_frame_unref(frame);
     return AVERROR(ENOMEM);
 }
 
@@ -691,23 +691,23 @@ AVFrameSideData *av_frame_get_side_data(const AVFrame *frame,
 
 static int frame_copy_video(AVFrame *dst, const AVFrame *src)
 {
-    exit(0);
-//    const uint8_t *src_data[4];
-//    int i, planes;
-//
-//    if (dst->width  < src->width ||
-//        dst->height < src->height)
-//        return AVERROR(EINVAL);
-//
-//    planes = av_pix_fmt_count_planes(dst->format);
-//    for (i = 0; i < planes; i++)
-//        if (!dst->data[i] || !src->data[i])
-//            return AVERROR(EINVAL);
-//
-//    memcpy(src_data, src->data, sizeof(src_data));
-//    av_image_copy(dst->data, dst->linesize,
-//                  src_data, src->linesize,
-//                  dst->format, src->width, src->height);
+   // exit(0);
+    const uint8_t *src_data[4];
+    int i, planes;
+
+    if (dst->width  < src->width ||
+        dst->height < src->height)
+        return AVERROR(EINVAL);
+
+    planes = av_pix_fmt_count_planes((AVPixelFormat)dst->format);
+    for (i = 0; i < planes; i++)
+        if (!dst->data[i] || !src->data[i])
+            return AVERROR(EINVAL);
+
+    memcpy(src_data, src->data, sizeof(src_data));
+    av_image_copy(dst->data, dst->linesize,
+                  src_data, src->linesize,
+                  (AVPixelFormat)dst->format, src->width, src->height);
 
     return 0;
 }

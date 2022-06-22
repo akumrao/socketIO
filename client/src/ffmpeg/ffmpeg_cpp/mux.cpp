@@ -578,10 +578,10 @@ static int compute_muxer_pkt_fields(AVFormatContext *s, AVStream *st, AVPacket *
         !(s->oformat->flags & AVFMT_NOTIMESTAMPS) &&
         (!(st->disposition & AV_DISPOSITION_ATTACHED_PIC) || (st->disposition & AV_DISPOSITION_TIMED_THUMBNAILS)) &&
         (pkt->pts == AV_NOPTS_VALUE || pkt->dts == AV_NOPTS_VALUE)) {
-        av_log(s, AV_LOG_WARNING,
-               "Timestamps are unset in a packet for stream %d. "
-               "This is deprecated and will stop working in the future. "
-               "Fix your code to set the timestamps properly\n", st->index);
+        // av_log(s, AV_LOG_WARNING,
+        //        "Timestamps are unset in a packet for stream %d. "
+        //        "This is deprecated and will stop working in the future. "
+        //        "Fix your code to set the timestamps properly\n", st->index);
         s->internal->missing_ts_warning = 1;
     }
 

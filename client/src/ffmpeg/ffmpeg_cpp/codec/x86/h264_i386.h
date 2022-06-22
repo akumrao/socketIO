@@ -31,8 +31,8 @@
 
 #include <stddef.h>
 
-#include "decoder/cabac.h"
-#include "decoder/x86/cabac.h"
+#include "cabac.h"
+#include "x86/cabac.h"
 
 #if HAVE_INLINE_ASM
 
