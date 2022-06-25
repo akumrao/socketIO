@@ -19,4 +19,18 @@ cd build
 
 on windows
 
-cmake.exe ..  -G  "Visual Studio 16 2019"
+
+## Widnows
+mkdir build 
+
+cd build
+
+cmake -G "Visual Studio 16 2019" -A x64 -T ClangCL ..
+
+
+## Linux
+mkdir build 
+
+cd build
+
+cmake -DCMAKE_BUILD_TYPE=Debug ...

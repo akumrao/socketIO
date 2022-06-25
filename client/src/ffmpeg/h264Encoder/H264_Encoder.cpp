@@ -43,7 +43,7 @@ static int test_device_type(enum AVHWDeviceType type)
 {
     enum AVHWDeviceType check;
     const char *name;
-    int i, j, found, err;
+    int found, err;
 
     name = av_hwdevice_get_type_name(type);
     if (!name) {
@@ -167,9 +167,9 @@ H264_Encoder::H264_Encoder(h264_encoder_callback frameCallback, void* user)
   :codec(NULL)
   ,c(NULL)
   ,fp(NULL)
-  ,sw_frame(nullptr)
   ,cb_frame(frameCallback)
   ,cb_user(user)
+  ,sw_frame(nullptr)
 
 {
    avcodec_register_all();
@@ -212,8 +212,10 @@ H264_Encoder::H264_Encoder(h264_encoder_callback frameCallback, void* user)
      } else if (avcodec_hw_type == AV_HWDEVICE_TYPE_D3D11VA) {
      
          avcodec_hw_pix_fmt = AV_PIX_FMT_D3D11;
-       avcodec_sw_pix_fmt = AV_PIX_FMT_NV12; //
-       AV_PIX_FMT_YUV420P;
+       avcodec_sw_pix_fmt = AV_PIX_FMT_NV12;
+       //AV_PIX_FMT_0RGB32;   // if enabled change the #if(1) to #if(0) beneath, do not fill the the color
+       //AV_PIX_FMT_NV12;  //
+      // AV_PIX_FMT_YUV420P;
         //AV_PIX_FMT_NV12;
      }
 
@@ -502,6 +504,7 @@ void H264_Encoder::encodeFrame() {
     if (ret < 0)
         exit(1);
 
+    #if 1
     sw_frame->pts = ++frameCount;
     /* prepare a dummy image */
     /* Y */
@@ -520,7 +523,7 @@ void H264_Encoder::encodeFrame() {
         }
     }
 
-
+     
 
     if (avcodec_hw_type != AV_HWDEVICE_TYPE_NONE) {
 
@@ -536,6 +539,7 @@ void H264_Encoder::encodeFrame() {
         av_frame_copy_props(hw_frame, sw_frame);
     }
 
+     #endif
 
     /* encode the image */
     /* ret = avcodec_encode_video2(c, &pkt, frame, &got_output);
