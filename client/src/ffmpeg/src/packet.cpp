@@ -7,10 +7,13 @@
 #include <assert.h>
 
 
-extern "C" {
-#include <libavutil/imgutils.h>
-#include <libavformat/avformat.h>
-}
+// extern "C" {
+// #include <libavutil/imgutils.h>
+// #include <libavformat/avformat.h>
+// }
+
+#include "imgutils.h"
+#include "avformat.h"
 
 
 using std::endl;

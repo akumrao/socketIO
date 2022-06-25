@@ -11,10 +11,14 @@
 #include <thread>
 
 
-extern "C" {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-}
+// extern "C" {
+// #include <libavcodec/avcodec.h>
+// #include <libavformat/avformat.h>
+// }
+
+
+#include "avcodec.h"
+#include "avformat.h"
 
 
 using std::endl;
@@ -96,7 +100,7 @@ namespace base {
             if (avformat_find_stream_info(_formatCtx, nullptr) < 0)
                 throw std::runtime_error("Cannot find stream information: " + filename);
 
-            av_dump_format(_formatCtx, 0, filename.c_str(), 0);
+            //av_dump_format(_formatCtx, 0, filename.c_str(), 0);  //arvind
 
             for (unsigned i = 0; i < _formatCtx->nb_streams; i++) {
                 auto stream = _formatCtx->streams[i];

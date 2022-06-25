@@ -10,13 +10,16 @@
 
 
 #ifdef HAVE_FFMPEG
+//
+//extern "C" {
+//#include <libavformat/avformat.h>
+//#ifdef HAVE_FFMPEG_AVDEVICE
+//#include <libavdevice/avdevice.h>
+//#endif
+//}
 
-extern "C" {
-#include <libavformat/avformat.h>
-#ifdef HAVE_FFMPEG_AVDEVICE
-#include <libavdevice/avdevice.h>
-#endif
-}
+
+#include "avformat.h"
 
 
 #define LIBAVCODEC_VERSION_CHECK( a, b, c, d, e ) \

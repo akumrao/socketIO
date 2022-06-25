@@ -63,11 +63,11 @@ namespace base {
             // Set the decoder time in microseconds
             // This value represents the number of microseconds
             // that have elapsed since the brginning of the stream.
-            this->time = frame->pkt_pts > 0 ? static_cast<int64_t> (frame->pkt_pts *
+            this->time = frame->pts > 0 ? static_cast<int64_t> (frame->pts *
                     av_q2d(stream->time_base) * AV_TIME_BASE) : 0;
 
             // Set the decoder pts in stream time base
-            this->pts = frame->pkt_pts;
+            this->pts = frame->pts;
 
             // Set the decoder seconds since stream start
             // http://stackoverflow.com/questions/6731706/syncing-decoded-video-using-ffmpeg

@@ -15,16 +15,30 @@
 #include "ff/packet.h"
 #include "ff/videoconverter.h"
 
-extern "C" {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
+//extern "C" {
+//#include <libavcodec/avcodec.h>
+//#include <libavformat/avformat.h>
+//// #include <libavutil/fifo.h>
+//#include <libavutil/avutil.h>
+//#include <libavutil/imgutils.h>
+//#include <libavutil/opt.h>
+//#include <libavutil/pixdesc.h>
+//#include <libswscale/swscale.h>
+//}
+
+
+
+
+#include "avcodec.h"
+#include "avformat.h"
 // #include <libavutil/fifo.h>
-#include <libavutil/avutil.h>
-#include <libavutil/imgutils.h>
-#include <libavutil/opt.h>
-#include <libavutil/pixdesc.h>
-#include <libswscale/swscale.h>
-}
+#include "avutil.h"
+#include "imgutils.h"
+#include "opt.h"
+#include "pixdesc.h"
+//#include "swscale.h"
+
+
 
 
 namespace base {

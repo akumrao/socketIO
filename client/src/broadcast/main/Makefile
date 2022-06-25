@@ -10,7 +10,7 @@ CXX     = g++
 TARGET=runStreamer # define the name of the executable
 SOURCES=$(wildcard *.cpp ../src/*.cpp ../../libuv/src/*.cpp ../../libuv/src/unix/*.cpp ../../base/src/*.cpp ../../crypto1/src/*.cpp ../../net/src/*.cpp ../../http/src/*.cpp ../../http_parser/*.cpp ../../signal/src/*.cpp ../../ffmpeg/src/*.cpp  ../../ffmpeg/ffmpeg_cpp/*.cpp ../../ffmpeg/ffmpeg_cpp/codec/*.cpp  ../../ffmpeg/ffmpeg_cpp/codec/x86/*.cpp ../../ffmpeg/ffmpeg_cpp/audio/*.cpp ../../ffmpeg/ffmpeg_cpp/mp4Probe/*.cpp  )
 
-CXXFLAGS   := -g -std=c++14 -Wno-inconsistent-missing-override -Wno-uninitialized -Wno-attributes -fPIC -fno-permissive -Wno-literal-suffix
+CXXFLAGS   := -g -std=c++14 -Wno-inconsistent-missing-override -Wno-uninitialized -Wno-attributes -fPIC -fno-permissive -Wno-literal-suffix -DHTTPSSL
 
 CPPFLAGS   := -I../../json/include/ -I../include -I../../signal/include -I../../crypto/include/ -I../../http/include/ -I../../base/include/ -I../../net/include/ -I../../libuv/include -I../../libuv/src -I../../../build/ -I../../http_parser/ -I../webrtc/include -I../../ffmpeg/include -DOPENSSL_IS_BORINGSSL -DWEBRTC_POSIX  -DWEBRTC_INCLUDE_DIRS=/workspace/webrtc_android/src -I../../ffmpeg/ffmpeg_cpp/ -I../../ffmpeg/ffmpeg_cpp/compat/atomics/gcc/ -I../../ffmpeg/ffmpeg_cpp/codec -I../../ffmpeg/ffmpeg_cpp/codec/x86/ -I../../ffmpeg/ffmpeg_cpp/audio/  -I../../ffmpeg/ffmpeg_cpp/mp4Probe/ \
                -I${WEBRTC_PATH} -I${WEBRTC_PATH}/third_party/abseil-cpp

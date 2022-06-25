@@ -10,10 +10,11 @@
 
 #ifdef HAVE_FFMPEG
 
-extern "C" {
-#include <libavutil/audio_fifo.h>
-}
+//extern "C" {
+//#include <libavutil/audio_fifo.h>
+//}
 
+#include "audio_fifo.h"
 
 namespace base {
 namespace ff {

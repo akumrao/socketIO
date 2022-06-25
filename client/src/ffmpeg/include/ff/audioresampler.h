@@ -11,17 +11,26 @@
 #include "ff/ffmpeg.h"
 #include "ff/format.h"
 #include "ff/packet.h"
+//
+//extern "C" {
+//#include <libavcodec/avcodec.h>
+//#include <libavutil/opt.h>
+//#include <libswscale/swscale.h>
+//#ifdef HAVE_FFMPEG_SWRESAMPLE
+//#include <libswresample/swresample.h>
+//#else
+//#include <libavresample/avresample.h>
+//#endif
+//}
 
-extern "C" {
-#include <libavcodec/avcodec.h>
-#include <libavutil/opt.h>
-#include <libswscale/swscale.h>
-#ifdef HAVE_FFMPEG_SWRESAMPLE
-#include <libswresample/swresample.h>
-#else
-#include <libavresample/avresample.h>
-#endif
-}
+
+#include "avcodec.h"
+#include "opt.h"
+//#include <libswscale/swscale.h>
+#include "avresample.h"
+
+
+
 
 
 namespace base {

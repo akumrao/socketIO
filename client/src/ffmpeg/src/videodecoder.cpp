@@ -87,7 +87,7 @@ void VideoDecoder::emitPacket( AVFrame* frame, MediaCapture *mediaCapure)
 
     STrace << "Decoded video frame:"
         << "\n\tFrame Pkt DTS: " << frame->pkt_dts
-        << "\n\tFrame Pkt PTS: " << frame->pkt_pts
+        << "\n\tFrame Pkt PTS: " << frame->pts
         << "\n\tFrame PTS: " << frame->pts
         << "\n\tTimestamp: " << this->time
         << "\n\tPTS: " << this->pts
