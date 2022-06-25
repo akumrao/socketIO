@@ -627,7 +627,7 @@ static void register_all(void)
     // REGISTER_ENCODER(LIBWEBP_ANIM,      libwebp_anim);  /* preferred over libwebp */
     // REGISTER_ENCODER(LIBWEBP,           libwebp);
     // REGISTER_ENCODER(LIBX262,           libx262);
-    // REGISTER_ENCODER(LIBX264,           libx264);
+    REGISTER_ENCODER(LIBX264,           libx264);
     // REGISTER_ENCODER(LIBX264RGB,        libx264rgb);
     // REGISTER_ENCODER(LIBX265,           libx265);
     // REGISTER_ENCODER(LIBXAVS,           libxavs);
@@ -642,8 +642,8 @@ static void register_all(void)
     /* external libraries, that shouldn't be used by default if one of the
      * above is available */
     //REGISTER_ENCDEC (LIBOPENH264,       libopenh264);
-    REGISTER_DECODER(H264_CUVID,        h264_cuvid);
-    //REGISTER_ENCODER(H264_NVENC,        h264_nvenc);
+    //REGISTER_DECODER(H264_CUVID,        h264_cuvid);
+    REGISTER_ENCODER(H264_NVENC,        h264_nvenc);
    // REGISTER_ENCODER(H264_OMX,          h264_omx);
    // REGISTER_ENCODER(H264_QSV,          h264_qsv);
    // REGISTER_ENCODER(H264_VAAPI,        h264_vaapi);

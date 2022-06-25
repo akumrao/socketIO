@@ -991,8 +991,6 @@ static int has_decode_delay_been_guessed(AVStream *st)
     if (!st->info) // if we have left find_stream_info then nb_decoded_frames won't increase anymore for stream copy
         return 1;
 #if CONFIG_H264_DECODER
-    //arvind 
-    exit(0);
     if (st->internal->avctx->has_b_frames &&
        avpriv_h264_has_num_reorder_frames(st->internal->avctx) == st->internal->avctx->has_b_frames)
         return 1;
@@ -1685,14 +1683,13 @@ FF_ENABLE_DEPRECATION_WARNINGS
             st->inject_global_side_data = 0;
         }
 
-        //arvind
-        exit(0);
-//#if FF_API_LAVF_MERGE_SD
-//FF_DISABLE_DEPRECATION_WARNINGS
-//        if (!(s->flags & AVFMT_FLAG_KEEP_SIDE_DATA))
-//            av_packet_merge_side_data(pkt);
-//FF_ENABLE_DEPRECATION_WARNINGS
-//#endif
+   
+#if FF_API_LAVF_MERGE_SD
+FF_DISABLE_DEPRECATION_WARNINGS
+        if (!(s->flags & AVFMT_FLAG_KEEP_SIDE_DATA))
+            av_packet_merge_side_data(pkt);
+FF_ENABLE_DEPRECATION_WARNINGS
+#endif
     }
 
     av_opt_get_dict_val(s, "metadata", AV_OPT_SEARCH_CHILDREN, &metadata);

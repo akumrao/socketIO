@@ -80,7 +80,7 @@ static const URLProtocol *url_protocols[] = {
     //&ff_crypto_protocol,
     //&ff_data_protocol,
     //&ff_ffrtmphttp_protocol,
-    //&ff_file_protocol,
+    &ff_file_protocol,
     //&ff_ftp_protocol,
     //&ff_gopher_protocol,
     //&ff_hls_protocol,
@@ -148,11 +148,7 @@ const URLProtocol **ffurl_get_protocols(const char *whitelist,
 {
     const URLProtocol **ret;
     int i, ret_idx = 0;
-
-    //arvind
-    
-    exit(0);
-    
+     
     
     ret = (const URLProtocol**)av_mallocz_array(FF_ARRAY_ELEMS(url_protocols), sizeof(*ret));
     if (!ret)

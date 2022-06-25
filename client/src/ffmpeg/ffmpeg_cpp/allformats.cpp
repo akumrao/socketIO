@@ -140,7 +140,7 @@ static void register_all(void)
 //    REGISTER_MUXDEMUX(GXF,              gxf);
 //    REGISTER_MUXDEMUX(H261,             h261);
 //    REGISTER_MUXDEMUX(H263,             h263);
-//    REGISTER_MUXDEMUX(H264,             h264);
+      REGISTER_DEMUXER(H264,             h264); //arvind for h264 file probe and guss
 //    REGISTER_MUXER   (HASH,             hash);
 //    REGISTER_MUXER   (HDS,              hds);
 //    REGISTER_MUXDEMUX(HEVC,             hevc);
@@ -184,7 +184,7 @@ static void register_all(void)
 //    REGISTER_DEMUXER (MLV,              mlv);
 //    REGISTER_DEMUXER (MM,               mm);
 //    REGISTER_MUXDEMUX(MMF,              mmf);
-//    REGISTER_MUXDEMUX(MOV,              mov);
+    REGISTER_MUXDEMUX(MOV,              mov);  // for mp4 file probe and guess
 //    REGISTER_MUXER   (MP2,              mp2);
 //    REGISTER_MUXDEMUX(MP3,              mp3);
       REGISTER_MUXER   (MP4,              mp4);
