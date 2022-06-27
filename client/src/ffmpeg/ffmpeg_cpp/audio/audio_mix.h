@@ -25,7 +25,7 @@
 
 #include "samplefmt.h"
 #include "avresample.h"
-#include "internal.h"
+#include "internal_audio.h"
 #include "audio_data.h"
 
 typedef void (mix_func)(uint8_t **src, void **matrix, int len, int out_ch,
