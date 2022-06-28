@@ -13,10 +13,10 @@
 #include "ff/fpscounter.h"
 #include "ff/packet.h"
 
-extern "C" {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-}
+//extern "C" {
+#include "avcodec.h"
+#include "avformat.h"
+//}
 
 
 namespace base {

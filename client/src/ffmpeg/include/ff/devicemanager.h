@@ -12,13 +12,13 @@
 
 #include "ff/ffmpeg.h"
 
-extern "C" {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
+//extern "C" {
+#include "avcodec.h"
+#include "avformat.h"
 #ifdef HAVE_FFMPEG_AVDEVICE
 #include <libavdevice/avdevice.h>
 #endif
-}
+//}
 
 #endif
 

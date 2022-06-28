@@ -1,3 +1,26 @@
+
+
+## Widnows
+mkdir build
+
+cd build
+
+cmake -G "Visual Studio 16 2019" -A x64 -T ClangCL ..
+
+
+## Linux
+mkdir build
+
+cd build
+
+cmake -DCMAKE_BUILD_TYPE=Debug ...
+~
+
+
+
+
+
+
 # Very high performing mediaserver. It is the only mediaserver with support both webrtc and ortc.
 
 Live media streaming

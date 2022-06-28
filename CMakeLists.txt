@@ -260,7 +260,7 @@ list(APPEND SOURCES
 
 
 
-file(GLOB SOURCESFFMPEG "./client/src/ffmpeg/ffmpeg_cpp/*.cpp" "./client/src/ffmpeg/ffmpeg_cpp/codec/*.cpp"  "./client/src/ffmpeg/ffmpeg_cpp/codec/x86/*.cpp")
+file(GLOB SOURCESFFMPEG "./client/src/ffmpeg/ffmpeg_cpp/*.cpp" "./client/src/ffmpeg/ffmpeg_cpp/codec/*.cpp"  "./client/src/ffmpeg/ffmpeg_cpp/codec/x86/*.cpp"  "./client/src/ffmpeg/ffmpeg_cpp/audio/*.cpp"  "./client/src/ffmpeg/ffmpeg_cpp/mp4Probe/*.cpp" )
 
 
 #_ffmpeg_lib
@@ -287,7 +287,7 @@ if(MSVC)
 endif()
 
 
-target_include_directories(_ffmpeg_lib PUBLIC "./client/src/ffmpeg/ffmpeg_cpp/" "./client/src/ffmpeg/ffmpeg_cpp/compat/atomics/gcc/"   "./client/src/ffmpeg/ffmpeg_cpp/codec" "./client/src/ffmpeg/ffmpeg_cpp/codec/x86/"  "./client/src/ffmpeg/ffmpeg_cpp/compat/zlib/" "./client/src/ffmpeg/ffmpeg_cpp/compat/")
+target_include_directories(_ffmpeg_lib PUBLIC "./client/src/ffmpeg/ffmpeg_cpp/" "./client/src/ffmpeg/ffmpeg_cpp/compat/atomics/gcc/"   "./client/src/ffmpeg/ffmpeg_cpp/codec" "./client/src/ffmpeg/ffmpeg_cpp/codec/x86/"  "./client/src/ffmpeg/ffmpeg_cpp/compat/zlib/" "./client/src/ffmpeg/ffmpeg_cpp/compat/" "./client/src/ffmpeg/ffmpeg_cpp/audio/"  "./client/src/ffmpeg/ffmpeg_cpp/mp4Probe/" )
 
 
 add_executable(main  ./client/src/rtsp/main/fMp4tests.cpp   
@@ -311,6 +311,29 @@ target_include_directories(main PUBLIC "./client/src/ffmpeg/ffmpeg_cpp/" "./clie
 if(MSVC)
 
   target_link_directories(main PUBLIC "win64binaries" "./client/src/rtsp/openssl/lib/debug")
+
+endif()
+
+
+
+file(GLOB SOURCESWBRTC "./client/src/broadcast/src/*.cpp" "./client/src/ffmpeg/src/*.cpp" )
+
+add_executable(webrtc  ./client/src/broadcast/main/Streamer.cpp   
+
+${SOURCESWBRTC}
+
+${SOURCES} )
+
+
+target_compile_definitions(webrtc PRIVATE ${media_defines} -DHTTPSSL -DNOMINMAX  -fno-rtti -DWEBRTC_WIN )
+target_include_directories(webrtc PUBLIC ./client/src/base/include ./client/src/http_parser ./client/src/json/include ./client/src/net/include ./client/src/http/include ./client/src/libuv/include ./client/src/libuv/src  ./client/src/signal/include ./client/src/broadcast/ffmpeg ./client/src/broadcast/include ./client/src/ffmpeg/include )
+target_link_libraries(webrtc  PUBLIC uv_a _ffmpeg_lib  libcrypto.lib libssl.lib )
+
+target_include_directories(webrtc PUBLIC "./client/src/ffmpeg/ffmpeg_cpp/" "./client/src/ffmpeg/ffmpeg_cpp/compat/atomics/gcc/"   "./client/src/ffmpeg/ffmpeg_cpp/codec" "./client/src/ffmpeg/ffmpeg_cpp/codec/x86/"  "./client/src/ffmpeg/ffmpeg_cpp/compat/zlib/" "./client/src/ffmpeg/ffmpeg_cpp/compat/" "./client/src/rtsp/openssl/include/" "C:/workspace/webrtc/src" "C:/workspace/webrtc/src/third_party/abseil-cpp/" )
+
+if(MSVC)
+
+  target_link_directories(webrtc PUBLIC "win64binaries" "./client/src/rtsp/openssl/lib/debug")
 
 endif()
 

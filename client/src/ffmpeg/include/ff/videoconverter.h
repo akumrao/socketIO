@@ -10,10 +10,10 @@
 
 #include "ff/packet.h"
 
-extern "C" {
-#include <libavformat/avformat.h>
-#include <libswscale/swscale.h>
-}
+//extern "C" {
+#include "avformat.h"
+//#include "swscale.h"
+//}
 
 
 namespace base {
@@ -30,7 +30,7 @@ struct VideoConverter
 
     virtual AVFrame* convert(AVFrame* iframe);
 
-    SwsContext* ctx;
+    //SwsContext* ctx;
     AVFrame* oframe;
     VideoCodec iparams;
     VideoCodec oparams;
