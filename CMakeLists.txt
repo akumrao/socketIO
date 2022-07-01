@@ -325,7 +325,7 @@ ${SOURCESWBRTC}
 ${SOURCES} )
 
 
-target_compile_definitions(webrtc PRIVATE ${media_defines} -DHTTPSSL -DNOMINMAX  -fno-rtti -DWEBRTC_WIN )
+target_compile_definitions(webrtc PRIVATE ${media_defines} -DHTTPSSL -DNOMINMAX -DWEBRTC_WIN -DOPENSSL_IS_BORINGSSL)
 target_include_directories(webrtc PUBLIC ./client/src/base/include ./client/src/http_parser ./client/src/json/include ./client/src/net/include ./client/src/http/include ./client/src/libuv/include ./client/src/libuv/src  ./client/src/signal/include ./client/src/broadcast/ffmpeg ./client/src/broadcast/include ./client/src/ffmpeg/include )
 target_link_libraries(webrtc  PUBLIC uv_a _ffmpeg_lib  libcrypto.lib libssl.lib )
 
@@ -334,7 +334,7 @@ target_include_directories(webrtc PUBLIC "./client/src/ffmpeg/ffmpeg_cpp/" "./cl
 if(MSVC)
 
   target_link_directories(webrtc PUBLIC "win64binaries" "./client/src/rtsp/openssl/lib/debug")
-
+  target_link_libraries(webrtc  PUBLIC webrtc.lib )
 endif()
 
 
