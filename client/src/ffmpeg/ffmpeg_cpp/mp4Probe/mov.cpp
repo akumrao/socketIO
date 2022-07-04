@@ -4584,8 +4584,10 @@ static int mov_read_cmov(MOVContext *c, AVIOContext *pb, MOVAtom atom)
     if (ret < 0)
         goto free_and_return;
 
-    if (uncompress (moov_data, (uLongf *) &moov_len, (const Bytef *)cmov_data, cmov_len) != Z_OK)
-        goto free_and_return;
+    exit(0);   //arvind
+
+    //if (uncompress (moov_data, (uLongf *) &moov_len, (const Bytef *)cmov_data, cmov_len) != Z_OK)
+     //   goto free_and_return;
     if (ffio_init_context(&ctx, moov_data, moov_len, 0, NULL, NULL, NULL, NULL) != 0)
         goto free_and_return;
     ctx.seekable = AVIO_SEEKABLE_NORMAL;

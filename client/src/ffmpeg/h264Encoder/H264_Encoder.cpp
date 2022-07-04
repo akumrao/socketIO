@@ -275,6 +275,10 @@ H264_Encoder::~H264_Encoder() {
 bool H264_Encoder::load(std::string filename, int fps, int width, int height) {
     
 
+    const AVCodec* audiocodec = NULL;
+    audiocodec = avcodec_find_encoder_by_name("libfdk_aac");  // Specify the use of file encoding type
+
+
     codec = avcodec_find_encoder_by_name("h264_nvenc");
        
     if (!codec) {

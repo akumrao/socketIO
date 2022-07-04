@@ -237,8 +237,8 @@ const char *av_basename(const char *path)
     char *p = (char*)strrchr(path, '/');
 
 #if HAVE_DOS_PATHS
-    char *q = strrchr(path, '\\');
-    char *d = strchr(path, ':');
+    char* q = (char*)strrchr(path, '\\');
+    char* d = (char*)strchr(path, ':');
 
     p = FFMAX3(p, q, d);
 #endif

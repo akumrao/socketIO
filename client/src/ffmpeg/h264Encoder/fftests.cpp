@@ -29,10 +29,12 @@ void initialize_playback(AVFrame* frame, AVPacket* pkt);
 
 H264_Encoder encoder(NULL, NULL);
 
+H264_Encoder encoder2(NULL, NULL);
+
 int main(int argc, char **argv)
 {
    
-
+     encoder2.load(std::string("e:/test9.264"), 25, 1920, 1080);
     //H264_Decoder decoder(frame_callback, NULL);
 
    // YUV420P_Player player;
@@ -68,19 +70,32 @@ int main(int argc, char **argv)
 
     encoder.load(fileName, 25, 800, 600);
 #elif _WIN32
+    int w = 800;
+    int h = 600;
     std::string fileName("e:/test2.264");
-    if (argc > 1) {
+    if (argc > 3) {
       fileName = argv[1];
+      w = atoi(argv[2]);
+      h = atoi(argv[3]);
     }
-    encoder.load(fileName, 25, 800, 600);
+    else if (argc > 1) 
+    {
+      fileName = argv[1];
+    
+    }
+    encoder.load(fileName, 25, w, h);
 #else
      encoder.load( std::string("/tmp/test2.264") , 25,  800, 600);
 #endif
      
      for (int x = 0; x < 100000; ++x) {
       encoder.encodeFrame();
+       encoder2.encodeFrame();
        _sleep(1);
     }
+
+
+       
      
 }
     

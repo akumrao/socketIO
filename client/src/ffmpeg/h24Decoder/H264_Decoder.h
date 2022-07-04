@@ -31,10 +31,11 @@
 #include <tinylib.h>
 #endif
 
-
+extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavutil/avutil.h>
-
+}
+#define FF_INPUT_BUFFER_PADDING_SIZE 32
 
 typedef void(*h264_decoder_callback)(AVFrame* frame, AVPacket* pkt, void* user);         /* the decoder callback, which will be called when we have decoded a frame */
 

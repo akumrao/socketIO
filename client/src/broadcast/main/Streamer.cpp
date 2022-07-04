@@ -58,7 +58,15 @@ int main(int argc, char** argv) {
 
     //sig.startStreaming("/var/tmp/songs", "", "mp3",  false);
     
-    sig.startStreaming("/var/tmp/videos", "", "mp4",  false);
+    #ifdef __linux__
+
+    sig.startStreaming("/var/tmp/videos", "", "mp4", false);
+
+    #elif _WIN32
+        sig.startStreaming("c:/videos", "", "mp4", false);
+    #endif   
+
+   
     
    // sig.startStreaming("/var/tmp/videos", "", "264",  false);
     
