@@ -316,11 +316,17 @@ endif()
 
 
 
-
 add_library(httpStream STATIC ${SOURCES})
 target_compile_definitions(httpStream PRIVATE ${media_defines})
-target_include_directories(httpStream PUBLIC ./client/src/base/include ./client/src/http_parser ./client/src/json/include ./client/src/net/include ./client/src/http/include ./client/src/libuv/include ./client/src/libuv/src  ./client/src/signal/include ./client/src/rtsp/ffmpeg )
+target_include_directories(httpStream PUBLIC ./client/src/base/include ./client/src/http_parser ./client/src/json/include ./client/src/net/include ./client/src/http/include ./client/src/libuv/include ./client/src/libuv/src  ./client/src/signal/include ./client/src/rtsp/ffmpeg ./client/src/rtsp/openssl/include/ )
 target_link_libraries(httpStream  PUBLIC uv_a )
+
+
+if(MSVC)
+
+  target_link_directories(httpStream PUBLIC "win64binaries" "./client/src/rtsp/openssl/lib/debug")
+
+endif()
 
 
 
