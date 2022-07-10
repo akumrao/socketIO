@@ -34,3 +34,14 @@ mkdir build
 cd build
 
 cmake -DCMAKE_BUILD_TYPE=Debug ...
+
+
+
+
+gn gen out/m89  --args="target_cpu=\"x64\" is_debug=true symbol_level=2 is_component_build=false is_clang=true use_lld=false treat_warnings_as_errors=false use_rtti=true rtc_include_tests =false rtc_build_examples=true  use_lld=false  is_clang=true is_component_build=false use_lld=false"
+
+ninja -C out/m89/ webrtc
+
+
+ninja -C out/m89/ mp4
+

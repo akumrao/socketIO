@@ -12,7 +12,7 @@ cmake_dependent_option(LIBUV_BUILD_TESTS
   "BUILD_TESTING;CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR" OFF)
 
 if(MSVC)
-  list(APPEND uv_cflags /W4)
+  list(APPEND uv_cflags /W4 )
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
   #list(APPEND uv_cflags -fvisibility=hidden --std=gnu89)
   list(APPEND uv_cflags -Wall -Wextra -Wstrict-prototypes)
@@ -314,28 +314,6 @@ if(MSVC)
 
 endif()
 
-
-
-file(GLOB SOURCESWBRTC "./client/src/broadcast/src/*.cpp" "./client/src/ffmpeg/src/*.cpp" )
-
-add_executable(webrtc  ./client/src/broadcast/main/Streamer.cpp   
-
-${SOURCESWBRTC}
-
-${SOURCES} )
-
-
-target_compile_definitions(webrtc PRIVATE ${media_defines} -DHTTPSSL -DNOMINMAX -DWEBRTC_WIN -DOPENSSL_IS_BORINGSSL)
-target_include_directories(webrtc PUBLIC ./client/src/base/include ./client/src/http_parser ./client/src/json/include ./client/src/net/include ./client/src/http/include ./client/src/libuv/include ./client/src/libuv/src  ./client/src/signal/include ./client/src/broadcast/ffmpeg ./client/src/broadcast/include ./client/src/ffmpeg/include )
-target_link_libraries(webrtc  PUBLIC uv_a _ffmpeg_lib  libcrypto.lib libssl.lib )
-
-target_include_directories(webrtc PUBLIC "./client/src/ffmpeg/ffmpeg_cpp/" "./client/src/ffmpeg/ffmpeg_cpp/compat/atomics/gcc/"   "./client/src/ffmpeg/ffmpeg_cpp/codec" "./client/src/ffmpeg/ffmpeg_cpp/codec/x86/"  "./client/src/ffmpeg/ffmpeg_cpp/compat/zlib/" "./client/src/ffmpeg/ffmpeg_cpp/compat/" "./client/src/rtsp/openssl/include/" "C:/workspace/webrtc/src" "C:/workspace/webrtc/src/third_party/abseil-cpp/" )
-
-if(MSVC)
-
-  target_link_directories(webrtc PUBLIC "win64binaries" "./client/src/rtsp/openssl/lib/debug")
-  target_link_libraries(webrtc  PUBLIC webrtc.lib )
-endif()
 
 
 
